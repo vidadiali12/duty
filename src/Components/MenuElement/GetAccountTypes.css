@@ -1,0 +1,154 @@
+.gat-wrapper {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.10);
+    backdrop-filter: blur(2px);
+    padding: 28px;
+    box-sizing: border-box;
+}
+
+.gat-card {
+    width: 60%;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 30px;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.10);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.gat-title {
+    margin: 0 0 18px 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e3a8a;
+}
+
+.gat-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.gat-row.gat-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e6e6e6;
+    background: #fbfdff;
+}
+
+.gat-key {
+    font-size: 14px;
+    color: #374151;
+}
+
+.gat-value {
+    font-weight: 600;
+    color: #111827;
+}
+
+.gat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+}
+
+.gat-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e6e6e6;
+    background: #ffffff;
+    transition: border-color .18s ease, transform .12s ease;
+    cursor: default;
+}
+
+.gat-item:hover {
+    border-color: var(--color-teal-8);
+    transform: translateY(-2px);
+}
+
+.gat-item-text {
+    font-size: 14px;
+    color: #374151;
+    text-transform: capitalize;
+}
+
+.gat-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #1e3a8a;
+    cursor: default;
+}
+
+.gat-save-btn {
+    outline: none;
+    padding: 12px 17px;
+    background-color: var(--color-teal-8);
+    color: white;
+    width: min-content;
+    white-space: nowrap;
+    border: 1px solid var(--color-teal-20);
+    box-shadow: 0 2px 2px var(--color-teal-19);
+    border-radius: .7rem;
+    margin-left: auto;
+    transition: .5s;
+    cursor: pointer;
+}
+
+.gat-save-btn:hover {
+    background-color: var(--color-teal-5);
+}
+
+.close-get-acc-types {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: none;
+    background: #f1f1f1;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.close-get-acc-types:hover {
+    background: #e2e2e2;
+}
+
+.input-text {
+    border: 1px solid rgb(231, 231, 231);
+    outline: none;
+    border-radius: 5px;
+    padding: 10px;
+    transition: .3s;
+}
+
+.input-text:focus {
+    border: 1px solid var(--color-teal-8);
+}
+
+
+@media (max-width: 480px) {
+    .gat-card {
+        width: 100%;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .gat-title {
+        font-size: 18px;
+    }
+}

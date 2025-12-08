@@ -1,0 +1,127 @@
+.update-personnel-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding: 1rem;
+}
+
+.update-personnel-card {
+    background: var(--color-teal-20);
+    padding: 2rem;
+    border-radius: 16px;
+    width: 700px;
+    max-width: 100%;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--color-teal-1);
+}
+
+.update-personnel-card h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--color-teal-5);
+    font-size: 1.8rem;
+}
+
+.update-personnel-card form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem 1rem;
+}
+
+.update-personnel-card .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.update-personnel-card label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-teal-6);
+}
+
+.update-personnel-card input,
+.update-personnel-card select {
+    padding: 0.55rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-teal-13);
+    background: #fff;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.update-personnel-card input:focus,
+.update-personnel-card select:focus {
+    border-color: var(--color-teal-7);
+    box-shadow: 0 0 8px rgba(89, 64, 214, 0.3);
+    outline: none;
+}
+
+.update-personnel-card .buttons {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.update-personnel-card button {
+    padding: 0.6rem 1.3rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.update-personnel-card button[type="submit"] {
+    background: var(--color-teal-7);
+    color: #fff;
+}
+
+.update-personnel-card button[type="submit"]:hover {
+    background: var(--color-teal-8);
+    transform: translateY(-1px);
+}
+
+.update-personnel-card button.cancel {
+    background: var(--color-teal-14);
+    color: var(--color-teal-1);
+}
+
+.update-personnel-card button.cancel:hover {
+    background: var(--color-teal-15);
+    transform: translateY(-1px);
+}
+
+.update-personnel-card .error {
+    grid-column: 1 / -1;
+    color: #d9534f;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.box-of-fields{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+@media (max-width: 900px) {
+    .update-personnel-card form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .update-personnel-card form {
+        grid-template-columns: 1fr;
+    }
+}

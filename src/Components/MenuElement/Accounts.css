@@ -1,0 +1,287 @@
+:root {
+    --bg-1: var(--color-teal-1);
+    --bg-2: var(--color-teal-2);
+    --bg-3: var(--color-teal-3);
+    --bg-4: var(--color-teal-4);
+    --accent: var(--color-teal-9);
+    --accent-light: var(--color-teal-12);
+    --text-1: var(--color-teal-18);
+    --text-2: var(--color-teal-19);
+}
+
+.filters {
+    display: flex;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+    gap: 20px;
+}
+
+.accounts-wrapper {
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    background: var(--bg-1);
+    color: var(--text-2);
+    height: auto;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.filter-box {
+    position: relative;
+    width: 200px;
+}
+
+.filter-label {
+    background: var(--bg-3);
+    padding: 10px 20px;
+    width: 100%;
+    border-radius: 6px;
+    font-size: 15px;
+    color: var(--text-1);
+    cursor: pointer;
+    border: 1px solid var(--bg-4);
+    transition: 0.2s;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+}
+
+.filter-label::placeholder {
+    color: white;
+}
+
+.filter-label:hover {
+    background: var(--bg-4);
+    border-color: var(--accent);
+    color: var(--accent-light);
+}
+
+.filter-box-child {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: min-content;
+    background: rgba(50, 40, 120, 0.35);
+    backdrop-filter: blur(8px);
+    padding: 10px;
+    border-radius: 14px;
+    border: 1px solid var(--bg-4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    z-index: 100;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    animation: openFilter 0.18s ease;
+}
+
+.show-filtered-element {
+    display: grid;
+}
+
+@keyframes openFilter {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.show-filtered-element {
+    display: grid;
+}
+
+.filter-box-child label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-2);
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--bg-3);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: 0.15s;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.filter-box-child label:hover {
+    background: var(--bg-3);
+    border-color: var(--accent);
+    color: var(--accent-light);
+}
+
+.filter-box-child input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.accounts-table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--bg-2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+}
+
+.table-header,
+.table-row {
+    display: grid;
+    grid-template-columns: .5fr 1fr 1fr 1fr .5fr 1.6fr 1fr 1fr 1fr;
+    padding: 14px 20px;
+    align-items: center;
+}
+
+.table-header {
+    background: var(--bg-4);
+    color: var(--text-1);
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid var(--accent);
+}
+
+.table-row {
+    background: var(--bg-3);
+    color: var(--text-2);
+    border-bottom: 1px solid var(--bg-4);
+    transition: 0.16s ease;
+}
+
+.table-row:hover {
+    background: var(--bg-4);
+    color: var(--accent-light);
+    cursor: pointer;
+}
+
+.add-account-btn {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--bg-1);
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 5px 15px rgba(120, 90, 250, 0.35);
+    transition: 0.2s;
+}
+
+.add-account-btn:hover {
+    background: var(--color-teal-10);
+    transform: translateY(-2px);
+}
+
+.clear-filter {
+    background-color: var(--color-teal-9);
+}
+
+.ope-box {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.ope-box .ope-icon {
+    font-size: 30px;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    scale: 1;
+    transition: .5s;
+}
+
+.ope-box .ope-icon:hover {
+    scale: 1.1;
+}
+
+.ope-box .ope-icon:nth-child(1) {
+    color: rgb(20, 120, 187);
+}
+
+.ope-box .ope-icon:nth-child(2) {
+    color: red;
+}
+
+.delete-user-box-back {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.delete-user-box {
+    background: #f5f6f8;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-end;
+    text-align: center;
+    position: relative;
+}
+
+.delete-user-box button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.25s;
+    width: min-content;
+    white-space: nowrap;
+}
+.delete-user-box>div{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.delete-user-box>div button {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+.delete-user-box>div button:nth-child(2) {
+    background-color: var(--color-teal-7);
+}
+
+.delete-user-box>div button:hover {
+    opacity: 0.9;
+}
+
+.delete-user-box>button {
+    background-color: #d1d3d6;
+    color: #2e3238;
+}
+
+.delete-user-box>button:hover {
+    background-color: #bfc1c5;
+}

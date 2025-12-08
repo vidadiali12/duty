@@ -1,0 +1,65 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style-position: inside;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+}
+
+body{
+    width: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--color-teal-20);
+    padding: 20px 10%;
+}
+
+:root {
+    --color-teal-1: #1a1446;
+    --color-teal-2: #241b5a;
+    --color-teal-3: #2e2270;
+    --color-teal-4: #392889;
+    --color-teal-5: #4430a3;
+    --color-teal-6: #4f38bc;
+    --color-teal-7: #5940d6;
+    --color-teal-8: #6450e0;
+    --color-teal-9: #6f5ff0;
+    --color-teal-10: #7a6fff;
+    --color-teal-11: #857fff;
+    --color-teal-12: #908fff;
+    --color-teal-13: #9b9fff;
+    --color-teal-14: #a6afff;
+    --color-teal-15: #b1bfff;
+    --color-teal-16: #bccfff;
+    --color-teal-17: #c7dfff;
+    --color-teal-18: #d2efff;
+    --color-teal-19: #ddefff;
+    --color-teal-20: #e8e6fa;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-teal-5);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-teal-7);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--color-teal-8);
+}

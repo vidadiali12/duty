@@ -1,0 +1,99 @@
+.update-add-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+.edit-add-card {
+  width: 420px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  position: relative;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.close-edit-add {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f1f1;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.close-edit-add:hover {
+  background: #e2e2e2;
+}
+
+.edit-add-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.edit-add-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 6px;
+}
+
+.input-group input,
+.input-group select {
+  padding: 10px 13px;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+  background: #fafafa;
+  outline: none;
+  transition: .2s;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--color-teal-6);
+  background: #fff;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--color-teal-6);
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.submit-btn:hover {
+  background: var(--color-teal-4);
+}

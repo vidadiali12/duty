@@ -1,0 +1,165 @@
+import React, { useState, useEffect } from "react";
+import api from "../../../api";
+import "./UpdateAndAddPersonnel.css";
+
+export default function UpdateAndAddPersonnel({ item, setItem, ranks, setCreateAndUpdate, apiOpe, typeOpe }) {
+    const [form, setForm] = useState({
+        username: "",
+        email: "",
+        fin: "",
+        name: "",
+        surname: "",
+        fatherName: "",
+        rankId: "",
+        position: "",
+        roleId: "",
+    });
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [rols, setRols] = useState(null)
+
+    useEffect(() => {
+        if (item) {
+            setForm({
+                username: item?.username || "",
+                email: item?.email || "",
+                fin: item?.person?.fin || "",
+                name: item?.person?.name || "",
+                surname: item?.person?.surname || "",
+                fatherName: item?.person?.fatherName || "",
+                rankId: item?.person?.rank?.id || "",
+                position: item?.person?.position || "",
+                roleId: item.role?.id || "",
+            });
+        }
+    }, [item]);
+
+    const callRols = async () => {
+        const token = localStorage.getItem('myUserDutyToken');
+        const hdrs = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+        const resRols = await api.get("/admin/role/getAllRole", hdrs);
+        console.log(resRols?.data?.data)
+        setRols(resRols?.data?.data || [])
+    }
+
+    useEffect(() => {
+        callRols()
+    }, [])
+
+    const handleRank = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: Number(value) }));
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        try {
+            if (typeOpe == "editOpe") {
+                await api.put(apiOpe, form);
+            }
+            else if (typeOpe == "createOpe") {
+                await api.post(apiOpe, form);
+            }
+            setItem(null)
+            setCreateAndUpdate(false)
+        } catch (err) {
+            console.error(err);
+            setError("Məlumatları yeniləmək mümkün olmadı.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="update-personnel-wrapper">
+            <div className="update-personnel-card">
+                <h2>{
+                    typeOpe == "editOpe" ? "İstifadəçi Yeniləmə" : "İstifadəçi Yaradılması"
+                    }</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="box-of-fields">
+                        <label>Username</label>
+                        <input name="username" value={form.username} onChange={handleChange} placeholder="İstifadəçi adı: " />
+                    </div>
+
+                    <div className="box-of-fields">
+                        <label>Email</label>
+                        <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="Email: " />
+                    </div>
+
+                    <div className="box-of-fields">
+                        <label>FIN</label>
+                        <input name="fin" value={form.fin} onChange={handleChange} placeholder="Fin: " />
+                    </div>
+
+                    <div className="box-of-fields">
+                        <label>Ad</label>
+                        <input name="name" value={form.name} onChange={handleChange} placeholder="Ad: " />
+                    </div>
+                    <div className="box-of-fields">
+                        <label>Soyad</label>
+                        <input name="surname" value={form.surname} onChange={handleChange} placeholder="Soyad: " />
+                    </div>
+
+                    <div className="box-of-fields">
+                        <label>Ata adı</label>
+                        <input name="fatherName" value={form.fatherName} onChange={handleChange} placeholder="Ata adı: " />
+                    </div>
+
+                    <div className="box-of-fields">
+                        <label>Rütbə</label>
+                        <select name="rankId" id="rankId" value={form.rankId} onChange={handleRank}>
+                            <option value="">Rütbə seç</option>
+                            {ranks?.map((r, index) => {
+                                return <option value={r?.id} key={index}>
+                                    {r.name}
+                                </option>
+                            })}
+                        </select>
+                    </div>
+
+                    <div className="box-of-fields">
+                        <label>Vəzifə</label>
+                        <input name="position" value={form.position} onChange={handleChange} placeholder="Vəzifə: " />
+                    </div>
+
+                    <div className="box-of-fields">
+                        <label>Durum</label>
+                        <select name="roleId" id="roleId" value={form.roleId} onChange={handleRank}>
+                            <option value="">Durum seç</option>
+                            {rols?.map((r, index) => {
+                                return <option value={r?.id} key={index}>
+                                    {r.name}
+                                </option>
+                            })}
+                        </select>
+                    </div>
+
+                    {error && <p className="error">{error}</p>}
+
+                    <div className="buttons">
+                        <button type="submit" disabled={loading}>
+                            {loading ? "Yenilənir..." : typeOpe == "editOpe" ? "Yenilə" : "Hesab Yarat"}
+                        </button>
+                        <button type="button" onClick={() => setCreateAndUpdate(false)} className="cancel">
+                            Ləğv et
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}

@@ -1,0 +1,142 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header-wrapper {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-logo {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.duty-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.user-rank {
+    font-size: 15px;
+    color: #555;
+}
+
+.profile-icon {
+    font-size: 28px;
+    color: #555;
+}
+
+.profile-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 150px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    padding: 8px 0;
+    z-index: 20;
+}
+
+.menu-item {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background: #f0f0f0;
+}
+
+.logout {
+    color: red;
+}
+
+.header-menu {
+  width: 100%;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+
+.menu-list-child {
+  margin-bottom: 10px;
+}
+
+.menu-list-child-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  font-size: 15px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.menu-list-child-link:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-4px);
+}
+
+.menu-icon {
+  font-size: 18px;
+  color: var(--color-teal-10);
+}
+
+.menu-list-child-text {
+  flex: 1;
+  color: var(--color-teal-5);
+}
+
+.menu-list-child-link.active {
+  background-color: var(--color-teal-20);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-teal-1);
+}
