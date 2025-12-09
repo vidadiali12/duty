@@ -109,12 +109,11 @@ export default function UpdateAndAddPersonnel({ item, setItem, ranks, setCreateA
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        setError("");
-
         const inValidFieldsCount = validationOfForm();
 
         if (inValidFieldsCount > 0) return;
+        setLoading(true);
+        setError("");
 
         try {
             if (typeOpe == "editOpe") {

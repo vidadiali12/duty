@@ -1,0 +1,19 @@
+.charts-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-top: 35px;
+}
+
+.chart-box {
+    width: 50%;
+    height: auto;
+    padding: 20px;
+    border-radius: 1rem;
+    box-shadow: 0 0 2px rgba(113, 3, 172, .2);
+    background-color: rgba(178, 173, 248, 0.1);
+}
+
+.chart-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+}

@@ -5,7 +5,6 @@ import { FaUserCircle } from 'react-icons/fa';
 import logo from '../../Logos/logo.png';
 import './Header.css';
 import { NavLink } from 'react-router-dom';
-
 import { AiFillHome } from 'react-icons/ai';
 import { MdBusiness } from 'react-icons/md';
 import { FaUsers, FaHistory } from 'react-icons/fa';

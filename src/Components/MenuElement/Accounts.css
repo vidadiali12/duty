@@ -1,13 +1,17 @@
 :root {
-    --bg-1: var(--color-teal-1);
-    --bg-2: var(--color-teal-2);
-    --bg-3: var(--color-teal-3);
-    --bg-4: var(--color-teal-4);
-    --accent: var(--color-teal-9);
-    --accent-light: var(--color-teal-12);
-    --text-1: var(--color-teal-18);
-    --text-2: var(--color-teal-19);
+    --bg-1: #f6f7fb;
+    --bg-2: #ffffff;
+    --bg-3: #eef0fb;
+    --bg-4: #d8ddff;
+
+    --accent: #6f5ff0;
+    --accent-light: #5940d6;
+
+    --text-1: #1a1446;
+    --text-2: #241b5a;
 }
+
+/* -------------------------------------------- */
 
 .filters {
     display: flex;
@@ -30,6 +34,8 @@
     margin-top: 20px;
 }
 
+/* -------------------------------------------- */
+
 .filters {
     display: flex;
     flex-wrap: wrap;
@@ -51,7 +57,7 @@
     cursor: pointer;
     border: 1px solid var(--bg-4);
     transition: 0.2s;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,7 +65,7 @@
 }
 
 .filter-label::placeholder {
-    color: white;
+    color: #4a4a4a;
 }
 
 .filter-label:hover {
@@ -68,18 +74,20 @@
     color: var(--accent-light);
 }
 
+/* -------------------------------------------- */
+
 .filter-box-child {
     display: none;
     position: absolute;
     top: 50px;
     left: 0;
     width: min-content;
-    background: rgba(50, 40, 120, 0.35);
+    background: rgba(240, 240, 255, 0.8);
     backdrop-filter: blur(8px);
     padding: 10px;
     border-radius: 14px;
     border: 1px solid var(--bg-4);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     z-index: 100;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -95,22 +103,19 @@
         opacity: 0;
         transform: translateY(-6px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.show-filtered-element {
-    display: grid;
-}
+/* -------------------------------------------- */
 
 .filter-box-child label {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: var(--bg-2);
+    background: #f0f2ff;
     padding: 8px 12px;
     border-radius: 10px;
     border: 1px solid var(--bg-3);
@@ -133,6 +138,8 @@
     cursor: pointer;
 }
 
+/* -------------------------------------------- */
+
 .accounts-table {
     width: 100%;
     display: flex;
@@ -140,7 +147,7 @@
     border-radius: 14px;
     overflow: hidden;
     background: var(--bg-2);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
 }
 
 .table-header,
@@ -172,6 +179,8 @@
     cursor: pointer;
 }
 
+/* -------------------------------------------- */
+
 .add-account-btn {
     align-self: flex-start;
     display: flex;
@@ -181,21 +190,44 @@
     padding: 12px 20px;
     border-radius: 12px;
     cursor: pointer;
-    color: var(--bg-1);
+    color: white;
     font-weight: 600;
     border: none;
-    box-shadow: 0 5px 15px rgba(120, 90, 250, 0.35);
+    box-shadow: 0 5px 15px rgba(120, 90, 250, 0.25);
     transition: 0.2s;
 }
 
 .add-account-btn:hover {
-    background: var(--color-teal-10);
+    background: var(--accent-light);
     transform: translateY(-2px);
 }
 
-.clear-filter {
-    background-color: var(--color-teal-9);
+/* -------------------------------------------- */
+
+.ope-box .ope-icon:hover {
+    scale: 1.1;
 }
+
+/* -------------------------------------------- */
+
+.delete-user-box-back {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.delete-user-box {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    width: 360px;
+}
+
 
 .ope-box {
     display: flex;
@@ -206,7 +238,7 @@
 .ope-box .ope-icon {
     font-size: 30px;
     padding: 5px;
-    border: 1px solid white;
+    box-shadow: 2px 2px 1px 1px var(--color-teal-20);
     border-radius: 5px;
     scale: 1;
     transition: .5s;
