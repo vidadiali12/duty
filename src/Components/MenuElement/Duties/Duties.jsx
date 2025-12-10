@@ -7,6 +7,7 @@ import "./Duties.css"
 import api from '../../../api';
 import UpdateAndAddPersonnel from './UpdateAndAddPersonnel';
 import Pagination from '../../Pagination/Pagination';
+import ChangePassword from './ChangePassword';
 
 export default function Duties({ setResponseRequest, userInfo, setItem, item }) {
     const [allAccounts, setAllAccounts] = useState([]);
@@ -18,6 +19,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
     const [apiOpe, setApiOpe] = useState("");
     const [rankList, setRankList] = useState([]);
     const [totalItem, setTotalItem] = useState(null)
+    const [showCPArea, setShowCPArea] = useState(null)
 
     const [filters, setFilters] = useState({
         text: "",
@@ -163,6 +165,11 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
         setTypeOpe("createOpe");
     }
 
+    const changePass = (acc) => {
+        setShowCPArea(true);
+        setItem(acc);
+    }
+
     return (
         <div className="accounts-wrapper p-4 w-full">
             <div className="filters flex flex-wrap gap-3 mb-5">
@@ -213,7 +220,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                     <span>Ata adı</span>
                     <span>Rütbə</span>
                     <span>Vəzifə</span>
-                    <span>Parolu sıfırla</span>
+                    <span>Parol</span>
                     <span style={{ textAlign: 'center' }}>Əməliyyatlar</span>
                 </div>
 
@@ -225,7 +232,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                         <span>{acc?.fatherName}</span>
                         <span>{acc?.rank?.name}</span>
                         <span>{acc?.position}</span>
-                        <span>Sıfırla</span>
+                        <span onClick={() => changePass(acc)}>Parolu Sıfırla</span>
                         <span className='ope-box'>
                             <AiOutlineEdit className='ope-icon' onClick={() => editUser(acc)} />
                             <AiOutlineDelete className='ope-icon' onClick={() => deleteUser(acc)}
@@ -245,6 +252,11 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                         apiOpe={apiOpe}
                         typeOpe={typeOpe}
                     />
+                )
+            }
+            {
+                showCPArea && (
+                    <ChangePassword setItem={setItem} item={item} setResponseRequest={setResponseRequest} setShowCPArea={setShowCPArea} />
                 )
             }
             {
