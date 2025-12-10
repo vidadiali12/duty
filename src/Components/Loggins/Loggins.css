@@ -1,0 +1,34 @@
+.logs-wrapper {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.logs-table {
+    width: 100%;
+}
+
+.logs-wrapper>.filters {
+    padding: 10px 0;
+}
+
+.table-log-header,
+.table-log-row {
+    display: grid;
+    grid-template-columns: 50px repeat(7, 1fr) 70px;
+    padding: 12px;
+}
+
+.log-more-icon-box {
+    text-align: center;
+}
+
+.icon-log-more {
+    color: blue;
+    font-size: 20px;
+    scale: 1;
+    transition: .5s;
+}
+
+.icon-log-more:hover {
+    scale: 1.1;
+}

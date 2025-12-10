@@ -89,7 +89,7 @@ export default function Home() {
         type: "pie",
         data: {
           labels: statusArr,
-          datasets: [{ data: Object.values(statusCounts), backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56", "#4BC0C0", "#189341ff"] }]
+          datasets: [{ data: Object.values(statusCounts), backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56", "#4BC0C0", "#176c5aff"] }]
         },
         options: {
           responsive: true,
@@ -109,22 +109,32 @@ export default function Home() {
         typeChartRef.current.destroy();
       }
 
-      const typeKeys = Object.keys(typeCounts);
-      const typeValues = Object.values(typeCounts);
+      const keys = Object.keys(typeCounts);
+      const values = Object.values(typeCounts);
 
-      const datasets = typeKeys.map((key, i) => ({
-        label: key,             
-        data: typeValues.map((_, j) => j === i ? typeValues[i] : 0), 
+      const datasets = keys.map((key, i) => ({
+        label: key,
+        data: [values[i]],
         backgroundColor: colors[i % colors.length]
       }));
 
       typeChartRef.current = new Chart(typeRef.current, {
-        type: 'bar',
-        data: { labels: typeKeys, datasets },
+        type: "bar",
+        data: {
+          labels: [" "], 
+          datasets
+        },
         options: {
+          plugins: {
+            legend: {
+              display: true
+            }
+          },
           responsive: true,
           maintainAspectRatio: false,
-          scales: { y: { beginAtZero: true } }
+          scales: {
+            y: { beginAtZero: true }
+          }
         }
       });
 

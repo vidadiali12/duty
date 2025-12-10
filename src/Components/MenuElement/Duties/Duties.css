@@ -1,0 +1,7 @@
+.table-duties-row>.ope-box>.ope-icon:nth-child(1) {
+    color: rgb(70, 34, 149);
+}
+
+.table-duties-row>.ope-box>.ope-icon:nth-child(2) {
+    color: red;
+}

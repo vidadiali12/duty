@@ -3,19 +3,21 @@ import { FaPlus } from 'react-icons/fa';
 import { FiChevronDown } from "react-icons/fi";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import "../Accounts.css"
-import CreateAndUpdateAcc from '../CreateAndUpdateAcc';
+import "./Duties.css"
 import api from '../../../api';
 import UpdateAndAddPersonnel from './UpdateAndAddPersonnel';
+import Pagination from '../../Pagination/Pagination';
 
 export default function Duties({ setResponseRequest, userInfo, setItem, item }) {
     const [allAccounts, setAllAccounts] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(15);
+    const [pageSize, setPageSize] = useState(12);
     const [activeFilter, setActiveFilter] = useState(null);
     const [createAndUpdate, setCreateAndUpdate] = useState(null)
     const [typeOpe, setTypeOpe] = useState("");
     const [apiOpe, setApiOpe] = useState("");
     const [rankList, setRankList] = useState([]);
+    const [totalItem, setTotalItem] = useState(null)
 
     const [filters, setFilters] = useState({
         text: "",
@@ -50,6 +52,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
             );
 
             const resData = res?.data?.data || [];
+            setTotalItem(res?.data?.totalItem)
             setAllAccounts(resData?.filter(p => p?.id !== JSON.parse(localStorage.getItem("userInfo"))?.id));
         } catch (err) {
             console.log(err);
@@ -116,7 +119,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
 
     useEffect(() => {
         callAccounts();
-    }, [filters]);
+    }, [filters, page]);
 
     const deleteUser = async (acc) => {
         console.log(acc)
@@ -215,8 +218,8 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                 </div>
 
                 {allAccounts.map((acc, index) => (
-                    <div className="table-row" key={acc?.id}>
-                        <span>{index + 1}</span>
+                    <div className="table-row table-duties-row" key={acc?.id}>
+                        <span>{pageSize * (page - 1) + index + 1}</span>
                         <span>{acc?.name}</span>
                         <span>{acc?.surname}</span>
                         <span>{acc?.fatherName}</span>
@@ -242,6 +245,11 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                         apiOpe={apiOpe}
                         typeOpe={typeOpe}
                     />
+                )
+            }
+            {
+                totalItem && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
                 )
             }
         </div>

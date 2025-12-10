@@ -11,7 +11,7 @@ import AccountTypes from './Components/MenuElement/AccountTypes'
 import Ranks from './Components/MenuElement/Ranks'
 import Accounts from './Components/MenuElement/Accounts'
 import Duties from './Components/MenuElement/Duties/Duties'
-import Logs from './Components/MenuElement/Logs/Logs'
+import Loggins from './Components/Loggins/Loggins'
 
 function App() {
   const navigate = useNavigate()
@@ -64,7 +64,7 @@ function App() {
               setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
             <Route path='/shift-managers' element={<Duties
               setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
-            <Route path='/operation-history' element={<Logs
+            <Route path='/operation-history' element={<Loggins
               setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
             <Route path="/login" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -4,14 +4,16 @@ import { FiEdit, FiTrash2, FiPlus } from 'react-icons/fi';
 import './Departments.css';
 import { NavLink } from 'react-router-dom';
 import UpdateAndAdd from './UpdateAndAdd';
+import Pagination from '../Pagination/Pagination';
 
 const Units = ({ setResponseRequest, setItem, item }) => {
     const [allUnits, setAllUnits] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(15);
+    const [pageSize, setPageSize] = useState(12);
     const [typeOfOpe, setTypeOfOpe] = useState("");
     const [section, setSection] = useState(null);
     const [endPoint, setEndPoint] = useState("");
+    const [totalItem, setTotalItem] = useState(null)
 
     const callUnits = async () => {
         const token = localStorage.getItem("myUserDutyToken");
@@ -20,6 +22,7 @@ const Units = ({ setResponseRequest, setItem, item }) => {
                 params: { page, pageSize },
                 headers: { Authorization: `Bearer ${token}` }
             });
+            setTotalItem(resUnits?.data?.data?.totalItem);
             setAllUnits(resUnits?.data?.data?.data || []);
         } catch (err) {
             console.error(err);
@@ -79,7 +82,7 @@ const Units = ({ setResponseRequest, setItem, item }) => {
 
                 {allUnits?.map((unit, index) => (
                     <div key={unit?.id} className="departments-row">
-                        <span className="cell id">{index + 1}</span>
+                        <span className="cell id">{pageSize * (page - 1) + index + 1}</span>
                         <span className="cell tag">{unit?.tag}</span>
                         <span className="cell description">{unit?.description}</span>
                         <span className="cell tag">{unit?.departmentName}</span>
@@ -107,6 +110,12 @@ const Units = ({ setResponseRequest, setItem, item }) => {
                         item={item}
                         setItem={setItem}
                     />
+                )
+            }
+
+            {
+                totalItem && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
                 )
             }
         </div>

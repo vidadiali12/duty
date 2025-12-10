@@ -1,0 +1,71 @@
+.detail-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex;
+    justify-content: flex-end;
+    z-index: 999;
+}
+
+.detail-box {
+    width: 40%;
+    height: 100vh;
+    background: var(--color-teal-20);
+    border-left: 3px solid var(--color-teal-7);
+    padding: 28px 30px;
+    overflow-y: auto;
+    color: var(--color-teal-2);
+    animation: open .35s ease;
+}
+
+@keyframes open {
+    from {transform: translateX(100%);}
+    to {transform: translateX(0);}
+}
+
+h2 {
+    margin-bottom: 25px;
+    color: var(--color-teal-3);
+}
+
+section {
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-teal-14);
+}
+
+section h3 {
+    margin: 0 0 12px 0;
+    color: var(--color-teal-4);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: flex-start;
+    padding: 6px 0;
+    gap: 20px;
+    font-size: 15px;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--color-teal-4);
+}
+
+.detail-value {
+    font-weight: 500;
+    color: var(--color-teal-1);
+}
+
+/* close */
+.detail-close {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-teal-7);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+}

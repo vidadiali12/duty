@@ -253,6 +253,10 @@
 }
 
 .ope-box .ope-icon:nth-child(2) {
+    color: rgb(70, 34, 149);
+}
+
+.ope-box .ope-icon:nth-child(3) {
     color: red;
 }
 

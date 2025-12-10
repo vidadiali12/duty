@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api';
 import { FaPlus } from 'react-icons/fa';
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiInfo } from "react-icons/fi";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import "./Accounts.css"
 import CreateAndUpdateAcc from './CreateAndUpdateAcc';
+import Pagination from '../Pagination/Pagination';
+import ClientOpe from './ClientOpe';
 
 export default function Accounts({ setResponseRequest, userInfo, setItem, item }) {
     const [allAccounts, setAllAccounts] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(15);
+    const [pageSize, setPageSize] = useState(12);
     const [activeFilter, setActiveFilter] = useState(null);
-    const [createAndUpdate, setCreateAndUpdate] = useState(null)
+    const [createAndUpdate, setCreateAndUpdate] = useState(null);
     const [typeOpe, setTypeOpe] = useState("");
-    const [apiOpe, setApiOpe] = useState("")
-    const [isDeleteU, setIsDeleteU] = useState(null)
+    const [apiOpe, setApiOpe] = useState("");
+    const [isDeleteU, setIsDeleteU] = useState(null);
+    const [totalItem, setTotalItem] = useState(null);
+    const [showClientOpe, setShowClientOpe] = useState(null);
 
     const [filters, setFilters] = useState({
         text: "",
@@ -50,8 +54,6 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 newToOld: true
             };
 
-            console.log(req)
-
             const res = await api.post(
                 '/admin/client/getAllClients',
                 req,
@@ -64,6 +66,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 }
             );
 
+            setTotalItem(res?.data?.totalItem)
             setAllAccounts(res?.data?.data || []);
         } catch (err) {
             console.log(err);
@@ -197,7 +200,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
 
     useEffect(() => {
         callAccounts();
-    }, [filters]);
+    }, [filters, page]);
 
     const deleteUser = async () => {
         setIsDeleteU(null)
@@ -359,6 +362,11 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
         setTypeOpe("createAcc");
     }
 
+    const showOpe = (acc) => {
+        setShowClientOpe(true)
+        setItem(acc)
+    }
+
     return (
         <div className="accounts-wrapper p-4 w-full">
             <div className="filters flex flex-wrap gap-3 mb-5">
@@ -494,7 +502,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
 
                 {allAccounts.map((acc, index) => (
                     <div className="table-row" key={acc?.id}>
-                        <span>{index + 1}</span>
+                        <span>{pageSize * (page - 1) + index + 1}</span>
                         <span>{acc?.name}</span>
                         <span>{acc?.surname}</span>
                         <span>{acc?.fatherName}</span>
@@ -508,6 +516,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                                         acc?.accountStatus?.status.toLowerCase() == "confidential" ? "Məxfi" : "Qeyri Məxfi"}
                         </span>
                         <span className='ope-box'>
+                            <FiInfo className='ope-icon' onClick={() => showOpe(acc)} />
                             <AiOutlineEdit className='ope-icon' onClick={() => editUser(acc)} />
                             <AiOutlineDelete className='ope-icon' onClick={
                                 userInfo?.role?.name === "Admin" ? () => isDeleteUser(acc)
@@ -548,6 +557,22 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                             <button onClick={cancelDelete}>Ləğv et</button>
                         </div>
                     </div>
+                )
+            }
+
+            {
+                showClientOpe && (
+                    <ClientOpe
+                        setItem={setItem} item={item}
+                        setResponseRequest={setResponseRequest}
+                        setShowClientOpe={setShowClientOpe}
+                    />
+                )
+            }
+
+            {
+                totalItem && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
                 )
             }
         </div>
