@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 999;
+    z-index: 9999999;
 }
 
 .modal-content {
@@ -24,6 +24,7 @@
     margin-bottom: 12px;
     font-size: 22px;
     font-weight: 700;
+    text-align: left;
 }
 
 .modal-content p {
@@ -31,6 +32,7 @@
     font-size: 15px;
     line-height: 1.5;
     color: var(--color-teal-2);
+    text-align: left;
 }
 
 .modal-buttons {

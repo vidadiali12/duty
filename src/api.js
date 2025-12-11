@@ -37,7 +37,9 @@ api.interceptors.request.use(async (config) => {
       }
       diffMinutes = Math.max(0, diffMinutes);
     }
-
+    
+    console.log(expDate, now)
+    console.log(diffMinutes)
     if (diffMinutes <= 1) {
       if (!isRefreshing) {
         localStorage.removeItem("firstLogin");

@@ -8,6 +8,7 @@ import api from '../../../api';
 import UpdateAndAddPersonnel from './UpdateAndAddPersonnel';
 import Pagination from '../../Pagination/Pagination';
 import ChangePassword from './ChangePassword';
+import CreateAdminAccount from './CreateAdminAccount';
 
 export default function Duties({ setResponseRequest, userInfo, setItem, item }) {
     const [allAccounts, setAllAccounts] = useState([]);
@@ -19,7 +20,8 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
     const [apiOpe, setApiOpe] = useState("");
     const [rankList, setRankList] = useState([]);
     const [totalItem, setTotalItem] = useState(null)
-    const [showCPArea, setShowCPArea] = useState(null)
+    const [showCPArea, setShowCPArea] = useState(null);
+    const [showCreate, setShowCreate] = useState(null);
 
     const [filters, setFilters] = useState({
         text: "",
@@ -165,6 +167,10 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
         setTypeOpe("createOpe");
     }
 
+    const createAccAdmin = () => {
+        setShowCreate(true)
+    }
+
     const changePass = (acc) => {
         setShowCPArea(true);
         setItem(acc);
@@ -208,9 +214,15 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                 </div>
             </div>
 
-            <button className="add-account-btn" onClick={createAcc}>
-                <FaPlus /> Yeni İstifadəçi
-            </button>
+            <div style={{display: 'flex', gap: '15px'}}>
+                <button className="add-account-btn" onClick={createAcc}>
+                    <FaPlus /> Yeni İstifadəçi
+                </button>
+
+                <button className="add-account-btn" onClick={createAccAdmin}>
+                    <FaPlus /> Admin İstifadəçi
+                </button>
+            </div>
 
             <div className="accounts-table w-full">
                 <div className="table-header">
@@ -257,6 +269,12 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
             {
                 showCPArea && (
                     <ChangePassword setItem={setItem} item={item} setResponseRequest={setResponseRequest} setShowCPArea={setShowCPArea} />
+                )
+            }
+
+            {
+                showCreate && (
+                    <CreateAdminAccount setShowCreate={setShowCreate} />
                 )
             }
             {

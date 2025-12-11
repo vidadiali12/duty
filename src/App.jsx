@@ -12,12 +12,14 @@ import Ranks from './Components/MenuElement/Ranks'
 import Accounts from './Components/MenuElement/Accounts'
 import Duties from './Components/MenuElement/Duties/Duties'
 import Loggins from './Components/Loggins/Loggins'
+import CreateAdminAccount from './Components/MenuElement/Duties/CreateAdminAccount'
 
 function App() {
-  const navigate = useNavigate()
-  const [token, setToken] = useState(localStorage.getItem("myUserDutyToken"))
-  const [userInfo, setUserInfo] = useState(null)
-  const [item, setItem] = useState({})
+  const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem("myUserDutyToken"));
+  const [userInfo, setUserInfo] = useState(null);
+  const [item, setItem] = useState({});
+  const [showCreate, setShowCreate] = useState(true);
 
   const [responseRequest, setResponseRequest] = useState({
     showResponse: false,
@@ -30,18 +32,15 @@ function App() {
   });
 
   useEffect(() => {
-    const check = () => {
-      const t = localStorage.getItem("myUserDutyToken")
-      setToken(t)
-      if (!t) navigate("/login", { replace: true })
-    }
-    window.addEventListener("storage", check)
-    const interval = setInterval(check, 300)
-    return () => {
-      window.removeEventListener("storage", check)
-      clearInterval(interval)
-    }
-  }, [navigate])
+    const interval = setInterval(() => {
+      const currentToken = localStorage.getItem("myUserDutyToken");
+      if (token !== currentToken) {
+        setToken(currentToken);
+        if (!currentToken) navigate("/login", { replace: true });
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [token, navigate]);
 
   return (
     <>
@@ -72,6 +71,15 @@ function App() {
         ) : (
           <>
             <Route path="/login" element={<Login />} />
+            {
+              showCreate && (
+                <Route path="/create-admin-page" element={<CreateAdminAccount
+                  setShowCreate={setShowCreate}
+                  setResponseRequest={setResponseRequest} />}
+                />
+              )
+            }
+
             <Route path="*" element={<Navigate to="/login" replace />} />
           </>
         )}

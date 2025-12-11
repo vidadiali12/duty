@@ -74,7 +74,12 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                     ) : (
                         <button
                             className="confirm-button"
-                            onClick={() => setResponseRequest(prev => ({ ...prev, showResponse: false }))}
+                            onClick={() => {
+                                setResponseRequest(prev => ({ ...prev, showResponse: false }));
+                                if (responseRequest?.type === "changeMyPass" || responseRequest?.type === "createAdminAccDuty") {
+                                    window.location.reload();
+                                }
+                            }}
                         >Bağla</button>
                     )}
                 </div>
