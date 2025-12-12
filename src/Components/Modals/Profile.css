@@ -45,7 +45,7 @@
 
 .avatar {
   font-size: 5rem;
-  color: var(--color-teal-1);
+  color: var(--color-teal-5);
   margin-bottom: 1rem;
 }
 
@@ -73,12 +73,12 @@
 }
 
 .info-section div strong {
-  color: var(--color-teal-1);
+  color: var(--color-teal-4);
   font-weight: 600;
 }
 
 .admin-badge {
-  background: var(--color-teal-1);
+  background: var(--color-teal-4);
   color: var(--color-teal-20);
   display: inline-flex;
   align-items: center;
@@ -102,7 +102,7 @@
 .password-section-card h3 {
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
-  color: var(--color-teal-1);
+  color: var(--color-teal-3);
 }
 
 .password-input-wrapper {
@@ -131,13 +131,13 @@
   position: absolute;
   right: 10px;
   cursor: pointer;
-  color: var(--color-teal-10);
+  color: var(--color-teal-5);
   display: flex;
   align-items: center;
 }
 
 .update-btn {
-  background: var(--color-teal-1);
+  background: var(--color-teal-5);
   border: none;
   border-radius: 8px;
   color: var(--color-teal-20);
@@ -150,9 +150,9 @@
 }
 
 .update-btn:hover {
-  background: var(--color-teal-12);
+  background: var(--color-teal-9);
 }
 
 .dark-profile{
-  background-color: var(--color-teal-5);
+  background-color: var(--color-teal-1);
 }

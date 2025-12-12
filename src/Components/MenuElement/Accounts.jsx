@@ -19,6 +19,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
     const [isDeleteU, setIsDeleteU] = useState(null);
     const [totalItem, setTotalItem] = useState(null);
     const [showClientOpe, setShowClientOpe] = useState(null);
+    const [isFromESD] = useState(null)
 
     const [filters, setFilters] = useState({
         text: "",
@@ -231,8 +232,8 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 username: clientData?.username,
                 password: clientData?.password,
                 deviceData: clientData?.device,
-                documentNo: null,
-                formId: null
+                documentNo: clientData?.documentNo || null,
+                formId: clientData?.formId || null
             }
 
             if (clientData?.accountStatus?.id != 5) {
@@ -287,8 +288,8 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             const clientData = client?.data?.data;
 
             const req = {
-                documentNo: "",
-                formId: "",
+                documentNo: clientData?.documentNo || "",
+                formId: clientData?.formId || "",
                 clientId: clientData?.id
             }
 
@@ -341,8 +342,8 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 username: clientData?.username,
                 password: clientData?.password,
                 deviceData: clientData?.device,
-                documentNo: null,
-                formId: null
+                documentNo: clientData?.documentNo || null,
+                formId: clientData?.formId || null
             }
 
             setItem(req);
@@ -534,7 +535,8 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                     <CreateAndUpdateAcc
                         setApiOpe={setApiOpe} apiOpe={apiOpe}
                         setTypeOpe={setTypeOpe} typeOpe={typeOpe}
-                        setCreateAndUpdate={setCreateAndUpdate} setResponseRequest={setResponseRequest}
+                        setCreateAndUpdate={setCreateAndUpdate}
+                        setResponseRequest={setResponseRequest}
                         rankList={rankList}
                         departmentList={departmentList}
                         unitList={unitList}
@@ -542,6 +544,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                         accStatusList={accStatusList}
                         setItem={setItem}
                         item={item}
+                        isFromESD={isFromESD}
                     />
                 )
             }

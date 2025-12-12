@@ -16,7 +16,8 @@ const CreateAndUpdateAcc = ({
     accTypeList,
     accStatusList,
     setItem,
-    item
+    item,
+    isFromESD
 }) => {
     const [form, setForm] = useState({
         fin: "",
@@ -181,6 +182,7 @@ const CreateAndUpdateAcc = ({
         const hdrs = {
             headers: { Authorization: `Bearer ${token}` }
         };
+        console.log("1", form)
 
         const req = {
             ...form,
@@ -191,6 +193,8 @@ const CreateAndUpdateAcc = ({
             statusId: Number(form.statusId),
             formId: Number(form.formId)
         };
+
+        console.log("2", req)
 
         try {
             if (typeOpe === "createAcc") {
@@ -258,12 +262,34 @@ const CreateAndUpdateAcc = ({
 
     useEffect(() => {
         if (item) {
-            callAccTypeDetails(item?.accountTypeId)
-            callUnitByDep(item?.departmentId)
-            setForm({ ...item, unitId: item?.unitId })
-            setValueOfCapacity(item?.deviceData?.capacity.slice(item?.deviceData?.capacity.length - 2, item?.deviceData?.capacity.length))
+            callAccTypeDetails(item?.accountTypeId);
+            callUnitByDep(item?.departmentId);
+            if (isFromESD === "fromESD") {
+                const { mark, serialNumber, capacity, ...rest } = item;
+                setForm({
+                    ...rest,
+                    unitId: item?.unitId,
+                    deviceData: {
+                        mark,
+                        serialNumber,
+                        capacity
+                    }
+                });
+                setValueOfCapacity(capacity.slice(capacity.length - 2));
+            }
+            else {
+                setForm({
+                    ...item,
+                    unitId: item?.unitId
+                });
+                const cap = item?.deviceData?.capacity;
+                if (cap) {
+                    setValueOfCapacity(cap.slice(cap.length - 2));
+                }
+            }
         }
-    }, [])
+    }, []);
+
 
     return (
         <div className="acc-form-container-back">

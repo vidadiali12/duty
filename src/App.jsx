@@ -13,6 +13,7 @@ import Accounts from './Components/MenuElement/Accounts'
 import Duties from './Components/MenuElement/Duties/Duties'
 import Loggins from './Components/Loggins/Loggins'
 import CreateAdminAccount from './Components/MenuElement/Duties/CreateAdminAccount'
+import RequestUsers from './Components/UsersRequest/RequestUsers'
 
 function App() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [item, setItem] = useState({});
   const [showCreate, setShowCreate] = useState(true);
+  const [connectNow, setConnectNow] = useState(null);
 
   const [responseRequest, setResponseRequest] = useState({
     showResponse: false,
@@ -45,7 +47,9 @@ function App() {
   return (
     <>
       {
-        token && <Header userInfo={userInfo} setUserInfo={setUserInfo} setResponseRequest={setResponseRequest} />
+        token && <Header userInfo={userInfo} setUserInfo={setUserInfo} setResponseRequest={setResponseRequest}
+          connectNow={connectNow}
+          setConnectNow={setConnectNow} />
       }
       <Routes>
         {token ? (
@@ -65,7 +69,10 @@ function App() {
               setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
             <Route path='/operation-history' element={<Loggins
               setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+            <Route path='/users-request' element={<RequestUsers
+              setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} connectNow={connectNow} />} />
             <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/create-admin-page" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (

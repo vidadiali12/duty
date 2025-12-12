@@ -11,12 +11,14 @@ import { FaUsers, FaHistory } from 'react-icons/fa';
 import { BsClockHistory } from 'react-icons/bs';
 import { FiCheckSquare, FiBarChart2, FiUserPlus } from 'react-icons/fi';
 import { GiTeamIdea, GiRank1 } from 'react-icons/gi';
+import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import Profile from '../Modals/Profile';
 
-const Header = ({ userInfo, setUserInfo, setResponseRequest }) => {
+const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConnectNow }) => {
     const [loading, setLoading] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [showProfile, setShowProfile] = useState(null);
+    const [connectOpe, setConnectOpe] = useState(null);
     const menuRef = useRef();
 
     const callUserInfo = async () => {
@@ -29,7 +31,6 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest }) => {
             });
             const data = res?.data?.data;
             setUserInfo(data);
-            console.log(data)
             localStorage.setItem("userInfo", JSON.stringify(data))
             setLoading(false);
         } catch (err) {
@@ -43,8 +44,80 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest }) => {
         }
     };
 
+    const callIsConnect = async () => {
+        try {
+            const token = localStorage.getItem("myUserDutyToken");
+            if (!token) throw new Error("❌ Token tapılmadı!");
+            const isConnect = await api.get("/admin/bridge/getStatus", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            setConnectNow(isConnect?.data?.data)
+
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                isQuestion: false,
+                showResponse: true,
+                title: `❌ Əlaqə yaradıla bilmədi!`
+            }))
+        }
+    }
+
+    const connectNs = async () => {
+        try {
+            setConnectOpe(true);
+            const token = localStorage.getItem("myUserDutyToken");
+            if (!token) throw new Error("❌ Token tapılmadı!");
+            const connectRes = await api.put("/admin/bridge/startBridging", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            setConnectNow(connectRes?.data?.data)
+            setConnectOpe(false);
+
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                isQuestion: false,
+                showResponse: true,
+                title: `❌ Əlaqə yaradıla bilmədi!`
+            }))
+            setConnectOpe(false);
+        }
+    }
+
+    const disConnectNs = async () => {
+        try {
+            setConnectOpe(true);
+            const token = localStorage.getItem("myUserDutyToken");
+            if (!token) throw new Error("❌ Token tapılmadı!");
+            const disConnectRes = await api.put("/admin/bridge/closeBridging", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setConnectNow(!disConnectRes?.data?.data)
+            setConnectOpe(false);
+
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                isQuestion: false,
+                showResponse: true,
+                title: `❌ Əlaqə kəsilmədi!`
+            }));
+            setConnectOpe(false);
+        }
+    }
+
     useEffect(() => {
         callUserInfo();
+        callIsConnect();
     }, []);
 
     const callShowProfile = () => {
@@ -69,6 +142,36 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest }) => {
                         <img src={logo} alt="logo" className="header-logo" />
                         <h2 className="duty-title">Növbətçi Sistemi</h2>
                     </div>
+
+                    {
+                        userInfo?.role?.name == "Admin" && (
+                            <div className='ns-connect-box'>
+                                <div className='ns-connect-inform'>
+                                    <span className='ns-connect-text'>ESD bağlantı: </span>
+                                    {
+                                        connectNow ? <RiCheckboxBlankCircleFill className='connect-icon ci-1' /> : <RiCheckboxBlankCircleFill className='connect-icon ci-2' />
+                                    }
+                                </div>
+                                {
+                                    !connectNow && (
+                                        <button className='ns-connect-btn' onClick={connectNs}>
+                                            {connectOpe ? "Bağlantı yaradılır..." : "Bağlantı yarat"}
+                                        </button>
+                                    )
+                                }
+                                {
+                                    connectNow && (
+                                        <button className='ns-connect-btn' onClick={disConnectNs}>
+                                            {connectOpe ? "Bağlantını kəsilir..." : "Bağlantını kəs"}
+                                        </button>
+                                    )
+                                }
+                                <NavLink to={'/users-request'} >
+                                    Gələn Formlar
+                                </NavLink>
+                            </div>
+                        )
+                    }
 
                     <div className="header-right" ref={menuRef} onClick={() => setMenuOpen(!menuOpen)}>
                         <div className="user-info">

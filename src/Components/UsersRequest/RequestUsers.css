@@ -1,0 +1,138 @@
+.request-users-container {
+    width: 100%;
+    padding: 20px;
+    background: #f8f9ff;
+    margin-top: 20px;
+}
+
+.request-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 18px;
+}
+
+.request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.request-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e8f0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: .2s ease;
+}
+
+.request-card:hover {
+    background: #f2f4ff;
+    border-color: #cdd4ff;
+}
+
+.req-left {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.req-docNo {
+    font-weight: 700;
+    color: #2d3a80;
+    font-size: 19px;
+}
+
+.req-type {
+    font-size: 17px;
+    color: #777;
+}
+
+.req-date {
+    font-size: 14px;
+    color: #7b7b7b;
+}
+
+.req-users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    font-size: 15px;
+    color: #666;
+}
+
+.req-user-table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e1e1e1;
+}
+
+.req-user-header {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 120px 150px 150px 150px 130px 140px;
+    background: #f5f7fa;
+    padding: 10px 15px;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.req-user-row {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 120px 150px 150px 150px 130px 140px;
+    padding: 10px 15px;
+    align-items: center;
+    border-bottom: 1px solid #efefef;
+    background: white;
+}
+
+.req-user-row:hover {
+    background: #f0f4ff;
+}
+
+.req-user-row span,
+.req-user-header span {
+    font-size: 14px;
+}
+
+.col-status{
+    text-align: center;
+}
+
+.status {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    font-size: 13px;
+}
+
+.status.pending {
+    background: #fff3cd;
+    color: #b68a00;
+}
+
+.status.approved {
+    background: #d1f5d3;
+    color: #2e7d32;
+}
+
+.status.rejected {
+    background: #ffd6d6;
+    color: #c82333;
+}

@@ -142,12 +142,12 @@ const Profile = ({ userInfo, setUserInfo, setShowProfile, setResponseRequest }) 
               <div className="info-section">
                 <div><strong>FIN:</strong> {userInfo?.person?.fin}</div>
                 <div><strong>Rütbə:</strong> {userInfo?.person?.rank?.description}</div>
-                <div><strong>Təşkilat:</strong> {userInfo?.person?.department?.tag}</div>
+                <div><strong>İdarə (Bölmə):</strong> {userInfo?.person?.department?.tag}</div>
                 <div><strong>Vəzifə:</strong> {userInfo?.person?.position}</div>
                 <div><strong>Qoşulma tarixi:</strong> {new Date(userInfo?.createdAt).toLocaleDateString()}</div>
               </div>
 
-              {userInfo?.admin && <div className="admin-badge"><MdAdminPanelSettings /> Admin</div>}
+              {userInfo?.role?.name === "Admin" && <div className="admin-badge"><MdAdminPanelSettings /> Admin</div>}
             </div>
           )
         }
