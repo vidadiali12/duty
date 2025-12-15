@@ -15,7 +15,6 @@ const Pagination = ({ page, setPage, pageSize, totalItem }) => {
             pa.push(i)
         }
         setPageArr(pa);
-        console.log(pa)
     }
 
     const changePage = (pageNumber) => {

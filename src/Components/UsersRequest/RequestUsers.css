@@ -5,13 +5,6 @@
     margin-top: 20px;
 }
 
-.request-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 18px;
-}
-
 .request-list {
     display: flex;
     flex-direction: column;
@@ -26,7 +19,7 @@
     padding: 16px 20px;
     border-radius: 12px;
     border: 1px solid #e5e8f0;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     transition: .2s ease;
 }
 
@@ -40,6 +33,7 @@
     flex-direction: column;
     gap: 5px;
 }
+
 
 .req-docNo {
     font-weight: 700;
@@ -91,6 +85,62 @@
     border-bottom: 1px solid #e1e1e1;
 }
 
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 16px;
+}
+
+.request-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    height: min-content;
+    margin: 0;
+    padding: 0;
+}
+.request-select {
+    min-width: 260px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.request-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.request-select option {
+    padding: 10px;
+    font-size: 14px;
+    color: white;
+    background-color: var(--color-teal-12);
+    border: none;
+    outline: none;
+}
+
+.request-select option:hover {
+    background-color: #f3f4f6;
+}
+
+.request-select option:checked {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-weight: 500;
+}
+
+.request-select option[value=""] {
+    color: #9ca3af;
+}
+
 .req-user-row {
     display: grid;
     gap: 15px;
@@ -110,7 +160,7 @@
     font-size: 14px;
 }
 
-.col-status{
+.col-status {
     text-align: center;
 }
 
@@ -135,4 +185,60 @@
 .status.rejected {
     background: #ffd6d6;
     color: #c82333;
+}
+
+.col-operation {
+    text-align: center;
+    display: flex;
+    gap: 7px;
+}
+
+.ope-btns-design {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
+    width: min-content;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.ope-btns-design:hover {
+    color: white !important;
+}
+
+.event-type {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
+    width: min-content;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background-color: white !important;
+}
+
+.insert-event-type {
+    color: #2e7d32;
+    border: 1px solid rgba(46, 125, 50, .4);
+}
+
+.update-event-type {
+    color: rgb(216, 174, 34);
+    border: 1px solid rgba(216, 174, 34, .4);
+}
+
+.delete-event-type {
+    color: rgb(210, 64, 64);
+    border: 1px solid rgba(210, 64, 64, .4);
+}
+
+.insert-event-type:hover {
+    background-color: rgb(46, 125, 50);
+}
+
+.update-event-type:hover {
+    background-color: rgb(216, 174, 34);
+}
+
+.delete-event-type:hover {
+    background-color: rgb(210, 64, 64);
 }

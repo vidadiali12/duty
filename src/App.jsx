@@ -54,7 +54,11 @@ function App() {
       <Routes>
         {token ? (
           <>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home
+              userInfo={userInfo}
+              setUserInfo={setUserInfo}
+              setResponseRequest={setResponseRequest} />} />
+
             <Route path='/departments' element={<Departments
               setResponseRequest={setResponseRequest} setItem={setItem} item={item} />} />
             <Route path='/units' element={<Units

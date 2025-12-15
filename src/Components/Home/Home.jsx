@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import api from "../../api";
 import './Home.css'
+import Profile from "../Modals/Profile";
 
-export default function Home() {
+export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
   const [mainData, setMainData] = useState(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(15);
+  const [showProfile, setShowProfile] = useState(true)
   const [filters, setFilters] = useState({
     text: "",
     ranks: [],
@@ -121,7 +122,7 @@ export default function Home() {
       typeChartRef.current = new Chart(typeRef.current, {
         type: "bar",
         data: {
-          labels: [" "], 
+          labels: [" "],
           datasets
         },
         options: {
@@ -148,13 +149,20 @@ export default function Home() {
   }, [filters]);
 
   return (
-    <div className="charts-wrapper">
-      <div className="chart-box">
-        <canvas ref={statusRef}></canvas>
+    userInfo?.shouldChangePassword ?
+      (showProfile && (<Profile
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+        setShowProfile={setShowProfile}
+        setResponseRequest={setResponseRequest}
+      />)) :
+      <div className="charts-wrapper">
+        <div className="chart-box">
+          <canvas ref={statusRef}></canvas>
+        </div>
+        <div className="chart-box">
+          <canvas ref={typeRef}></canvas>
+        </div>
       </div>
-      <div className="chart-box">
-        <canvas ref={typeRef}></canvas>
-      </div>
-    </div>
   );
 }

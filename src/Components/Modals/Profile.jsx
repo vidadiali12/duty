@@ -124,6 +124,7 @@ const Profile = ({ userInfo, setUserInfo, setShowProfile, setResponseRequest }) 
   }
 
   useEffect(() => {
+    console.log(userInfo)
     callUser()
   }, [])
 

@@ -11,7 +11,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
     const [allUsersRequest, setAllUsersRequest] = useState(null);
     const [totalItem, setTotalItem] = useState(null);
 
-
+    const [searchByDocNo, setSearchByDocNo] = useState("");
     const [rankList, setRankList] = useState([]);
     const [departmentList, setDepartmentList] = useState([]);
     const [unitList, setUnitList] = useState([]);
@@ -22,7 +22,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
     const [apiOpe, setApiOpe] = useState("");
     const [isFromESD] = useState("fromESD")
 
-    const loadFilterData = async () => {
+    const loadFilterData = async (detailsData, formElement) => {
         const token = localStorage.getItem('myUserDutyToken');
         const hdrs = {
             headers: {
@@ -53,9 +53,88 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             setAccTypeList(t?.data?.data || []);
             setAccStatusList(s?.data?.data || []);
 
-            setCreateAndUpdate(true);
-            setApiOpe("/admin/client/createClient");
-            setTypeOpe("createAcc");
+
+            if (formElement?.eventId == 2) {
+                setCreateAndUpdate(true);
+                setApiOpe("/admin/client/createClient");
+                setTypeOpe("createAcc");
+            }
+            else if (formElement?.eventId == 3) {
+                try {
+                    const userDetails = await api.post('/admin/client/getClientDetailsV2', {
+                        accountTypeId: detailsData?.accountTypeId,
+                        username: detailsData?.username
+                    }, hdrs)
+
+                    const resDetailsData = userDetails?.data?.data
+
+                    setItem({
+                        ...detailsData,
+                        formId: formElement?.formId,
+                        note: resDetailsData?.note,
+                        isRegistered: resDetailsData?.registered,
+                        password: resDetailsData?.password
+                    });
+                    setCreateAndUpdate(true)
+                    setApiOpe(`/admin/client/updateClient/${resDetailsData?.id}`);
+                    setTypeOpe("editAcc");
+                } catch (err) {
+
+                }
+            }
+            else if (formElement?.eventId == 4) {
+                try {
+                    const userDetails = await api.post('/admin/client/getClientDetailsV2', {
+                        accountTypeId: detailsData?.accountTypeId,
+                        username: detailsData?.username
+                    }, hdrs)
+
+                    const resDetailsData = userDetails?.data?.data
+
+                    try {
+                        const client = await api.get(`/admin/client/getClientDetails/${resDetailsData?.id}`, hdrs)
+                        const clientData = client?.data?.data;
+
+                        const req = {
+                            ...detailsData,
+                            note: clientData?.note,
+                            isRegistered: clientData?.registered,
+                            statusId: 5,
+                            password: clientData?.password,
+                            formId: formElement?.formId || null
+                        }
+
+                        if (clientData?.accountStatus?.id != 5) {
+                            setResponseRequest(prev => (
+                                {
+                                    ...prev,
+                                    isQuestion: true,
+                                    showResponse: true,
+                                    title: `${detailsData?.name} ${detailsData?.surname} adlı istifadəçini silməyə əminsiniz?`,
+                                    type: "deleteAccSoft",
+                                    api: `/admin/client/updateClient/${resDetailsData?.id}`,
+                                    message: req
+                                }
+                            ))
+                        }
+                        else {
+
+                            setResponseRequest(prev => (
+                                {
+                                    ...prev,
+                                    isQuestion: false,
+                                    showResponse: true,
+                                    title: `${detailsData?.name} ${detailsData?.surname} adlı istifadəçinin statusu artıq "silinmiş" kimi qeyd olunub`
+                                }
+                            ))
+                        }
+                    } catch (err) {
+
+                    }
+                } catch (err) {
+
+                }
+            }
         } catch (err) {
             console.log(err);
         }
@@ -104,9 +183,9 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             const res = await api.get(
                 `/form/getFormDetails/${formElement?.formId}`, hdrs
             );
-            const resData =res?.data?.data 
-            setItem({...resData, formId: formElement?.formId});
-            loadFilterData();
+            const resData = res?.data?.data
+            setItem({ ...resData, formId: formElement?.formId });
+            loadFilterData({ ...resData, formId: formElement?.formId }, formElement);
         } catch (err) {
 
         }
@@ -115,22 +194,97 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
     useEffect(() => {
         setItem(null)
         allRequest();
-    }, [connectNow])
+    }, [page]);
+
+
+    const deleteFromForm = (formElement) => {
+        setResponseRequest(
+            {
+                isQuestion: true,
+                showResponse: true,
+                title: `${formElement?.name} ${formElement?.surname} adlı istifadəçini silməyə əminsiniz?`,
+                type: "deleteFromForm",
+                api: `/form/deleteForm/${formElement?.formId}`
+            }
+        )
+    }
+
+    const deleteDoc = (doc) => {
+        console.log(doc)
+        setResponseRequest(
+            {
+                isQuestion: true,
+                showResponse: true,
+                title: `Bu sənədi silməyə əminsiniz?`,
+                type: "deleteDoc",
+                api: `/form/deleteFormList/${doc?.documentId}`
+            }
+        )
+    }
+
+    const searchDocumentByNo = async () => {
+        try {
+            if (searchByDocNo.trim() != "") {
+                const resResultOfSerch = await api.get(`/form/searchForm/${searchByDocNo}`)
+                const newData = resResultOfSerch?.data?.data;
+                setAllUsersRequest(newData);
+            }
+            else {
+                allRequest();
+            }
+        } catch (err) {
+
+        }
+    }
+
+    useEffect(() => {
+        searchDocumentByNo()
+    }, [searchByDocNo])
+
     return (
         <div className="request-users-container">
 
-            <h2 className="request-title">Göndərilmiş Formlar</h2>
+            <div className="request-header">
+                <h2 className="request-title">Göndərilmiş Formlar</h2>
+                <div className="request-select-box">
+                    <select
+                        className="request-select"
+                        value={searchByDocNo}
+                        onChange={(e) => setSearchByDocNo(e.target.value)}
+                    >
+                        <option value="">Sənəd nömrəsinə görə axtar</option>
+                        {allUsersRequest?.map(doc => (
+                            <option key={doc.documentId} value={doc.documentNo}>
+                                {doc.documentNo}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
 
             <div className="request-list">
-                {connectNow ? (
+                {
                     allUsersRequest?.length > 0 ? (
-                        allUsersRequest.map((req) => (
-                            <div className="request-card" key={req.documentNo}>
+                        allUsersRequest?.map((req) => (
+                            <div className="request-card" key={req?.documentNo}>
 
                                 <div className="req-left">
-                                    <span className="req-docNo">№ {req.documentNo}</span>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <span className="req-docNo">№ {req.documentNo}</span>
+                                        <span className={`req-type event-type
+                                    ${req?.forms[0]?.eventId == 2 ? "insert-event-type" :
+                                                req?.forms[0]?.eventId == 3 ? "update-event-type" :
+                                                    req?.forms[0]?.eventId == 4 ? "delete-event-type" : ""}`}>
+                                            {req?.forms[0]?.eventId == 2 ? "İstifadəçi yaradılması" :
+                                                req?.forms[0]?.eventId == 3 ? "İstifadəçi məlumatlarının dəyişdirilməsi" :
+                                                    req?.forms[0]?.eventId == 4 ? "İstifadəçinin silinməsi" : ""}
+                                        </span>
+                                    </div>
                                     <span className="req-type">{req.accountType}</span>
                                     <span className="req-date">{req.formDate?.split("T")[0]} {req.formDate?.split("T")[1]?.slice(0, 8)}</span>
+                                    <span className="ope-btns-design delete-event-type"
+                                        style={{ marginTop: '5px' }}
+                                        onClick={() => deleteDoc(req)}>Sənədi sil</span>
                                 </div>
 
                                 <div className="req-users-list">
@@ -154,21 +308,35 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
                                                 <span
                                                     className={
-                                                        form.formStatusId === 3
+                                                        form.formStatusId == 3
                                                             ? "status pending"
-                                                            : form.formStatusId === 2
+                                                            : form.formStatusId == 2
                                                                 ? "status approved"
                                                                 : "status rejected"
                                                     }
                                                 >
-                                                    {form.formStatusId === 3
+                                                    {form.formStatusId == 3
                                                         ? "Gözləmədə"
-                                                        : form.formStatusId === 2
+                                                        : form.formStatusId == 2
                                                             ? "Təsdiqlənib"
                                                             : "İmtina edilib"}
                                                 </span>
                                                 <span className="col-operation">
-                                                    <span onClick={() => callClientDetails(form)}>Əlavə et</span>
+                                                    {
+                                                        form.formStatusId != 2 && (
+                                                            <span onClick={() => callClientDetails(form)}
+                                                                className={` ope-btns-design
+                                                                    ${form?.eventId == 2 ? "insert-event-type" :
+                                                                        form?.eventId == 3 ? "update-event-type" :
+                                                                            form?.eventId == 4 ? "delete-event-type" : ""}
+                                                                            `}>
+                                                                Təsdiq et
+                                                            </span>
+                                                        )
+                                                    }
+                                                    <span className="ope-btns-design delete-event-type" onClick={() => deleteFromForm(form)}>
+                                                        Formdan sil
+                                                    </span>
                                                 </span>
                                             </div>
                                         ))}
@@ -179,18 +347,12 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                         ))
                     ) : (
                         <div className="no-data">Məlumat tapılmadı...</div>
-                    )
-                ) : (
-                    <div className="no-data">Bağlantı yoxdur!</div>
-                )}
+                    )}
             </div>
 
             {totalItem && totalItem > pageSize && (
                 <Pagination
-                    page={page}
-                    setPage={setPage}
-                    pageSize={pageSize}
-                    totalItem={totalItem}
+                    page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem}
                 />
             )}
 

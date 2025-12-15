@@ -21,6 +21,26 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
     const [connectOpe, setConnectOpe] = useState(null);
     const menuRef = useRef();
 
+
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 150);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    // return (
+    //     <div className={`my-element ${scrolled ? "scrolled" : ""}`}>
+    //         Məzmun
+    //     </div>
+    // );
+
+
+
     const callUserInfo = async () => {
         setLoading(true);
         const token = localStorage.getItem("myUserDutyToken");
@@ -136,8 +156,8 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
 
     return (
         !userInfo?.shouldChangePassword && (
-            <div className='header'>
-                <div className="header-wrapper">
+            <div className={`header  ${scrolled ? "scrolled" : ""}`}>
+                <div className={`header-wrapper ${scrolled ? "scrolled-wrapper" : ""} `}>
                     <div className="header-left">
                         <img src={logo} alt="logo" className="header-logo" />
                         <h2 className="duty-title">Növbətçi Sistemi</h2>
@@ -166,7 +186,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                                         </button>
                                     )
                                 }
-                                <NavLink to={'/users-request'} >
+                                <NavLink to={'/users-request'} className={"forms-button"}>
                                     Gələn Formlar
                                 </NavLink>
                             </div>
