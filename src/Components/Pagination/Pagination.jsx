@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import './Pagination.css'
 
-const Pagination = ({ page, setPage, pageSize, totalItem }) => {
+const Pagination = ({ page, setPage, pageSize, totalItem, totalPages }) => {
 
     const [pageArr, setPageArr] = useState([])
     const [mainPage, setMainPage] = useState(null)
 
     const createPag = () => {
-        console.log(totalItem, page)
         if (!totalItem) return;
-        const countOfPage = Math.ceil(totalItem / pageSize)
         let pa = [];
-        for (let i = 1; i <= countOfPage; i++) {
+        for (let i = 1; i <= totalPages; i++) {
             pa.push(i)
         }
         setPageArr(pa);
+
+        if (page > totalPages) {
+            setPage(1)
+        }
     }
 
     const changePage = (pageNumber) => {
@@ -27,9 +29,6 @@ const Pagination = ({ page, setPage, pageSize, totalItem }) => {
             setPage(pageNumber - 1)
             setMainPage(pageNumber - 1)
         }
-        else {
-
-        }
     }
 
     const changePageAfter = (pageNumber) => {
@@ -39,10 +38,9 @@ const Pagination = ({ page, setPage, pageSize, totalItem }) => {
         }
     }
 
-
     useEffect(() => {
         createPag();
-    }, [])
+    }, [page, totalItem, totalPages])
     return (
         <div className='pag-box'>
 
@@ -68,8 +66,6 @@ const Pagination = ({ page, setPage, pageSize, totalItem }) => {
                     </>
                 )
             }
-
-
             {
                 (pageArr.length > 4) && (
                     <>
@@ -99,11 +95,10 @@ const Pagination = ({ page, setPage, pageSize, totalItem }) => {
                                         </button>
                                     )
                                 }
-                            })}
-
+                            })
+                        }
 
                         ...
-
 
                         {pageArr.slice(-2).map((p, i) => (
                             <button
@@ -117,8 +112,6 @@ const Pagination = ({ page, setPage, pageSize, totalItem }) => {
                     </>
                 )
             }
-
-
 
             <button
                 className={`pag-btn ${mainPage < pageArr.length ? 'active' : ''}`}

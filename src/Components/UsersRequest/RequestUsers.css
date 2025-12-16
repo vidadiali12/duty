@@ -77,12 +77,13 @@
 .req-user-header {
     display: grid;
     gap: 15px;
-    grid-template-columns: 120px 150px 150px 150px 130px 140px;
+    grid-template-columns: 120px 150px 150px 150px 130px 300px;
     background: #f5f7fa;
     padding: 10px 15px;
     font-weight: 600;
     color: #333;
     border-bottom: 1px solid #e1e1e1;
+    align-items: center;
 }
 
 .request-header {
@@ -144,7 +145,7 @@
 .req-user-row {
     display: grid;
     gap: 15px;
-    grid-template-columns: 120px 150px 150px 150px 130px 140px;
+    grid-template-columns: 120px 150px 150px 150px 130px 300px;
     padding: 10px 15px;
     align-items: center;
     border-bottom: 1px solid #efefef;
@@ -158,6 +159,8 @@
 .req-user-row span,
 .req-user-header span {
     font-size: 14px;
+    display: flex;
+    align-items: center;
 }
 
 .col-status {
@@ -241,4 +244,20 @@
 
 .delete-event-type:hover {
     background-color: rgb(210, 64, 64);
+}
+
+.approved-all{
+    width: min-content;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border: 1px solid rgba(46, 125, 50, .4);
+    border-radius: 8px;
+    color: rgb(46, 125, 50);
+    transition: .5s;
+    cursor: pointer;
+}
+
+.approved-all:hover{
+    background-color: #2e7d32;
+    color: white;
 }

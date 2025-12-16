@@ -10,6 +10,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
     const [pageSize, setPageSize] = useState(5);
     const [allUsersRequest, setAllUsersRequest] = useState(null);
     const [totalItem, setTotalItem] = useState(null);
+    const [totalPages, setTotalPages] = useState(null);
 
     const [searchByDocNo, setSearchByDocNo] = useState("");
     const [rankList, setRankList] = useState([]);
@@ -22,7 +23,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
     const [apiOpe, setApiOpe] = useState("");
     const [isFromESD] = useState("fromESD")
 
-    const loadFilterData = async (detailsData, formElement) => {
+    const loadFilterData = async (detailsData, formElement, toAll) => {
         const token = localStorage.getItem('myUserDutyToken');
         const hdrs = {
             headers: {
@@ -91,20 +92,53 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
                     const resDetailsData = userDetails?.data?.data
 
-                    try {
-                        const client = await api.get(`/admin/client/getClientDetails/${resDetailsData?.id}`, hdrs)
-                        const clientData = client?.data?.data;
-
-                        const req = {
-                            ...detailsData,
-                            note: clientData?.note,
-                            isRegistered: clientData?.registered,
+                    console.log(detailsData, resDetailsData)
+                    let req;
+                    if (resDetailsData?.device) {
+                        req = {
+                            fin: detailsData?.fin,
+                            name: detailsData?.name,
+                            surname: detailsData?.surname,
+                            fatherName: detailsData?.fatherName,
+                            rankId: detailsData?.rankId,
+                            departmentId: detailsData?.departmentId,
+                            unitId: detailsData?.unitId,
+                            position: detailsData?.position,
+                            phoneNumber: detailsData?.phoneNumber,
+                            note: resDetailsData?.note,
+                            isRegistered: resDetailsData?.registered,
+                            accountTypeId: detailsData?.accountTypeId,
                             statusId: 5,
-                            password: clientData?.password,
-                            formId: formElement?.formId || null
+                            username: detailsData?.username,
+                            password: resDetailsData?.password,
+                            deviceData: resDetailsData?.device || null,
+                            documentNo: detailsData?.documentNo || null,
+                            formId: formElement?.formId || null,
+                            actionReasonId: resDetailsData?.actionReason?.id,
                         }
+                    }
+                    else {
+                        req = {
+                            ...detailsData,
+                            note: resDetailsData?.note,
+                            isRegistered: resDetailsData?.registered,
+                            statusId: 5,
+                            password: resDetailsData?.password,
+                            formId: formElement?.formId || null,
+                        }
+                    }
 
-                        if (clientData?.accountStatus?.id != 5) {
+                    if (toAll === "approvedAll") {
+                        try {
+
+                            await api.put(`/admin/client/updateClient/${resDetailsData?.id}`, req, hdrs);
+                        } catch (err) {
+                            console.log(err)
+                        }
+                    }
+
+                    else {
+                        if (resDetailsData?.accountStatus?.id != 5) {
                             setResponseRequest(prev => (
                                 {
                                     ...prev,
@@ -128,8 +162,6 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                                 }
                             ))
                         }
-                    } catch (err) {
-
                     }
                 } catch (err) {
 
@@ -162,14 +194,15 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                 }
             );
 
-            setTotalItem(res?.data?.totalItem)
+            setTotalItem(res?.data?.totalItem || null);
+            setTotalPages(res?.data?.totalPages || null);
             setAllUsersRequest(res?.data?.data || []);
         } catch (err) {
 
         }
     }
 
-    const callClientDetails = async (formElement) => {
+    const callClientDetails = async (formElement, toAll) => {
         const token = localStorage.getItem("myUserDutyToken");
         if (!token) throw new Error("❌ Token tapılmadı");
 
@@ -185,7 +218,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             );
             const resData = res?.data?.data
             setItem({ ...resData, formId: formElement?.formId });
-            loadFilterData({ ...resData, formId: formElement?.formId }, formElement);
+            loadFilterData({ ...resData, formId: formElement?.formId }, formElement, toAll);
         } catch (err) {
 
         }
@@ -227,7 +260,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             if (searchByDocNo.trim() != "") {
                 const resResultOfSerch = await api.get(`/form/searchForm/${searchByDocNo}`)
                 const newData = resResultOfSerch?.data?.data;
-                setAllUsersRequest(newData);
+                setAllUsersRequest([newData]);
             }
             else {
                 allRequest();
@@ -235,6 +268,14 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
         } catch (err) {
 
         }
+    }
+
+
+    const approvedAll = (req) => {
+        console.log(req);
+        req?.forms.forEach((form) => {
+            callClientDetails(form, "approvedAll")
+        })
     }
 
     useEffect(() => {
@@ -296,10 +337,19 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                                             <span className="col-surname">Soyad</span>
                                             <span className="col-father">Ata adı</span>
                                             <span className="col-status">Status</span>
-                                            <span className="col-operation">Əməliyyatlar</span>
+                                            <span className="col-operation">
+                                                Əməliyyatlar
+                                                {
+                                                    req?.forms[0]?.eventId != 2 && (
+                                                        <span className="approved-all" onClick={() => approvedAll(req)}>
+                                                            Bir dəfəyə təsdiq et
+                                                        </span>
+                                                    )
+                                                }
+                                            </span>
                                         </div>
 
-                                        {req.forms?.map(form => (
+                                        {req?.forms?.map(form => (
                                             <div className="req-user-row" key={form.formId}>
                                                 <span className="col-rank">{form.rank}</span>
                                                 <span className="col-name">{form.name}</span>
@@ -308,7 +358,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
                                                 <span
                                                     className={
-                                                        form.formStatusId == 3
+                                                        form?.formStatusId == 3
                                                             ? "status pending"
                                                             : form.formStatusId == 2
                                                                 ? "status approved"
@@ -324,7 +374,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                                                 <span className="col-operation">
                                                     {
                                                         form.formStatusId != 2 && (
-                                                            <span onClick={() => callClientDetails(form)}
+                                                            <span onClick={() => callClientDetails(form, "onlyOne")}
                                                                 className={` ope-btns-design
                                                                     ${form?.eventId == 2 ? "insert-event-type" :
                                                                         form?.eventId == 3 ? "update-event-type" :
@@ -350,11 +400,11 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                     )}
             </div>
 
-            {totalItem && totalItem > pageSize && (
-                <Pagination
-                    page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem}
-                />
-            )}
+            {
+                totalItem && totalPages && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
+                )
+            }
 
             {
                 createAndUpdate && (

@@ -13,7 +13,8 @@ const Units = ({ setResponseRequest, setItem, item }) => {
     const [typeOfOpe, setTypeOfOpe] = useState("");
     const [section, setSection] = useState(null);
     const [endPoint, setEndPoint] = useState("");
-    const [totalItem, setTotalItem] = useState(null)
+    const [totalItem, setTotalItem] = useState(null);
+    const [totalPages, setTotalPages] = useState(null);
 
     const callUnits = async () => {
         const token = localStorage.getItem("myUserDutyToken");
@@ -22,7 +23,8 @@ const Units = ({ setResponseRequest, setItem, item }) => {
                 params: { page, pageSize },
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setTotalItem(resUnits?.data?.data?.totalItem);
+            setTotalItem(resUnits?.data?.data?.totalItem || null);
+            setTotalPages(resUnits?.data?.data?.totalPages || null)
             setAllUnits(resUnits?.data?.data?.data || []);
         } catch (err) {
             console.error(err);
@@ -114,8 +116,8 @@ const Units = ({ setResponseRequest, setItem, item }) => {
             }
 
             {
-                totalItem && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
+                totalItem && totalPages && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
                 )
             }
         </div>

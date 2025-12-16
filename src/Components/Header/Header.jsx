@@ -33,14 +33,6 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // return (
-    //     <div className={`my-element ${scrolled ? "scrolled" : ""}`}>
-    //         Məzmun
-    //     </div>
-    // );
-
-
-
     const callUserInfo = async () => {
         setLoading(true);
         const token = localStorage.getItem("myUserDutyToken");

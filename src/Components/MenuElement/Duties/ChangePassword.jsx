@@ -62,7 +62,7 @@ const ChangePassword = ({ item, setItem, setResponseRequest, setShowCPArea }) =>
 
                 <AiOutlineClose className='cp-close' onClick={() => setShowCPArea(false)} />
                     
-                <label>
+                <label className='cp-label'>
                     <span>Yeni Parol</span>
                     <div className='inp-wrap'>
                         <input
@@ -80,7 +80,7 @@ const ChangePassword = ({ item, setItem, setResponseRequest, setShowCPArea }) =>
                     </div>
                 </label>
 
-                <label>
+                <label className='cp-label'>
                     <span>Təkrar</span>
                     <div className='inp-wrap'>
                         <input

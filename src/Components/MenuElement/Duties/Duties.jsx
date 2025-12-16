@@ -19,7 +19,8 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
     const [typeOpe, setTypeOpe] = useState("");
     const [apiOpe, setApiOpe] = useState("");
     const [rankList, setRankList] = useState([]);
-    const [totalItem, setTotalItem] = useState(null)
+    const [totalItem, setTotalItem] = useState(null);
+    const [totalPages, setTotalPages] = useState(null);
     const [showCPArea, setShowCPArea] = useState(null);
     const [showCreate, setShowCreate] = useState(null);
 
@@ -56,7 +57,8 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
             );
 
             const resData = res?.data?.data || [];
-            setTotalItem(res?.data?.totalItem)
+            setTotalItem(res?.data?.totalItem || null);
+            setTotalPages(res?.data?.totalPages || null);
             setAllAccounts(resData?.filter(p => p?.id !== JSON.parse(localStorage.getItem("userInfo"))?.id));
         } catch (err) {
             console.log(err);
@@ -214,7 +216,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                 </div>
             </div>
 
-            <div style={{display: 'flex', gap: '15px'}}>
+            <div style={{ display: 'flex', gap: '15px' }}>
                 <button className="add-account-btn" onClick={createAcc}>
                     <FaPlus /> Yeni İstifadəçi
                 </button>
@@ -278,8 +280,8 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                 )
             }
             {
-                totalItem && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
+                totalItem && totalPages && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
                 )
             }
         </div>

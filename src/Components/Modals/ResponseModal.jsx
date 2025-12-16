@@ -20,7 +20,7 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                 }
                 else if (responseRequest.type === "deleteAccSoft") {
                     await api.put(responseRequest.api, responseRequest.message, hdrs);
-                    window.location.reload()
+                    // window.location.reload()
                 }
 
                 else if (responseRequest.type === "deleteAccHard") {

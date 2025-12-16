@@ -13,6 +13,7 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
     const [page, setPage] = useState(1);
     const [pageSize] = useState(12);
     const [totalItem, setTotalItem] = useState(null);
+    const [totalPages, setTotalPages] = useState(null);
     const [rankList, setRankList] = useState([]);
     const [showLogDetails, setShowLogDetails] = useState(null)
 
@@ -70,7 +71,8 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                 }
             );
 
-            setTotalItem(res?.data?.totalItem)
+            setTotalItem(res?.data?.totalItem || null);
+            setTotalPages(res?.data?.totalPages || null);
             setLogs(res?.data?.data || []);
         } catch (err) {
             console.log(err)
@@ -136,12 +138,14 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
 
     useEffect(() => {
         getLogs();
+
+        console.log(totalItem, page)
     }, [filters, page]);
 
     return (
         <div className="logs-wrapper p-4">
 
-            <div className="filters flex gap-3 mb-6">
+            <div className="filters">
 
                 <div className="filter-box">
                     <input
@@ -283,8 +287,8 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
             }
 
             {
-                totalItem && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
+                totalItem && totalPages && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
                 )
             }
         </div>

@@ -8,7 +8,8 @@ const ClientOpe = ({ item, setShowClientOpe }) => {
     const [clientOpes, setClientOpes] = useState([])
     const [page, setPage] = useState(1);
     const [pageSize] = useState(12);
-    const [totalItem, setTotalItem] = useState(null)
+    const [totalItem, setTotalItem] = useState(null);
+    const [totalPages, setTotalPages] = useState(null);
 
     const callClientOpeDetails = async () => {
         const token = localStorage.getItem('myUserDutyToken');
@@ -25,8 +26,8 @@ const ClientOpe = ({ item, setShowClientOpe }) => {
                 }
             );
             setClientOpes(res?.data?.data?.data || [])
-            setTotalItem(res?.data?.data?.totalItem)
-            console.log(res?.data?.data?.totalItem)
+            setTotalItem(res?.data?.data?.totalItem || null);
+            setTotalPages(res?.data?.data?.totalPages || null);
         } catch (err) {
             console.log(err)
         }
@@ -70,8 +71,8 @@ const ClientOpe = ({ item, setShowClientOpe }) => {
                 ))}
 
                 {
-                    totalItem && (totalItem > pageSize) && (
-                        <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
+                    totalItem && totalPages && (totalItem > pageSize) && (
+                        <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
                     )
                 }
 

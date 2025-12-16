@@ -13,7 +13,8 @@ const Departments = ({ setResponseRequest, setItem, item }) => {
     const [typeOfOpe, setTypeOfOpe] = useState("");
     const [section, setSection] = useState(null);
     const [endPoint, setEndPoint] = useState("");
-    const [totalItem, setTotalItem] = useState(null)
+    const [totalItem, setTotalItem] = useState(null);
+    const [totalPages, setTotalPages] = useState(null);
 
     const callDepartments = async () => {
         const token = localStorage.getItem("myUserDutyToken");
@@ -22,7 +23,8 @@ const Departments = ({ setResponseRequest, setItem, item }) => {
                 params: { page, pageSize },
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setTotalItem(resDeps?.data?.data?.totalItem)
+            setTotalItem(resDeps?.data?.data?.totalItem || null);
+            setTotalPages(resDeps?.data?.data?.totalPages || null);
             setAllDeps(resDeps?.data?.data?.data || []);
         } catch (err) {
             console.error(err);
@@ -113,9 +115,9 @@ const Departments = ({ setResponseRequest, setItem, item }) => {
                 )
             }
 
-             {
-                totalItem && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
+            {
+                totalItem && totalPages && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
                 )
             }
         </div>

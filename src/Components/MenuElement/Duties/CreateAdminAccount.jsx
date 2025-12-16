@@ -72,7 +72,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
 
                 <div className="su-grid">
 
-                    <label>
+                    <label className="caa-label">
                         <span>İstifadəçi adı</span>
                         <input
                             name="username"
@@ -82,7 +82,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         />
                     </label>
 
-                    <label>
+                    <label className="caa-label">
                         <span>Email</span>
                         <input
                             name="email"
@@ -92,7 +92,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         />
                     </label>
 
-                    <label>
+                    <label className="caa-label">
                         <span>FİN</span>
                         <input
                             name="fin"
@@ -102,7 +102,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         />
                     </label>
 
-                    <label>
+                    <label className="caa-label">
                         <span>Ad</span>
                         <input
                             name="name"
@@ -112,7 +112,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         />
                     </label>
 
-                    <label>
+                    <label className="caa-label">
                         <span>Soyad</span>
                         <input
                             name="surname"
@@ -122,7 +122,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         />
                     </label>
 
-                    <label>
+                    <label className="caa-label">
                         <span>Ata adı</span>
                         <input
                             name="fatherName"
@@ -132,7 +132,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         />
                     </label>
 
-                    <label className="select-wrapper">
+                    <label className="select-wrapper caa-label">
                         <span>Rütbə</span>
                         <select
                             name="rankId"
@@ -149,7 +149,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         </select>
                     </label>
 
-                    <label>
+                    <label className="caa-label">
                         <span>Vəzifə</span>
                         <input
                             name="position"
@@ -159,7 +159,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         />
                     </label>
 
-                    <label className="su-pass-wrapper">
+                    <label className="su-pass-wrapper caa-label">
                         <span>İstifadəçi Parolu</span>
                         <input
                             type={showPass ? "text" : "password"}
@@ -174,7 +174,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                         </i>
                     </label>
 
-                    <label>
+                    <label className="caa-label">
                         <span>Admin İstifadəçi adı</span>
                         <input
                             name="adminUsername"
@@ -183,8 +183,8 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                             onChange={onChange}
                         />
                     </label>
-
-                    <label className="su-pass-wrapper">
+ 
+                    <label className="su-pass-wrapper caa-label">
                         <span>Admin Parolu</span>
                         <input
                             type={showAdminPass ? "text" : "password"}

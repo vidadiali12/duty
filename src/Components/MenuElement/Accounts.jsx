@@ -18,6 +18,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
     const [apiOpe, setApiOpe] = useState("");
     const [isDeleteU, setIsDeleteU] = useState(null);
     const [totalItem, setTotalItem] = useState(null);
+    const [totalPages, setTotalPages] = useState(null)
     const [showClientOpe, setShowClientOpe] = useState(null);
     const [isFromESD] = useState(null)
 
@@ -67,7 +68,8 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 }
             );
 
-            setTotalItem(res?.data?.totalItem)
+            setTotalItem(res?.data?.totalItem || null);
+            setTotalPages(res?.data?.totalPages || null);
             setAllAccounts(res?.data?.data || []);
         } catch (err) {
             console.log(err);
@@ -574,8 +576,8 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             }
 
             {
-                totalItem && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} />
+                totalItem && totalPages && (totalItem > pageSize) && (
+                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
                 )
             }
         </div>
