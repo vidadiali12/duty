@@ -18,9 +18,10 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                     await api.post(responseRequest.api, hdrs);
                     localStorage.clear();
                 }
+
                 else if (responseRequest.type === "deleteAccSoft") {
                     await api.put(responseRequest.api, responseRequest.message, hdrs);
-                    // window.location.reload()
+                    window.location.reload()
                 }
 
                 else if (responseRequest.type === "deleteAccHard") {
@@ -28,10 +29,12 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                     await api.delete(responseRequest.api, { headers: hdrs.headers, data: responseRequest?.message });
                     window.location.reload()
                 }
+
                 else {
                     await api.delete(responseRequest.api, hdrs);
                     window.location.reload()
                 }
+                
                 setResponseRequest({
                     showResponse: false,
                     isQuestion: false,

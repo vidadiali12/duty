@@ -17,6 +17,7 @@ const Pagination = ({ page, setPage, pageSize, totalItem, totalPages }) => {
         if (page > totalPages) {
             setPage(1)
         }
+        console.log(page, totalItem, totalPages)
     }
 
     const changePage = (pageNumber) => {

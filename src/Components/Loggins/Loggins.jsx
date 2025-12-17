@@ -111,10 +111,10 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
             );
 
             setItem(res?.data?.data);
+            setShowLogDetails(true)
         } catch (err) {
             console.log(err)
         }
-        setShowLogDetails(true)
     }
 
     const clearFilter = () => {

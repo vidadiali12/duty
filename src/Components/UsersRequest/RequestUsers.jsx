@@ -69,16 +69,46 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
                     const resDetailsData = userDetails?.data?.data
 
-                    setItem({
-                        ...detailsData,
-                        formId: formElement?.formId,
+                    const dataOfDevice = {
+                        mark: detailsData?.mark || "",
+                        capacity: detailsData?.capacity || "",
+                        serialNumber: detailsData?.serialNumber || ""
+                    }
+                    console.log(dataOfDevice)
+                    const req = {
+                        fin: detailsData?.fin,
+                        name: detailsData?.name,
+                        surname: detailsData?.surname,
+                        fatherName: detailsData?.fatherName,
+                        rankId: detailsData?.rankId,
+                        departmentId: detailsData?.departmentId,
+                        unitId: detailsData?.unitId,
+                        position: detailsData?.position,
+                        phoneNumber: detailsData?.phoneNumber,
                         note: resDetailsData?.note,
                         isRegistered: resDetailsData?.registered,
-                        password: resDetailsData?.password
-                    });
-                    setCreateAndUpdate(true)
-                    setApiOpe(`/admin/client/updateClient/${resDetailsData?.id}`);
-                    setTypeOpe("editAcc");
+                        accountTypeId: detailsData?.accountTypeId,
+                        statusId: resDetailsData?.accountStatus?.id,
+                        username: detailsData?.username,
+                        password: resDetailsData?.password,
+                        deviceData: dataOfDevice || null,
+                        documentNo: detailsData?.documentNo || null,
+                        formId: formElement?.formId || null
+                    }
+                    if (toAll === "approvedAll") {
+                        try {
+                            await api.put(`/admin/client/updateClient/${resDetailsData?.id}`, req, hdrs);
+                            window.location.reload()
+                        } catch (err) {
+                            console.log(err)
+                        }
+                    }
+                    else {
+                        setItem(req);
+                        setCreateAndUpdate(true)
+                        setApiOpe(`/admin/client/updateClient/${resDetailsData?.id}`);
+                        setTypeOpe("editAcc");
+                    }
                 } catch (err) {
 
                 }
@@ -92,46 +122,33 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
                     const resDetailsData = userDetails?.data?.data
 
-                    console.log(detailsData, resDetailsData)
-                    let req;
-                    if (resDetailsData?.device) {
-                        req = {
-                            fin: detailsData?.fin,
-                            name: detailsData?.name,
-                            surname: detailsData?.surname,
-                            fatherName: detailsData?.fatherName,
-                            rankId: detailsData?.rankId,
-                            departmentId: detailsData?.departmentId,
-                            unitId: detailsData?.unitId,
-                            position: detailsData?.position,
-                            phoneNumber: detailsData?.phoneNumber,
-                            note: resDetailsData?.note,
-                            isRegistered: resDetailsData?.registered,
-                            accountTypeId: detailsData?.accountTypeId,
-                            statusId: 5,
-                            username: detailsData?.username,
-                            password: resDetailsData?.password,
-                            deviceData: resDetailsData?.device || null,
-                            documentNo: detailsData?.documentNo || null,
-                            formId: formElement?.formId || null,
-                            actionReasonId: resDetailsData?.actionReason?.id,
-                        }
+                    const req = {
+                        fin: resDetailsData?.person?.fin,
+                        name: resDetailsData?.person?.name,
+                        surname: resDetailsData?.person?.surname,
+                        fatherName: resDetailsData?.person?.fatherName,
+                        rankId: resDetailsData?.person?.rank?.id,
+                        departmentId: resDetailsData?.person?.department?.id,
+                        unitId: resDetailsData?.person?.unit?.id,
+                        position: resDetailsData?.person?.position,
+                        phoneNumber: resDetailsData?.phoneNumber,
+                        note: resDetailsData?.note,
+                        isRegistered: resDetailsData?.registered,
+                        accountTypeId: resDetailsData?.accountType?.id,
+                        statusId: 5,
+                        username: resDetailsData?.username,
+                        password: resDetailsData?.password,
+                        deviceData: resDetailsData?.device || null,
+                        documentNo: detailsData?.documentNo || null,
+                        formId: formElement?.formId || null
                     }
-                    else {
-                        req = {
-                            ...detailsData,
-                            note: resDetailsData?.note,
-                            isRegistered: resDetailsData?.registered,
-                            statusId: 5,
-                            password: resDetailsData?.password,
-                            formId: formElement?.formId || null,
-                        }
-                    }
+
 
                     if (toAll === "approvedAll") {
                         try {
-
+                            console.log(req)
                             await api.put(`/admin/client/updateClient/${resDetailsData?.id}`, req, hdrs);
+                            window.location.reload()
                         } catch (err) {
                             console.log(err)
                         }
@@ -243,7 +260,6 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
     }
 
     const deleteDoc = (doc) => {
-        console.log(doc)
         setResponseRequest(
             {
                 isQuestion: true,
@@ -257,10 +273,31 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
     const searchDocumentByNo = async () => {
         try {
+            const token = localStorage.getItem("myUserDutyToken");
+            if (!token) throw new Error("❌ Token tapılmadı");
+
+            const hdrs = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
             if (searchByDocNo.trim() != "") {
-                const resResultOfSerch = await api.get(`/form/searchForm/${searchByDocNo}`)
+                const resResultOfSerch = await api.post(`/form/searchForm`, {
+                    documentNo: searchByDocNo.trim(),
+                },
+                    {
+                        ...hdrs,
+                        params: {
+                            page,
+                            pageSize,
+                        }
+                    }
+                );
                 const newData = resResultOfSerch?.data?.data;
-                setAllUsersRequest([newData]);
+                setAllUsersRequest(newData);
+                setTotalItem(newData?.data?.totalItem || null);
+                setTotalPages(newData?.data?.totalPages || null);
             }
             else {
                 allRequest();
@@ -288,18 +325,11 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             <div className="request-header">
                 <h2 className="request-title">Göndərilmiş Formlar</h2>
                 <div className="request-select-box">
-                    <select
-                        className="request-select"
-                        value={searchByDocNo}
-                        onChange={(e) => setSearchByDocNo(e.target.value)}
-                    >
-                        <option value="">Sənəd nömrəsinə görə axtar</option>
-                        {allUsersRequest?.map(doc => (
-                            <option key={doc.documentId} value={doc.documentNo}>
-                                {doc.documentNo}
-                            </option>
-                        ))}
-                    </select>
+                    <label htmlFor="">
+                        <input type="search"
+                            value={searchByDocNo}
+                            onChange={(e) => setSearchByDocNo(e.target.value)} />
+                    </label>
                 </div>
             </div>
 
