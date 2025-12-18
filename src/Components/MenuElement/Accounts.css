@@ -11,8 +11,6 @@
     --text-2: #241b5a;
 }
 
-/* -------------------------------------------- */
-
 .filters {
     display: flex;
     width: 100%;
@@ -33,8 +31,6 @@
     border-radius: 10px;
     margin-top: 20px;
 }
-
-/* -------------------------------------------- */
 
 .filters {
     display: flex;
@@ -68,13 +64,19 @@
     color: #4a4a4a;
 }
 
+.filter-label.date-filter {
+    padding: 10px 25px !important;
+}
+
+input[type="date"] {
+    padding-right: 12px;
+}
+
 .filter-label:hover {
     background: var(--bg-4);
     border-color: var(--accent);
     color: var(--accent-light);
 }
-
-/* -------------------------------------------- */
 
 .filter-box-child {
     display: none;
@@ -103,13 +105,12 @@
         opacity: 0;
         transform: translateY(-6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-
-/* -------------------------------------------- */
 
 .filter-box-child label {
     display: flex;
@@ -137,8 +138,6 @@
     height: 18px;
     cursor: pointer;
 }
-
-/* -------------------------------------------- */
 
 .accounts-table {
     width: 100%;
@@ -179,8 +178,6 @@
     cursor: pointer;
 }
 
-/* -------------------------------------------- */
-
 .add-account-btn {
     align-self: flex-start;
     display: flex;
@@ -202,13 +199,10 @@
     transform: translateY(-2px);
 }
 
-/* -------------------------------------------- */
-
 .ope-box .ope-icon:hover {
     scale: 1.1;
 }
 
-/* -------------------------------------------- */
 
 .delete-user-box-back {
     position: fixed;
@@ -224,7 +218,7 @@
     background: white;
     padding: 30px 25px;
     border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     width: 360px;
 }
 
@@ -295,11 +289,13 @@
     width: min-content;
     white-space: nowrap;
 }
-.delete-user-box>div{
+
+.delete-user-box>div {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
 }
+
 .delete-user-box>div button {
     background-color: #ff6b6b;
     color: #fff;
@@ -320,4 +316,19 @@
 
 .delete-user-box>button:hover {
     background-color: #bfc1c5;
+}
+
+.clear-filters {
+    height: auto;
+    padding: 0 14px;
+    border-radius: 6px;
+    border: none;
+    background: #ef4444;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.clear-filters:hover {
+    background: #dc2626;
 }

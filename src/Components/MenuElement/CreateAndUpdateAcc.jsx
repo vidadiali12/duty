@@ -173,6 +173,7 @@ const CreateAndUpdateAcc = ({
     };
 
     const submitForm = async () => {
+
         if (!validateForm()) {
             return;
         }
@@ -182,7 +183,6 @@ const CreateAndUpdateAcc = ({
         const hdrs = {
             headers: { Authorization: `Bearer ${token}` }
         };
-        console.log("1", form)
 
         const req = {
             ...form,
@@ -193,9 +193,7 @@ const CreateAndUpdateAcc = ({
             statusId: Number(form.statusId),
             formId: Number(form.formId)
         };
-
-        console.log("2", req)
-
+        
         try {
             if (typeOpe === "createAcc") {
                 await api.post(apiOpe, req, hdrs);
@@ -205,7 +203,7 @@ const CreateAndUpdateAcc = ({
             setCreateAndUpdate(null);
             setApiOpe("");
             setTypeOpe("");
-            setItem(null)
+            setItem(null);
             window.location.reload();
         } catch (err) {
             console.log("Error:", err);
@@ -308,7 +306,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.name}
                                 name="name"
                                 placeholder="Ad: "
-                                onChange={(e) => onChange(e, "status")} />
+                                onChange={(e) => onChange(e, "name")} />
                             {errors.name && <span className="error-text">{errors.name}</span>}
                         </div>
 
@@ -318,7 +316,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.surname}
                                 name="surname"
                                 placeholder="Soyad: "
-                                onChange={(e) => onChange(e, "status")} />
+                                onChange={(e) => onChange(e, "surname")} />
                             {errors.surname && <span className="error-text">{errors.surname}</span>}
                         </div>
 
@@ -328,7 +326,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.fatherName}
                                 name="fatherName"
                                 placeholder="Ata adı: "
-                                onChange={(e) => onChange(e, "status")} />
+                                onChange={(e) => onChange(e, "fatherName")} />
                             {errors.fatherName && <span className="error-text">{errors.fatherName}</span>}
                         </div>
 
@@ -339,7 +337,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.position}
                                 name="position"
                                 placeholder="Vəzifə: "
-                                onChange={(e) => onChange(e, "status")} />
+                                onChange={(e) => onChange(e, "position")} />
                             {errors.position && <span className="error-text">{errors.position}</span>}
                         </div>
 
@@ -349,7 +347,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.phoneNumber}
                                 name="phoneNumber"
                                 placeholder="+9945005050"
-                                onChange={(e) => onChange(e, "status")} />
+                                onChange={(e) => onChange(e, "phoneNumber")} />
                             {errors.phoneNumber && <span className="error-text">{errors.phoneNumber}</span>}
                         </div>
 
@@ -359,7 +357,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.username}
                                 name="username"
                                 placeholder="İstifadəçi adı: "
-                                onChange={(e) => onChange(e, "status")} />
+                                onChange={(e) => onChange(e, "usernme")} />
                             {errors.username && <span className="error-text">{errors.username}</span>}
                         </div>
 
@@ -369,7 +367,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.fin}
                                 name="fin"
                                 placeholder="Fin: "
-                                onChange={(e) => onChange(e, "status")} />
+                                onChange={(e) => onChange(e, "fin")} />
                             {errors.fin && <span className="error-text">{errors.fin}</span>}
                         </div>
 
@@ -379,7 +377,7 @@ const CreateAndUpdateAcc = ({
                                 value={form?.password}
                                 name="password"
                                 placeholder="Parol: "
-                                onChange={(e) => onChange(e, "status")}
+                                onChange={(e) => onChange(e, "password")}
                                 type={showPassword ? "password" : "text"} />
                             {
                                 showPassword ? <FiEye className="pass-on-off" onClick={passView} />
@@ -392,7 +390,7 @@ const CreateAndUpdateAcc = ({
                     <div className="select-boxes">
                         <div className={`form-group ${errors.rankId ? "error" : ""}`}>
                             <label>Rütbə</label>
-                            <select name="rankId" value={form?.rankId} onChange={(e) => onChange(e, "status")}>
+                            <select name="rankId" value={form?.rankId} onChange={(e) => onChange(e, "rankId")}>
                                 <option value="">Seç</option>
                                 {rankList?.map(r => (
                                     <option key={r.id} value={r.id}>{r.name}</option>
@@ -414,7 +412,7 @@ const CreateAndUpdateAcc = ({
 
                         <div className={`form-group ${errors.unitId ? "error" : ""}`}>
                             <label>Bölmə</label>
-                            <select name="unitId" value={form?.unitId} onChange={(e) => onChange(e, "status")}>
+                            <select name="unitId" value={form?.unitId} onChange={(e) => onChange(e, "unit")}>
                                 <option value="">Seç</option>
                                 {unitArr?.map(u => (
                                     <option key={u.id} value={u.id}>{u.tag}</option>
@@ -546,7 +544,7 @@ const CreateAndUpdateAcc = ({
                             value={form?.note}
                             name="note"
                             onChange={(e) =>
-                                onChange(e, "status")}
+                                onChange(e, "note")}
                             placeholder="Qeyd: "></textarea>
                         {errors.note && <span className="error-text">{errors.note}</span>}
                     </div>

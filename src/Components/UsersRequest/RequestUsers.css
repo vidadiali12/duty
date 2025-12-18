@@ -261,3 +261,7 @@
     background-color: #2e7d32;
     color: white;
 }
+
+.request-select-box>label>input{
+    width: 320px;
+}

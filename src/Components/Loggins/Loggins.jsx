@@ -138,9 +138,12 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
 
     useEffect(() => {
         getLogs();
-
-        console.log(totalItem, page)
     }, [filters, page]);
+
+    useEffect(() => {
+        setPage(1)
+    }, [filters]);
+
 
     return (
         <div className="logs-wrapper p-4">

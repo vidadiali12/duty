@@ -28,7 +28,9 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
         departments: [],
         units: [],
         accountTypes: [],
-        accountStatus: []
+        accountStatus: [],
+        fromDate: "",
+        toDate: ""
     });
 
     const [rankList, setRankList] = useState([]);
@@ -53,7 +55,9 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 unitIds: filters.units,
                 accountTypeIds: filters.accountTypes,
                 accountStatusIds: filters.accountStatus,
-                newToOld: true
+                newToOld: true,
+                fromDate: filters?.fromDate,
+                toDate: filters?.toDate
             };
 
             const res = await api.post(
@@ -140,7 +144,9 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             departments: [],
             units: [],
             accountTypes: [],
-            accountStatus: []
+            accountStatus: [],
+            fromDate: "",
+            toDate: ""
         })
 
         const inputs = document.querySelectorAll('input[type="checkbox"]');
@@ -204,6 +210,10 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
     useEffect(() => {
         callAccounts();
     }, [filters, page]);
+
+    useEffect(() => {
+        setPage(1)
+    }, [filters]);
 
     const deleteUser = async () => {
         setIsDeleteU(null)
@@ -479,11 +489,31 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                         ))}
                     </div>
                 </div>
+
                 <div className="filter-box">
-                    <span className="filter-label clear-filter" onClick={clearFilter}>
-                        Filteri Sıfırla
-                    </span>
+                    <input
+                        className="filter-label date-filter"
+                        value={filters.fromDate.split(".").reverse().join("-")}
+                        type="date"
+                        onChange={e =>
+                            setFilters(prev => ({ ...prev, fromDate: e.target.value.split("-").reverse().join(".") }))
+                        }
+                    />
+
                 </div>
+
+                <div className="filter-box">
+                    <input
+                        className="filter-label date-filter"
+                        value={filters.toDate.split(".").reverse().join("-")}
+                        type="date"
+                        onChange={e =>
+                            setFilters(prev => ({ ...prev, toDate: e.target.value.split("-").reverse().join(".") }))
+                        }
+                    />
+                </div>
+
+                <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
             </div>
 
             <button className="add-account-btn" onClick={createAcc}>
@@ -576,8 +606,14 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             }
 
             {
-                totalItem && totalPages && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
+                totalItem && totalPages && totalItem > pageSize && (
+                    <Pagination
+                        page={page}
+                        setPage={setPage}
+                        pageSize={pageSize}
+                        totalItem={totalItem}
+                        totalPages={totalPages}
+                    />
                 )
             }
         </div>

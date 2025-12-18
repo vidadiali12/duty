@@ -59,6 +59,8 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                 setCreateAndUpdate(true);
                 setApiOpe("/admin/client/createClient");
                 setTypeOpe("createAcc");
+                const postedItem = { ...detailsData, statusId: detailsData?.serialNumber == "" ? 1 : 3 }
+                setItem(postedItem)
             }
             else if (formElement?.eventId == 3) {
                 try {
@@ -74,7 +76,6 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                         capacity: detailsData?.capacity || "",
                         serialNumber: detailsData?.serialNumber || ""
                     }
-                    console.log(dataOfDevice)
                     const req = {
                         fin: detailsData?.fin,
                         name: detailsData?.name,
@@ -143,10 +144,8 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                         formId: formElement?.formId || null
                     }
 
-
                     if (toAll === "approvedAll") {
                         try {
-                            console.log(req)
                             await api.put(`/admin/client/updateClient/${resDetailsData?.id}`, req, hdrs);
                             window.location.reload()
                         } catch (err) {
@@ -213,6 +212,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
             setTotalItem(res?.data?.totalItem || null);
             setTotalPages(res?.data?.totalPages || null);
+            console.log(res?.data?.data )
             setAllUsersRequest(res?.data?.data || []);
         } catch (err) {
 
@@ -233,8 +233,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             const res = await api.get(
                 `/form/getFormDetails/${formElement?.formId}`, hdrs
             );
-            const resData = res?.data?.data
-            setItem({ ...resData, formId: formElement?.formId });
+            const resData = res?.data?.data;
             loadFilterData({ ...resData, formId: formElement?.formId }, formElement, toAll);
         } catch (err) {
 
@@ -245,7 +244,6 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
         setItem(null)
         allRequest();
     }, [page]);
-
 
     const deleteFromForm = (formElement) => {
         setResponseRequest(
@@ -316,8 +314,26 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
     }
 
     useEffect(() => {
-        searchDocumentByNo()
+        searchDocumentByNo();
+        setPage(1)
     }, [searchByDocNo])
+
+
+    const countOfApproveds = (req) => {
+        let c = 0;
+        req.forms.forEach((r) => {
+            if (r.formStatusId == 2) {
+                c++;
+            }
+        })
+
+        if (c == req.forms.length) {
+            return false
+        }
+        else {
+            return true
+        }
+    }
 
     return (
         <div className="request-users-container">
@@ -327,6 +343,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                 <div className="request-select-box">
                     <label htmlFor="">
                         <input type="search"
+                            placeholder="Sənəd nömrəsi ilə axtar..."
                             value={searchByDocNo}
                             onChange={(e) => setSearchByDocNo(e.target.value)} />
                     </label>
@@ -361,16 +378,24 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                                 <div className="req-users-list">
                                     <div className="req-user-table">
 
-                                        <div className="req-user-header">
-                                            <span className="col-rank">Rütbə</span>
-                                            <span className="col-name">Ad</span>
-                                            <span className="col-surname">Soyad</span>
-                                            <span className="col-father">Ata adı</span>
+                                        <div className="req-user-header"
+                                            style={{ gridTemplateColumns: req?.forms[0]?.eventId == 4 ? '160px 130px 300px' : '120px 150px 150px 150px 130px 300px' }}>
+                                            {
+                                                req?.forms[0]?.eventId == 4 ?
+                                                    <span className="col-name">İstifadəçi adı</span> :
+                                                    <>
+
+                                                        <span className="col-rank">Rütbə</span>
+                                                        <span className="col-name">Ad</span>
+                                                        <span className="col-surname">Soyad</span>
+                                                        <span className="col-father">Ata adı</span>
+                                                    </>
+                                            }
                                             <span className="col-status">Status</span>
                                             <span className="col-operation">
                                                 Əməliyyatlar
                                                 {
-                                                    req?.forms[0]?.eventId != 2 && (
+                                                    req?.forms[0]?.eventId != 2 && countOfApproveds(req) && (
                                                         <span className="approved-all" onClick={() => approvedAll(req)}>
                                                             Bir dəfəyə təsdiq et
                                                         </span>
@@ -380,12 +405,18 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                                         </div>
 
                                         {req?.forms?.map(form => (
-                                            <div className="req-user-row" key={form.formId}>
-                                                <span className="col-rank">{form.rank}</span>
-                                                <span className="col-name">{form.name}</span>
-                                                <span className="col-surname">{form.surname}</span>
-                                                <span className="col-father">{form.fatherName}</span>
-
+                                            <div className="req-user-row" key={form.formId}
+                                                style={{ gridTemplateColumns: form?.eventId == 4 ? '160px 130px 300px' : '120px 150px 150px 150px 130px 300px' }}>
+                                                {
+                                                    form?.eventId == 4 ?
+                                                        <span className="col-name">{form.username}</span> :
+                                                        <>
+                                                            <span className="col-rank">{form.rank}</span>
+                                                            <span className="col-name">{form.name}</span>
+                                                            <span className="col-surname">{form.surname}</span>
+                                                            <span className="col-father">{form.fatherName}</span>
+                                                        </>
+                                                }
                                                 <span
                                                     className={
                                                         form?.formStatusId == 3
@@ -431,8 +462,14 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             </div>
 
             {
-                totalItem && totalPages && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
+                totalItem && totalPages && totalItem > pageSize && (
+                    <Pagination
+                        page={page}
+                        setPage={setPage}
+                        pageSize={pageSize}
+                        totalItem={totalItem}
+                        totalPages={totalPages}
+                    />
                 )
             }
 

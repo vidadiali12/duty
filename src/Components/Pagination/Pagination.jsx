@@ -15,9 +15,8 @@ const Pagination = ({ page, setPage, pageSize, totalItem, totalPages }) => {
         setPageArr(pa);
 
         if (page > totalPages) {
-            setPage(1)
+            setPage(1)   
         }
-        console.log(page, totalItem, totalPages)
     }
 
     const changePage = (pageNumber) => {

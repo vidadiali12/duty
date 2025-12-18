@@ -127,6 +127,10 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
         callAccounts();
     }, [filters, page]);
 
+    useEffect(() => {
+        setPage(1)
+    }, [filters]);
+
     const deleteUser = async (acc) => {
         console.log(acc)
         setResponseRequest(prev => (
