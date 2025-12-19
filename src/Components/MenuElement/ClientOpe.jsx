@@ -3,7 +3,7 @@ import api from '../../api'
 import "./ClientOpe.css"
 import Pagination from '../Pagination/Pagination'
 
-const ClientOpe = ({ item, setShowClientOpe }) => {
+const ClientOpe = ({ item, setResponseRequest, setShowClientOpe }) => {
 
     const [clientOpes, setClientOpes] = useState([])
     const [page, setPage] = useState(1);
@@ -29,7 +29,12 @@ const ClientOpe = ({ item, setShowClientOpe }) => {
             setTotalItem(res?.data?.data?.totalItem || null);
             setTotalPages(res?.data?.data?.totalPages || null);
         } catch (err) {
-            console.log(err)
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 

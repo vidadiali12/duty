@@ -30,7 +30,12 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
             const res = await api.get("/rank/getAllRank");
             setRanks(res?.data?.data || []);
         } catch (err) {
-            console.log("Rütbə sorğusu xətası:", err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -55,7 +60,12 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                 type: "createAdminAccDuty"
             }))
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         } finally {
             setLoading(false);
         }
@@ -183,7 +193,7 @@ const CreateAdminAccount = ({ setShowCreate, setResponseRequest }) => {
                             onChange={onChange}
                         />
                     </label>
- 
+
                     <label className="su-pass-wrapper caa-label">
                         <span>Admin Parolu</span>
                         <input

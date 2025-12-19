@@ -54,7 +54,12 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
             setAccTypeList(types?.data?.data || []);
 
         } catch (err) {
-            console.log(err)
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -75,7 +80,12 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
             setTotalPages(res?.data?.totalPages || null);
             setLogs(res?.data?.data || []);
         } catch (err) {
-            console.log(err)
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -113,7 +123,12 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
             setItem(res?.data?.data);
             setShowLogDetails(true)
         } catch (err) {
-            console.log(err)
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 

@@ -43,7 +43,12 @@ const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, se
       window.location.reload();
 
     } catch (err) {
-      console.log(err);
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
     }
   };
 
@@ -60,7 +65,12 @@ const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, se
       setDepartments(res?.data?.data?.data || []);
 
     } catch (err) {
-      console.log(err);
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
     }
   };
 

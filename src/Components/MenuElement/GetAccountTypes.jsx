@@ -40,7 +40,12 @@ const GetAccountTypes = ({ setResponseRequest, setItem, item, ope }) => {
                 setTypesDetails(resTypes?.data?.data);
             }
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -130,7 +135,7 @@ const GetAccountTypes = ({ setResponseRequest, setItem, item, ope }) => {
                                         return false;
                                     }
 
-                                    return true; 
+                                    return true;
                                 })
                                 .map((key) => (
                                     <label className="gat-item" key={key}>

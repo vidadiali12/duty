@@ -21,7 +21,12 @@ const AccountTypes = ({ setResponseRequest, userInfo, setItem, item }) => {
             });
             setAllTypes(resTypes?.data?.data);
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 

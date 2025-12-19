@@ -76,7 +76,12 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             setTotalPages(res?.data?.totalPages || null);
             setAllAccounts(res?.data?.data || []);
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -112,7 +117,12 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             setAccStatusList(s?.data?.data || []);
 
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -163,33 +173,43 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
     }, []);
 
     const callUnitByDep = async () => {
-        const token = localStorage.getItem('myUserDutyToken');
-        const hdrs = {
-            headers: {
-                Authorization: `Bearer ${token}`
+        try {
+            const token = localStorage.getItem('myUserDutyToken');
+            const hdrs = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const hdrsDep = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                params: { page, pageSize }
             }
-        };
-        const hdrsDep = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            params: { page, pageSize }
-        }
 
-        if (filters?.departments.length !== 0) {
-            let u, uList = [];
-            const callUnits = async (id) => {
-                u = await api.get(`/department/unit/getUnitsByDepartment/${id}`, hdrs);
-                uList = [...uList, ...(u?.data?.data || [])];
-                setUnitList(uList);
+            if (filters?.departments.length !== 0) {
+                let u, uList = [];
+                const callUnits = async (id) => {
+                    u = await api.get(`/department/unit/getUnitsByDepartment/${id}`, hdrs);
+                    uList = [...uList, ...(u?.data?.data || [])];
+                    setUnitList(uList);
+                }
+                filters?.departments.forEach((id) => {
+                    callUnits(id)
+                })
             }
-            filters?.departments.forEach((id) => {
-                callUnits(id)
-            })
+            else {
+                const uu = await api.get('/department/unit/getAllUnit', hdrsDep);
+                setUnitList(uu?.data?.data?.data || []);
+            }
         }
-        else {
-            const uu = await api.get('/department/unit/getAllUnit', hdrsDep);
-            setUnitList(uu?.data?.data?.data || []);
+        catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -272,8 +292,13 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                     }
                 ))
             }
-        } catch (error) {
-
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -316,8 +341,13 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                     message: req
                 }
             ))
-        } catch (error) {
-
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -363,8 +393,13 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             setApiOpe(`/admin/client/updateClient/${acc?.id}`);
             setTypeOpe("editAcc");
 
-        } catch (error) {
-
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -598,7 +633,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             {
                 showClientOpe && (
                     <ClientOpe
-                        setItem={setItem} item={item}
+                        item={item}
                         setResponseRequest={setResponseRequest}
                         setShowClientOpe={setShowClientOpe}
                     />

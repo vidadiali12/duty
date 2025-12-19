@@ -14,6 +14,7 @@ import Duties from './Components/MenuElement/Duties/Duties'
 import Loggins from './Components/Loggins/Loggins'
 import CreateAdminAccount from './Components/MenuElement/Duties/CreateAdminAccount'
 import RequestUsers from './Components/UsersRequest/RequestUsers'
+import Footer from './Components/Footer/Footer'
 
 function App() {
   const navigate = useNavigate();
@@ -94,6 +95,7 @@ function App() {
           </>
         )}
       </Routes>
+      <Footer />
       {
         responseRequest.showResponse && (
           <ResponseModal responseRequest={responseRequest} setResponseRequest={setResponseRequest} />

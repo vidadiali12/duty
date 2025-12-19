@@ -69,7 +69,7 @@ const CreateAndUpdateAcc = ({
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(15);
     const [errors, setErrors] = useState({});
-    const [valueOfCapacity, setValueOfCapacity] = useState(null)
+    const [valueOfCapacity, setValueOfCapacity] = useState(null);
 
     const validateForm = () => {
         let newErrors = {};
@@ -193,7 +193,7 @@ const CreateAndUpdateAcc = ({
             statusId: Number(form.statusId),
             formId: Number(form.formId)
         };
-        
+
         try {
             if (typeOpe === "createAcc") {
                 await api.post(apiOpe, req, hdrs);
@@ -206,7 +206,12 @@ const CreateAndUpdateAcc = ({
             setItem(null);
             window.location.reload();
         } catch (err) {
-            console.log("Error:", err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -231,30 +236,45 @@ const CreateAndUpdateAcc = ({
             const clientData = await api.get(`/admin/accountType/getAccountType/${id}`, hdrs)
             setAccTypesDetail(clientData?.data?.data)
         } catch (err) {
-
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
     const callUnitByDep = async (id) => {
-        const token = localStorage.getItem('myUserDutyToken');
-        const hdrs = {
-            headers: {
-                Authorization: `Bearer ${token}`
+        try {
+            const token = localStorage.getItem('myUserDutyToken');
+            const hdrs = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const hdrsDep = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                params: { page, pageSize }
             }
-        };
-        const hdrsDep = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            params: { page, pageSize }
-        }
 
-        if (id) {
-            const res = await api.get(`/department/unit/getUnitsByDepartment/${id}`, hdrs);
-            setUnitArr(res?.data?.data || []);
-        } else {
-            const res = await api.get('/department/unit/getAllUnit', hdrsDep);
-            setUnitArr(res?.data?.data?.data || []);
+            if (id) {
+                const res = await api.get(`/department/unit/getUnitsByDepartment/${id}`, hdrs);
+                setUnitArr(res?.data?.data || []);
+            } else {
+                const res = await api.get('/department/unit/getAllUnit', hdrsDep);
+                setUnitArr(res?.data?.data?.data || []);
+            }
+        }
+        catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 

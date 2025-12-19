@@ -61,7 +61,12 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
             setTotalPages(res?.data?.totalPages || null);
             setAllAccounts(resData?.filter(p => p?.id !== JSON.parse(localStorage.getItem("userInfo"))?.id));
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -79,7 +84,12 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
             const r = await api.get('/rank/getAllRank', hdrs);
             setRankList(r?.data?.data || []);
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -161,8 +171,13 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
             setCreateAndUpdate(true)
             setApiOpe(`/admin/personnel/updatePersonnel/${acc?.id}`);
             setTypeOpe("editOpe");
-        } catch (error) {
-
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -269,6 +284,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                         setCreateAndUpdate={setCreateAndUpdate}
                         apiOpe={apiOpe}
                         typeOpe={typeOpe}
+                        setResponseRequest={setResponseRequest}
                     />
                 )
             }

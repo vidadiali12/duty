@@ -48,7 +48,12 @@ const ChangePassword = ({ item, setItem, setResponseRequest, setShowCPArea }) =>
             setShowCPArea(false);
 
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         } finally {
             setLoading(false);
         }
@@ -61,7 +66,7 @@ const ChangePassword = ({ item, setItem, setResponseRequest, setShowCPArea }) =>
                 <h3>🔐 Parol Dəyiş</h3>
 
                 <AiOutlineClose className='cp-close' onClick={() => setShowCPArea(false)} />
-                    
+
                 <label className='cp-label'>
                     <span>Yeni Parol</span>
                     <div className='inp-wrap'>

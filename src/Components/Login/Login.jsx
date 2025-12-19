@@ -67,7 +67,7 @@ const Login = () => {
                 </div>
 
                 <button type="submit" disabled={loading}>
-                    {loading ? "Loading..." : "Daxil ol"}
+                    {loading ? "Daxil olunur..." : "Daxil ol"}
                 </button>
             </form>
         </div>

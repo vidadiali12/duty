@@ -27,7 +27,12 @@ const Units = ({ setResponseRequest, setItem, item }) => {
             setTotalPages(resUnits?.data?.data?.totalPages || null)
             setAllUnits(resUnits?.data?.data?.data || []);
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 

@@ -34,7 +34,7 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                     await api.delete(responseRequest.api, hdrs);
                     window.location.reload()
                 }
-                
+
                 setResponseRequest({
                     showResponse: false,
                     isQuestion: false,
@@ -45,7 +45,12 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                     api: ""
                 });
             } catch (err) {
-                console.error(err);
+                setResponseRequest(prev => ({
+                    ...prev,
+                    showResponse: true,
+                    title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                    message: err?.response?.data?.errorDescription || err,
+                }));
             }
         }
     };

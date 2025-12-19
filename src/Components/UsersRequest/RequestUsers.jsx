@@ -56,6 +56,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
 
             if (formElement?.eventId == 2) {
+                console.log(detailsData)
                 setCreateAndUpdate(true);
                 setApiOpe("/admin/client/createClient");
                 setTypeOpe("createAcc");
@@ -111,7 +112,12 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                         setTypeOpe("editAcc");
                     }
                 } catch (err) {
-
+                    setResponseRequest(prev => ({
+                        ...prev,
+                        showResponse: true,
+                        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                        message: err?.response?.data?.errorDescription || err,
+                    }));
                 }
             }
             else if (formElement?.eventId == 4) {
@@ -149,7 +155,12 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                             await api.put(`/admin/client/updateClient/${resDetailsData?.id}`, req, hdrs);
                             window.location.reload()
                         } catch (err) {
-                            console.log(err)
+                            setResponseRequest(prev => ({
+                                ...prev,
+                                showResponse: true,
+                                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                                message: err?.response?.data?.errorDescription || err,
+                            }));
                         }
                     }
 
@@ -180,11 +191,21 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                         }
                     }
                 } catch (err) {
-
+                    setResponseRequest(prev => ({
+                        ...prev,
+                        showResponse: true,
+                        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                        message: err?.response?.data?.errorDescription || err,
+                    }));
                 }
             }
         } catch (err) {
-            console.log(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 
@@ -212,10 +233,15 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
 
             setTotalItem(res?.data?.totalItem || null);
             setTotalPages(res?.data?.totalPages || null);
-            console.log(res?.data?.data )
+            console.log(res?.data?.data)
             setAllUsersRequest(res?.data?.data || []);
         } catch (err) {
-
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -236,7 +262,12 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
             const resData = res?.data?.data;
             loadFilterData({ ...resData, formId: formElement?.formId }, formElement, toAll);
         } catch (err) {
-
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 
@@ -301,7 +332,12 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                 allRequest();
             }
         } catch (err) {
-
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     }
 

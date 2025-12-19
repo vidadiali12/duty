@@ -3,7 +3,7 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import api from "../../api";
 import "./Ranks.css"
 
-const Ranks = () => {
+const Ranks = ({ setResponseRequest, userInfo, setItem, item }) => {
   const [ranks, setRanks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +19,12 @@ const Ranks = () => {
       const res = await api.get("/rank/getAllRank", hdrs);
       setRanks(res?.data?.data || []);
     } catch (err) {
-      console.error("Rank load error:", err);
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
     } finally {
       setLoading(false);
     }
@@ -45,21 +50,21 @@ const Ranks = () => {
           <span>ID</span>
           <span>Ad</span>
           <span>Tam ad</span>
-          <span style={{textAlign: 'center'}}>Əməliyyatlar</span>
+          <span style={{ textAlign: 'center' }}>Əməliyyatlar</span>
         </div>
 
         <div className="table-row-rank table-header-rank">
           <span>ID</span>
           <span>Ad</span>
           <span>Tam ad</span>
-          <span style={{textAlign: 'center'}}>Əməliyyatlar</span>
+          <span style={{ textAlign: 'center' }}>Əməliyyatlar</span>
         </div>
 
         <div className="table-row-rank table-header-rank">
           <span>ID</span>
           <span>Ad</span>
           <span>Tam ad</span>
-          <span style={{textAlign: 'center'}}>Əməliyyatlar</span>
+          <span style={{ textAlign: 'center' }}>Əməliyyatlar</span>
         </div>
 
         {ranks.map((item) => (

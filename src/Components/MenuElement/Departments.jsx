@@ -27,7 +27,12 @@ const Departments = ({ setResponseRequest, setItem, item }) => {
             setTotalPages(resDeps?.data?.data?.totalPages || null);
             setAllDeps(resDeps?.data?.data?.data || []);
         } catch (err) {
-            console.error(err);
+               setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
         }
     };
 

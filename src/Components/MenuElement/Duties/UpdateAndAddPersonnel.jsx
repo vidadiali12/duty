@@ -3,7 +3,7 @@ import api from "../../../api";
 import "./UpdateAndAddPersonnel.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-export default function UpdateAndAddPersonnel({ item, setItem, ranks, setCreateAndUpdate, apiOpe, typeOpe }) {
+export default function UpdateAndAddPersonnel({ item, setItem, ranks, setCreateAndUpdate, apiOpe, typeOpe, setResponseRequest }) {
 
     const keys = {
         username: "İstifadəçi adı",
@@ -68,14 +68,23 @@ export default function UpdateAndAddPersonnel({ item, setItem, ranks, setCreateA
     }, [item]);
 
     const callRols = async () => {
-        const token = localStorage.getItem('myUserDutyToken');
-        const hdrs = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        };
-        const resRols = await api.get("/admin/role/getAllRole", hdrs);
-        setRols(resRols?.data?.data || [])
+        try {
+            const token = localStorage.getItem('myUserDutyToken');
+            const hdrs = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const resRols = await api.get("/admin/role/getAllRole", hdrs);
+            setRols(resRols?.data?.data || [])
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
+        }
     }
 
     useEffect(() => {
@@ -126,7 +135,12 @@ export default function UpdateAndAddPersonnel({ item, setItem, ranks, setCreateA
             setCreateAndUpdate(false);
             window.location.reload();
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
             setError("Məlumatları yeniləmək mümkün olmadı.");
         } finally {
             setLoading(false);
