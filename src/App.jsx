@@ -47,54 +47,56 @@ function App() {
 
   return (
     <>
-      {
-        token && <Header userInfo={userInfo} setUserInfo={setUserInfo} setResponseRequest={setResponseRequest}
-          connectNow={connectNow}
-          setConnectNow={setConnectNow} />
-      }
-      <Routes>
-        {token ? (
-          <>
-            <Route path="/" element={<Home
-              userInfo={userInfo}
-              setUserInfo={setUserInfo}
-              setResponseRequest={setResponseRequest} />} />
+      <div className='root-child'>
+        {
+          token && <Header userInfo={userInfo} setUserInfo={setUserInfo} setResponseRequest={setResponseRequest}
+            connectNow={connectNow}
+            setConnectNow={setConnectNow} />
+        }
+        <Routes>
+          {token ? (
+            <>
+              <Route path="/" element={<Home
+                userInfo={userInfo}
+                setUserInfo={setUserInfo}
+                setResponseRequest={setResponseRequest} />} />
 
-            <Route path='/departments' element={<Departments
-              setResponseRequest={setResponseRequest} setItem={setItem} item={item} />} />
-            <Route path='/units' element={<Units
-              setResponseRequest={setResponseRequest} setItem={setItem} item={item} />} />
-            <Route path='/account-types' element={<AccountTypes
-              setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
-            <Route path='/ranks' element={<Ranks
-              setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
-            <Route path='/accounts' element={<Accounts
-              setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
-            <Route path='/shift-managers' element={<Duties
-              setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
-            <Route path='/operation-history' element={<Loggins
-              setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
-            <Route path='/users-request' element={<RequestUsers
-              setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} connectNow={connectNow} />} />
-            <Route path="/login" element={<Navigate to="/" replace />} />
-            <Route path="/create-admin-page" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </>
-        ) : (
-          <>
-            <Route path="/login" element={<Login />} />
-            {
-              showCreate && (
-                <Route path="/create-admin-page" element={<CreateAdminAccount
-                  setShowCreate={setShowCreate}
-                  setResponseRequest={setResponseRequest} />}
-                />
-              )
-            }
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </>
-        )}
-      </Routes>
+              <Route path='/departments' element={<Departments
+                setResponseRequest={setResponseRequest} setItem={setItem} item={item} />} />
+              <Route path='/units' element={<Units
+                setResponseRequest={setResponseRequest} setItem={setItem} item={item} />} />
+              <Route path='/account-types' element={<AccountTypes
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+              <Route path='/ranks' element={<Ranks
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+              <Route path='/accounts' element={<Accounts
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+              <Route path='/shift-managers' element={<Duties
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+              <Route path='/operation-history' element={<Loggins
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+              <Route path='/users-request' element={<RequestUsers
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} connectNow={connectNow} />} />
+              <Route path="/login" element={<Navigate to="/" replace />} />
+              <Route path="/create-admin-page" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </>
+          ) : (
+            <>
+              <Route path="/login" element={<Login />} />
+              {
+                showCreate && (
+                  <Route path="/create-admin-page" element={<CreateAdminAccount
+                    setShowCreate={setShowCreate}
+                    setResponseRequest={setResponseRequest} />}
+                  />
+                )
+              }
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </>
+          )}
+        </Routes>
+      </div>
       <Footer />
       {
         responseRequest.showResponse && (

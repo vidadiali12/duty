@@ -26,7 +26,8 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
 
     const [filters, setFilters] = useState({
         text: "",
-        ranks: []
+        ranks: [],
+        newToOld: true
     });
 
     const callAccounts = async () => {
@@ -41,7 +42,7 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
             const req = {
                 searchText: filters.text,
                 rankIds: filters.ranks,
-                newToOld: true
+                newToOld: filters.newToOld
             };
 
             const res = await api.post(
@@ -117,7 +118,8 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
     const clearFilter = () => {
         setFilters({
             text: "",
-            ranks: []
+            ranks: [],
+            newToOld: true
         })
 
         const inputs = document.querySelectorAll('input[type="checkbox"]');
@@ -197,6 +199,20 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
         setItem(acc);
     }
 
+
+    const changeAsc = (e) => {
+        if (e?.target?.value == `${true}`) {
+            setFilters(prev => ({
+                ...prev, newToOld: true
+            }))
+        }
+        else if (e?.target?.value == `${false}`) {
+            setFilters(prev => ({
+                ...prev, newToOld: false
+            }))
+        }
+    }
+
     return (
         <div className="accounts-wrapper p-4 w-full">
             <div className="filters flex flex-wrap gap-3 mb-5">
@@ -228,11 +244,19 @@ export default function Duties({ setResponseRequest, userInfo, setItem, item }) 
                     </div>
                 </div>
 
-                <div className="filter-box">
-                    <span className="filter-label clear-filter" onClick={clearFilter}>
-                        Filteri Sıfırla
-                    </span>
+                <div className="filter-box sort-filter">
+                    <select
+                        className="filter-select"
+                        onChange={changeAsc}
+                        value={filters?.newToOld}
+                    >
+                        <option value={`${true}`}>Yenidən Köhnəyə</option>
+                        <option value={`${false}`}>Köhnədən Yeniyə</option>
+                    </select>
+                    <span className="select-icon">⇅</span>
                 </div>
+
+                <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
             </div>
 
             <div style={{ display: 'flex', gap: '15px' }}>

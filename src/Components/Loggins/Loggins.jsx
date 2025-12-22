@@ -151,6 +151,19 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
         setActiveFilter(null);
     }
 
+    const changeAsc = (e) => {
+        if (e?.target?.value == `${true}`) {
+            setFilters(prev => ({
+                ...prev, newToOld: true
+            }))
+        }
+        else if (e?.target?.value == `${false}`) {
+            setFilters(prev => ({
+                ...prev, newToOld: false
+            }))
+        }
+    }
+
     useEffect(() => {
         getLogs();
     }, [filters, page]);
@@ -158,7 +171,6 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
     useEffect(() => {
         setPage(1)
     }, [filters]);
-
 
     return (
         <div className="logs-wrapper p-4">
@@ -257,12 +269,19 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                     </div>
                 </div>
 
-                <div className="filter-box">
-                    <span className="filter-label clear-filter" onClick={clearFilter}>
-                        Filteri Sıfırla
-                    </span>
+                <div className="filter-box sort-filter">
+                    <select
+                        className="filter-select"
+                        onChange={changeAsc}
+                        value={filters?.newToOld}
+                    >
+                        <option value={`${true}`}>Yenidən Köhnəyə</option>
+                        <option value={`${false}`}>Köhnədən Yeniyə</option>
+                    </select>
+                    <span className="select-icon">⇅</span>
                 </div>
 
+                <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
             </div>
 
 

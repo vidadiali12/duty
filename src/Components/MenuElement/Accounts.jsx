@@ -30,7 +30,9 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
         accountTypes: [],
         accountStatus: [],
         fromDate: "",
-        toDate: ""
+        toDate: "",
+        newToOld: true,
+        registered: null
     });
 
     const [rankList, setRankList] = useState([]);
@@ -55,9 +57,10 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 unitIds: filters.units,
                 accountTypeIds: filters.accountTypes,
                 accountStatusIds: filters.accountStatus,
-                newToOld: true,
+                newToOld: filters?.newToOld,
                 fromDate: filters?.fromDate,
-                toDate: filters?.toDate
+                toDate: filters?.toDate,
+                registered: filters?.registered
             };
 
             const res = await api.post(
@@ -156,7 +159,9 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             accountTypes: [],
             accountStatus: [],
             fromDate: "",
-            toDate: ""
+            toDate: "",
+            newToOld: true,
+            registered: null
         })
 
         const inputs = document.querySelectorAll('input[type="checkbox"]');
@@ -415,6 +420,37 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
         setItem(acc)
     }
 
+    const changeAsc = (e) => {
+        if (e?.target?.value == `${true}`) {
+            setFilters(prev => ({
+                ...prev, newToOld: true
+            }))
+        }
+        else if (e?.target?.value == `${false}`) {
+            setFilters(prev => ({
+                ...prev, newToOld: false
+            }))
+        }
+    }
+
+    const changeRegistered = (e) => {
+        if (e?.target?.value == `${true}`) {
+            setFilters(prev => ({
+                ...prev, registered: true
+            }))
+        }
+        else if (e?.target?.value == `${false}`) {
+            setFilters(prev => ({
+                ...prev, registered: false
+            }))
+        }
+        else if (e?.target?.value == `${null}`) {
+            setFilters(prev => ({
+                ...prev, registered: null
+            }))
+        }
+    }
+
     return (
         <div className="accounts-wrapper p-4 w-full">
             <div className="filters flex flex-wrap gap-3 mb-5">
@@ -546,6 +582,31 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                             setFilters(prev => ({ ...prev, toDate: e.target.value.split("-").reverse().join(".") }))
                         }
                     />
+                </div>
+
+                <div className="filter-box sort-filter">
+                    <select
+                        className="filter-select"
+                        onChange={changeAsc}
+                        value={filters?.newToOld}
+                    >
+                        <option value={`${true}`}>Yenidən Köhnəyə</option>
+                        <option value={`${false}`}>Köhnədən Yeniyə</option>
+                    </select>
+                    <span className="select-icon">⇅</span>
+                </div>
+
+                <div className="filter-box sort-filter">
+                    <select
+                        className="filter-select"
+                        onChange={changeRegistered}
+                        value={filters?.registered}
+                    >
+                        <option value={`${null}`}>Hamısı</option>
+                        <option value={`${true}`}>Qeydiyyatdan keçmiş</option>
+                        <option value={`${false}`}>Qeydiyyatdan keçməmiş</option>
+                    </select>
+                    <span className="select-icon">⇅</span>
                 </div>
 
                 <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
