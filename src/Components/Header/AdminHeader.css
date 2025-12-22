@@ -1,0 +1,35 @@
+.admin-menu {
+    position: absolute;
+    right: 0px;
+    top: 60px;
+    background-color: white;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.02);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.admin-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+}
+
+.admin-menu-list-child-link {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px;
+    transition: .3s;
+    border-radius: 8px;
+}
+
+.admin-menu-list-child-link:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-4px);
+}
+.admin-menu-list-child-link.active {
+  background-color: var(--color-teal-20);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-teal-1);
+}

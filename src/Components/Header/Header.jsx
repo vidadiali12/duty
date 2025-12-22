@@ -9,16 +9,17 @@ import { AiFillHome } from 'react-icons/ai';
 import { MdBusiness } from 'react-icons/md';
 import { FaUsers, FaHistory } from 'react-icons/fa';
 import { BsClockHistory } from 'react-icons/bs';
-import { FiCheckSquare, FiBarChart2, FiUserPlus } from 'react-icons/fi';
-import { GiTeamIdea, GiRank1 } from 'react-icons/gi';
+import { FiCheckSquare, FiBarChart2, FiMenu, FiX } from 'react-icons/fi';
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import Profile from '../Modals/Profile';
+import AdminHeader from './AdminHeader';
 
 const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConnectNow }) => {
     const [loading, setLoading] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [showProfile, setShowProfile] = useState(null);
     const [connectOpe, setConnectOpe] = useState(null);
+    const [showAdminMenu, setShowAdminMenu] = useState(false);
     const menuRef = useRef();
 
 
@@ -168,6 +169,9 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                                             <RiCheckboxBlankCircleFill className='connect-icon ci-2' />
                                     }
                                 </div>
+                                <NavLink to={'/users-request'} className={"forms-button"}>
+                                    Gələn Formlar
+                                </NavLink>
                             </div>
                         )
                     }
@@ -243,30 +247,19 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                                 <span className='menu-list-child-text'>Statistika</span>
                             </NavLink>
                         </li>
-
-                        {userInfo?.role?.name === "Admin" && (
-                            <>
-                                <li className='menu-list-child'>
-                                    <NavLink className="menu-list-child-link" to="/account-types">
-                                        <FiUserPlus className="menu-icon" />
-                                        <span className='menu-list-child-text'>Hesab Növləri</span>
-                                    </NavLink>
-                                </li>
-                                <li className='menu-list-child'>
-                                    <NavLink className="menu-list-child-link" to="/shift-managers">
-                                        <GiTeamIdea className="menu-icon" />
-                                        <span className='menu-list-child-text'>Növbətçilər</span>
-                                    </NavLink>
-                                </li>
-                                <li className='menu-list-child'>
-                                    <NavLink className="menu-list-child-link" to="/ranks">
-                                        <GiRank1 className="menu-icon" />
-                                        <span className='menu-list-child-text'>Rütbələr</span>
-                                    </NavLink>
-                                </li>
-                            </>
-                        )}
                     </ul>
+
+                    {userInfo?.role?.name === "Admin" && (
+                        !showAdminMenu ?
+                            <FiMenu className="menu-icon admin-menu-button" onClick={() => setShowAdminMenu(!showAdminMenu)} />
+                            : <FiX className="menu-icon admin-menu-button" onClick={() => setShowAdminMenu(!showAdminMenu)} />
+                    )}
+
+                    {
+                        showAdminMenu && (
+                            <AdminHeader />
+                        )
+                    }
                 </div>
                 {
                     showProfile && userInfo && (
