@@ -203,7 +203,7 @@ input[type="date"] {
 .table-header,
 .table-row {
     display: grid;
-    grid-template-columns: .5fr 1fr 1fr 1fr .5fr 1.6fr 1fr 1fr 1fr;
+    grid-template-columns: .3fr .5fr .8fr .8fr .8fr 1fr 1.5fr 1fr .6fr .8fr;
     padding: 14px 20px;
     align-items: center;
 }

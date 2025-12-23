@@ -15,6 +15,8 @@ import Loggins from './Components/Loggins/Loggins'
 import CreateAdminAccount from './Components/MenuElement/Duties/CreateAdminAccount'
 import RequestUsers from './Components/UsersRequest/RequestUsers'
 import Footer from './Components/Footer/Footer'
+import CompletedTasks from './Components/MenuElement/CompletedTasks/CompletedTasks'
+import TaskTypeAndTitleAdmin from './Components/MenuElement/CompletedTasks/TaskTypeAndTitleAdmin'
 
 function App() {
   const navigate = useNavigate();
@@ -77,6 +79,10 @@ function App() {
                 setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
               <Route path='/users-request' element={<RequestUsers
                 setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} connectNow={connectNow} />} />
+              <Route path='/completed-tasks' element={<CompletedTasks
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+              <Route path='/task-area' element={<TaskTypeAndTitleAdmin
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
               <Route path="/login" element={<Navigate to="/" replace />} />
               <Route path="/create-admin-page" element={<Navigate to="/" replace />} />
               <Route path="*" element={<Navigate to="/" replace />} />

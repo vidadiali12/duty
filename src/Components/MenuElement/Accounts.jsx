@@ -619,10 +619,11 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             <div className="accounts-table w-full">
                 <div className="table-header">
                     <span>#</span>
+                    <span>Rütbə</span>
                     <span>Ad</span>
                     <span>Soyad</span>
                     <span>Ata adı</span>
-                    <span>Rütbə</span>
+                    <span>İstifadəçi adı</span>
                     <span>Vəzifə</span>
                     <span>Hesab Növü</span>
                     <span>Status</span>
@@ -632,10 +633,11 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 {allAccounts.map((acc, index) => (
                     <div className="table-row" key={acc?.id}>
                         <span>{pageSize * (page - 1) + index + 1}</span>
+                        <span>{acc?.rank?.name}</span>
                         <span>{acc?.name}</span>
                         <span>{acc?.surname}</span>
                         <span>{acc?.fatherName}</span>
-                        <span>{acc?.rank?.name}</span>
+                        <span>{acc?.username}</span>
                         <span>{acc?.position}</span>
                         <span>{acc?.accountType?.name}</span>
                         <span>

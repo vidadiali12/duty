@@ -42,10 +42,13 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
             const res = await api.get('/auth/getMyProfile', {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            const data = res?.data?.data;
+            const data = res?.data?.data || null;
             setUserInfo(data);
             localStorage.setItem("userInfo", JSON.stringify(data))
             setLoading(false);
+            if (data?.shouldChangePassword == false) {
+                callIsConnect();
+            }
         } catch (err) {
             setLoading(false);
             setResponseRequest(prev => ({
@@ -130,7 +133,6 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
 
     useEffect(() => {
         callUserInfo();
-        callIsConnect();
     }, []);
 
     const callShowProfile = () => {

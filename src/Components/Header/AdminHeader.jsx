@@ -27,6 +27,12 @@ const AdminHeader = () => {
                         <span className='admin-menu-list-child-text'>Rütbələr</span>
                     </NavLink>
                 </li>
+                <li className='admin-menu-list-child'>
+                    <NavLink className="admin-menu-list-child-link" to="/task-area">
+                        <GiRank1 className="menu-icon" />
+                        <span className='admin-menu-list-child-text'>Görülən işlər</span>
+                    </NavLink>
+                </li>
             </ul>
         </div>
     )

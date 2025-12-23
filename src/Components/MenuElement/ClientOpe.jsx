@@ -52,26 +52,26 @@ const ClientOpe = ({ item, setResponseRequest, setShowClientOpe }) => {
                 <div className="cl-row cl-head">
                     <span>#</span>
                     <span>Əməliyyat</span>
-                    <span>Action</span>
-                    <span>Tarix</span>
-                    <span>Sənəd №</span>
+                    <span>Rütbə</span>
                     <span>Ad</span>
                     <span>Soyad</span>
-                    <span>User</span>
-                    <span>Rütbə</span>
+                    <span>İstifadəçi adı</span>
+                    <span>İstifadəçi növü</span>
+                    <span>Tarix</span>
+                    <span>Sənəd №</span>
                 </div>
 
                 {clientOpes?.map((log, index) => (
                     <div className="cl-row" key={log?.id}>
                         <span>{pageSize * (page - 1) + index + 1}</span>
-                        <span>{log?.accountType}</span>
                         <span>{log?.action}</span>
-                        <span>{log?.historyDate?.split("T")[0]} {log?.historyDate?.split("T")[1]?.slice(0, 8)}</span>
-                        <span>{log?.documentNo || "Mövcud deyil"}</span>
+                        <span>{log?.clientData?.rank?.name}</span>
                         <span>{log?.clientData?.name}</span>
                         <span>{log?.clientData?.surname}</span>
                         <span>{log?.clientData?.username}</span>
-                        <span>{log?.clientData?.rank?.name}</span>
+                        <span>{log?.accountType}</span>
+                        <span>{log?.historyDate?.split("T")[0]} {log?.historyDate?.split("T")[1]?.slice(0, 8)}</span>
+                        <span>{log?.documentNo || "Mövcud deyil"}</span>
                     </div>
                 ))}
 

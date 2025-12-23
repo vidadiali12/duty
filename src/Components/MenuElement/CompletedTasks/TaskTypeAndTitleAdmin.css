@@ -1,0 +1,109 @@
+.task-admin-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.task-admin-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.task-admin-tab {
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-3);
+    color: var(--text-1);
+    font-weight: 600;
+    transition: 0.2s;
+    width: min-content !important;
+    white-space: nowrap;
+}
+
+.task-admin-tab.active {
+    background: var(--accent);
+    color: #fff;
+}
+
+.task-type-table,
+.task-title-table {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bg-2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.task-type-row,
+.task-title-row {
+    display: grid;
+    grid-template-columns: 0.2fr 1fr 0.5fr;
+    padding: 10px 15px;
+    align-items: center;
+    border-bottom: 1px solid var(--bg-4);
+}
+
+.task-type-row.header,
+.task-title-row.header {
+    background: var(--bg-4);
+    color: var(--text-1);
+    font-weight: 600;
+}
+
+.task-type-actions svg,
+.task-title-actions svg {
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.task-type-actions svg:hover,
+.task-title-actions svg:hover {
+    scale: 1.1;
+}
+
+.task-type-create,
+.task-title-create {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-type-create input,
+.task-title-create input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--bg-4);
+    background: var(--bg-3);
+    color: var(--text-1);
+    width: min-content;
+    white-space: nowrap;
+}
+
+.task-type-btn,
+.task-title-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    transition: 0.2s;
+    width: min-content;
+    white-space: nowrap;
+}
+
+.task-type-btn:hover,
+.task-title-btn:hover {
+    background: var(--accent-light);
+}

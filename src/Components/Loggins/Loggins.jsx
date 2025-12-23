@@ -290,9 +290,10 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                 <div className="table-header table-log-header">
                     <span>#</span>
                     <span>Əməliyyat</span>
+                    <span>Rütbə</span>
                     <span>Ad</span>
                     <span>Soyad</span>
-                    <span>Rütbə</span>
+                    <span>İstifadəçi adı</span>
                     <span>Növ</span>
                     <span>Sənəd Nömrəsi</span>
                     <span>Tarix</span>
@@ -303,9 +304,10 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                     <div className="table-row table-log-row" key={log.id}>
                         <span>{pageSize * (page - 1) + index + 1}</span>
                         <span>{log?.action}</span>
+                        <span>{log?.clientData?.rank?.name}</span>
                         <span>{log?.clientData?.name}</span>
                         <span>{log?.clientData?.surname}</span>
-                        <span>{log?.clientData?.rank?.name}</span>
+                        <span>{log?.clientData?.username}</span>
                         <span>{log?.accountType}</span>
                         <span>{log?.documentNo || "Mövcud deyil"}</span>
                         <span>{log?.historyDate?.split("T")[0]} {log?.historyDate?.split("T")[1]?.slice(0, 8)}</span>
