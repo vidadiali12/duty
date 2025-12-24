@@ -13,8 +13,9 @@ import { FiCheckSquare, FiBarChart2, FiMenu, FiX } from 'react-icons/fi';
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import Profile from '../Modals/Profile';
 import AdminHeader from './AdminHeader';
+import { isPermission } from '../../Functions/IsPermissionFunc';
 
-const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConnectNow }) => {
+const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConnectNow, permissionIdsList, setPermissionIdsList }) => {
     const [loading, setLoading] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [showProfile, setShowProfile] = useState(null);
@@ -22,7 +23,6 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
     const [showAdminMenu, setShowAdminMenu] = useState(false);
     const [zIndexValue, setZIndexValue] = useState('100000')
     const menuRef = useRef();
-
 
     const [scrolled, setScrolled] = useState(false);
 
@@ -43,11 +43,13 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
             const res = await api.get('/auth/getMyProfile', {
                 headers: { Authorization: `Bearer ${token}` }
             });
+            
             const data = res?.data?.data || null;
             setUserInfo(data);
             localStorage.setItem("userInfo", JSON.stringify(data))
             setLoading(false);
-            console.log(data)
+            setPermissionIdsList(data?.role?.permissions.map(p => p.id));
+
             if (data?.shouldChangePassword == false) {
                 callIsConnect();
             }
@@ -253,17 +255,20 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                         </li>
                     </ul>
 
-                    {userInfo?.role?.name === "Admin" && (
-                        !showAdminMenu ?
-                            <FiMenu className="menu-icon admin-menu-button" onClick={() => {
-                                setShowAdminMenu(!showAdminMenu);
-                                setZIndexValue('99999999');
-                            }} />
-                            : <FiX className="menu-icon admin-menu-button" onClick={() => {
-                                setShowAdminMenu(!showAdminMenu);
-                                setZIndexValue('100000');
-                            }} />
-                    )}
+                    {permissionIdsList && isPermission(
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
+                        permissionIdsList
+                    ) && (
+                            !showAdminMenu ?
+                                <FiMenu className="menu-icon admin-menu-button" onClick={() => {
+                                    setShowAdminMenu(!showAdminMenu);
+                                    setZIndexValue('99999999');
+                                }} />
+                                : <FiX className="menu-icon admin-menu-button" onClick={() => {
+                                    setShowAdminMenu(!showAdminMenu);
+                                    setZIndexValue('100000');
+                                }} />
+                        )}
 
                     {
                         showAdminMenu && (

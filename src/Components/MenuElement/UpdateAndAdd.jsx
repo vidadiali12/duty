@@ -12,8 +12,6 @@ const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, se
         { tag: item?.tag, description: item?.description, departmentId: item?.departmentId }
   );
 
-  console.log(item)
-
   const updateAndAdd = async () => {
     const token = localStorage.getItem("myUserDutyToken");
     if (!token) return;

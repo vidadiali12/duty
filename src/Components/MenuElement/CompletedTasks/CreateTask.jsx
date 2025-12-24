@@ -127,7 +127,6 @@ const CreateTask = ({ setResponseRequest, setShowCreateTaskArea, departmentList,
 
     useEffect(() => {
         if (item) {
-            console.log(item)
             setForm({
                 typeId: item?.type?.id,
                 title: item?.title?.title,

@@ -26,6 +26,7 @@ function App() {
   const [item, setItem] = useState({});
   const [showCreate, setShowCreate] = useState(true);
   const [connectNow, setConnectNow] = useState(null);
+  const [permissionIdsList, setPermissionIdsList] = useState(null)
 
   const [responseRequest, setResponseRequest] = useState({
     showResponse: false,
@@ -53,6 +54,7 @@ function App() {
       <div className='root-child'>
         {
           token && <Header userInfo={userInfo} setUserInfo={setUserInfo} setResponseRequest={setResponseRequest}
+            permissionIdsList={permissionIdsList} setPermissionIdsList={setPermissionIdsList}
             connectNow={connectNow}
             setConnectNow={setConnectNow} />
         }
