@@ -2,7 +2,7 @@ import React from 'react'
 import './Header.css';
 import './AdminHeader.css'
 import { GiTeamIdea, GiRank1 } from 'react-icons/gi';
-import { FiUserPlus } from 'react-icons/fi';
+import { FiUserPlus, FiCheckSquare, FiLock  } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 
 const AdminHeader = () => {
@@ -22,15 +22,21 @@ const AdminHeader = () => {
                     </NavLink>
                 </li>
                 <li className='admin-menu-list-child'>
-                    <NavLink className="admin-menu-list-child-link" to="/ranks">
-                        <GiRank1 className="menu-icon" />
-                        <span className='admin-menu-list-child-text'>Rütbələr</span>
+                    <NavLink className="admin-menu-list-child-link" to="/task-area">
+                        <FiCheckSquare className="menu-icon" />
+                        <span className='admin-menu-list-child-text'>Görülən işlər</span>
                     </NavLink>
                 </li>
                 <li className='admin-menu-list-child'>
-                    <NavLink className="admin-menu-list-child-link" to="/task-area">
+                    <NavLink className="admin-menu-list-child-link" to="/permissions">
+                        <FiLock  className="menu-icon" />
+                        <span className='admin-menu-list-child-text'>İcazələr</span>
+                    </NavLink>
+                </li>
+                <li className='admin-menu-list-child'>
+                    <NavLink className="admin-menu-list-child-link" to="/ranks">
                         <GiRank1 className="menu-icon" />
-                        <span className='admin-menu-list-child-text'>Görülən işlər</span>
+                        <span className='admin-menu-list-child-text'>Rütbələr</span>
                     </NavLink>
                 </li>
             </ul>

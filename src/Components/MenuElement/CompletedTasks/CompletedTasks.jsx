@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { FiChevronDown, FiInfo } from "react-icons/fi";
+import { FiChevronDown, FiEdit, FiTrash2, } from "react-icons/fi";
 import "./CompletedTasks.css";
 import api from "../../../api";
 import Pagination from "../../Pagination/Pagination";
+import CreateTask from "./CreateTask";
 
-export default function CompletedTasks({ setResponseRequest, setItem }) {
+export default function CompletedTasks({ setResponseRequest, userInfo, setItem, item }) {
     const [tasks, setTasks] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize] = useState(12);
     const [totalItem, setTotalItem] = useState(null);
     const [totalPages, setTotalPages] = useState(null);
+    const [showCreateTaskArea, setShowCreateTaskArea] = useState(null)
 
     const [activeFilter, setActiveFilter] = useState(null);
 
@@ -28,9 +30,9 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
     const [unitList, setUnitList] = useState([]);
     const [personnelList, setPersonnelList] = useState([]);
 
-    const token = localStorage.getItem("myUserDutyToken");
 
     const callTasks = async () => {
+        const token = localStorage.getItem("myUserDutyToken");
         if (!token) return;
         try {
             const res = await api.post(
@@ -56,6 +58,7 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
     };
 
     const loadFilterData = async () => {
+        const token = localStorage.getItem("myUserDutyToken");
         if (!token) return;
 
         const hdrs = {
@@ -167,7 +170,31 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
         }));
 
         callUnitByDep();
-    }, [filters?.departmentId])
+    }, [filters?.departmentId]);
+
+
+    const showCreateTask = () => {
+        setShowCreateTaskArea(true);
+        setItem(null)
+    }
+
+    const editTask = (t) => {
+        setShowCreateTaskArea(true);
+        setItem(t)
+    }
+
+    const deleteTask = (id) => {
+        setResponseRequest(prev => (
+            {
+                ...prev,
+                title: 'Bu tapşırığı silməyə əminsiz?',
+                isQuestion: true,
+                api: `/task/deleteTask/${id}`,
+                showResponse: true,
+                type: 'deleteThisTask'
+            }
+        ))
+    };
 
     return (
         <div className="accounts-wrapper p-4 w-full">
@@ -177,7 +204,7 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
                 <div className="filter-task-box">
                     <input
                         className="filter-task-label"
-                        placeholder="axtar..."
+                        placeholder="Başlıq axtar..."
                         value={filters.searchText}
                         onChange={e =>
                             setFilters(prev => ({ ...prev, searchText: e.target.value }))
@@ -217,7 +244,7 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
 
                 <div className="filter-task-box">
                     <span className="filter-task-label" onClick={() => showFilter("type")}>
-                        Task Növü <FiChevronDown />
+                        Tapşırıq Növü <FiChevronDown />
                     </span>
                     <div className={`filter-box-child ${activeFilter === "type" ? "show-filtered-element" : ""}`}>
                         {taskTypeList.map(t => (
@@ -255,9 +282,9 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
                     <input
                         className="filter-task-label date-filter-task"
                         type="date"
-                        value={filters.fromDate}
+                        value={filters?.fromDate?.split(".").reverse().join("-")}
                         onChange={e =>
-                            setFilters(prev => ({ ...prev, fromDate: e.target.value }))
+                            setFilters(prev => ({ ...prev, fromDate: e.target.value.split("-").reverse().join(".") }))
                         }
                     />
                 </div>
@@ -266,9 +293,9 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
                     <input
                         className="filter-task-label date-filter"
                         type="date"
-                        value={filters.toDate}
+                        value={filters?.toDate?.split(".").reverse().join("-")}
                         onChange={e =>
-                            setFilters(prev => ({ ...prev, toDate: e.target.value }))
+                            setFilters(prev => ({ ...prev, toDate: e.target.value.split("-").reverse().join(".") }))
                         }
                     />
                 </div>
@@ -278,14 +305,18 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
                 </button>
             </div>
 
+            <button onClick={showCreateTask} className="create-task">
+                Tapşırıq Yarat
+            </button>
+
             <div className="accounts-table-task w-full">
                 <div className="table-task-header">
                     <span>#</span>
-                    <span>Task Növü</span>
+                    <span>Növ</span>
                     <span>Başlıq</span>
                     <span>İdarə</span>
                     <span>Bölmə</span>
-                    <span>Sayı</span>
+                    <span>Say</span>
                     <span>İcraçı</span>
                     <span>Tarix</span>
                     <span style={{ textAlign: "center" }}>Əməliyyat</span>
@@ -300,16 +331,28 @@ export default function CompletedTasks({ setResponseRequest, setItem }) {
                         <span>{t?.unit?.tag}</span>
                         <span>{t?.count}</span>
                         <span>{t?.personnelUsername}</span>
-                        <span>{t?.taskDate}</span>
+                        <span>{t?.taskDate?.split("T")[0]} {t?.taskDate?.split("T")[1]?.slice(0, 8)}</span>
                         <span className="ope-box">
-                            <FiInfo
-                                className="ope-icon"
-                                onClick={() => setItem(t)}
-                            />
+                            <FiEdit className="ope-icon" onClick={() => editTask(t)} />
+                            <FiTrash2 className="ope-icon" onClick={() => deleteTask(t.id)} />
                         </span>
                     </div>
                 ))}
             </div>
+
+            {
+                showCreateTaskArea && (
+                    <CreateTask
+                        setResponseRequest={setResponseRequest}
+                        setShowCreateTaskArea={setShowCreateTaskArea}
+                        departmentList={departmentList}
+                        setUnitList={setUnitList}
+                        unitList={unitList}
+                        setItem={setItem}
+                        item={item}
+                    />
+                )
+            }
 
             {totalItem && totalPages && totalItem > pageSize && (
                 <Pagination

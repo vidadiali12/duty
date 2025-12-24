@@ -1,0 +1,155 @@
+.role-wrapper {
+    padding: 20px 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 9999997;
+}
+
+.role-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.role-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #222;
+}
+
+.role-header button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #4f38bc;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.role-header button:hover {
+    opacity: 0.9;
+}
+
+.role-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.role-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f5f6fb;
+    border-radius: 6px;
+}
+
+.role-card span {
+    font-size: 15px;
+    color: #333;
+}
+
+.role-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.role-actions svg {
+    cursor: pointer;
+    font-size: 18px;
+    color: #444;
+}
+
+.role-actions svg:hover {
+    color: #000;
+}
+
+.role-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.role-box {
+    width: 420px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.role-box h3 {
+    margin: 0 0 14px;
+    font-size: 18px;
+}
+
+.role-box input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+.permission-box {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.permission-box label {
+    display: flex;
+    align-items: center !important;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.permission-box label .permission-text {
+    width: 100%;
+    display: inline-block;
+    font-size: 1.05rem;
+}
+
+.permission-box label input[type="checkbox"] {
+    width: 50px;
+    margin: 0px;
+}
+
+.role-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.role-footer button {
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.role-footer button:first-child {
+    background: #e0e0e0;
+}
+
+.role-footer button:last-child {
+    background: #4f38bc;
+    color: #fff;
+}

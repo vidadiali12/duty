@@ -60,15 +60,15 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
     return (
         <div className="modal-backdrop">
             <div className="modal-content">
-                <h2>{responseRequest.title}</h2>
+                <h2>{responseRequest?.title || ""}</h2>
                 {
-                    (responseRequest.type === "deleteAccSoft" || responseRequest.type == "deleteAccHard") ? ""
+                    (responseRequest?.type === "deleteAccSoft" || responseRequest?.type == "deleteAccHard") ? ""
                         : <p>
-                            {responseRequest.message}
+                            {responseRequest?.message || ""}
                         </p>
                 }
                 <div className="modal-buttons">
-                    {responseRequest.isQuestion ? (
+                    {responseRequest?.isQuestion ? (
                         <>
                             <button
                                 className="confirm-button"

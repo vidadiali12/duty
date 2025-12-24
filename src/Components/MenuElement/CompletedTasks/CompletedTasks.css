@@ -16,7 +16,7 @@
     padding: 30px;
     display: flex;
     flex-direction: column;
-    gap: 35px;
+    gap: 15px;
     background: var(--bg-1);
     color: var(--text-2);
     border-radius: 10px;
@@ -28,7 +28,6 @@
     flex-wrap: wrap;
     gap: 14px;
     width: 100%;
-    padding: 10px;
     border-radius: 10px;
 }
 
@@ -130,6 +129,24 @@
     background: #dc2626;
 }
 
+.create-task {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: .3s;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+.create-task:hover {
+    background: var(--accent-light);
+}
+
 .accounts-table-task {
     width: 100%;
     display: flex;
@@ -143,16 +160,8 @@
 .table-task-header,
 .table-task-row {
     display: grid;
-    grid-template-columns: 
-        .3fr
-        .7fr
-        1.2fr
-        1fr
-        1fr
-        .5fr
-        1fr
-        .8fr
-        .6fr;
+    grid-template-columns:
+        .3fr 1.2fr 1.2fr .5fr .5fr .5fr 1fr .8fr .6fr;
     padding: 14px 20px;
     align-items: center;
 }
@@ -191,7 +200,16 @@
     color: var(--accent);
 }
 
+.ope-box .ope-icon:nth-child(2){
+    color: red;
+}
+
 .ope-box .ope-icon:hover {
     transform: scale(1.15);
     color: var(--accent-light);
+}
+
+.ope-box .ope-icon:nth-child(2):hover {
+    transform: scale(1.15);
+    color: rgb(129, 3, 3);
 }

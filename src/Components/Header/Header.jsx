@@ -20,6 +20,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
     const [showProfile, setShowProfile] = useState(null);
     const [connectOpe, setConnectOpe] = useState(null);
     const [showAdminMenu, setShowAdminMenu] = useState(false);
+    const [zIndexValue, setZIndexValue] = useState('100000')
     const menuRef = useRef();
 
 
@@ -46,6 +47,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
             setUserInfo(data);
             localStorage.setItem("userInfo", JSON.stringify(data))
             setLoading(false);
+            console.log(data)
             if (data?.shouldChangePassword == false) {
                 callIsConnect();
             }
@@ -151,7 +153,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
 
     return (
         !userInfo?.shouldChangePassword && (
-            <div className={`header  ${scrolled ? "scrolled" : ""}`}>
+            <div className={`header  ${scrolled ? "scrolled" : ""}`} style={{ zIndex: zIndexValue }}>
                 <div className={`header-wrapper ${scrolled ? "scrolled-wrapper" : ""} `}>
                     <div className="header-left">
                         <img src={logo} alt="logo" className="header-logo" />
@@ -253,8 +255,14 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
 
                     {userInfo?.role?.name === "Admin" && (
                         !showAdminMenu ?
-                            <FiMenu className="menu-icon admin-menu-button" onClick={() => setShowAdminMenu(!showAdminMenu)} />
-                            : <FiX className="menu-icon admin-menu-button" onClick={() => setShowAdminMenu(!showAdminMenu)} />
+                            <FiMenu className="menu-icon admin-menu-button" onClick={() => {
+                                setShowAdminMenu(!showAdminMenu);
+                                setZIndexValue('99999999');
+                            }} />
+                            : <FiX className="menu-icon admin-menu-button" onClick={() => {
+                                setShowAdminMenu(!showAdminMenu);
+                                setZIndexValue('100000');
+                            }} />
                     )}
 
                     {

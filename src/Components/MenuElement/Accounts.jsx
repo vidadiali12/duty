@@ -606,7 +606,6 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                         <option value={`${true}`}>Qeydiyyatdan keçmiş</option>
                         <option value={`${false}`}>Qeydiyyatdan keçməmiş</option>
                     </select>
-                    <span className="select-icon">⇅</span>
                 </div>
 
                 <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>

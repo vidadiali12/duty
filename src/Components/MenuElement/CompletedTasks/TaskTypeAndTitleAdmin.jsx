@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiEdit, FiTrash2, FiPlus } from "react-icons/fi";
+import { FiEdit, FiTrash2, FiPlus, FiX } from "react-icons/fi";
 import "./TaskTypeAndTitleAdmin.css";
 import api from "../../../api";
 
@@ -50,7 +50,14 @@ const TaskTypeAndTitleAdmin = ({ setResponseRequest, item, setItem }) => {
   }, []);
 
   const createType = async () => {
-    if (!newType) return;
+    if (!newType) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Tip boş qala bilməz"
+      }));
+      return;
+    };
     try {
       if (item == null) {
         const res = await api.post("/task/type/createType", { typeName: newType }, hdrs);
@@ -72,7 +79,14 @@ const TaskTypeAndTitleAdmin = ({ setResponseRequest, item, setItem }) => {
   };
 
   const createTitle = async () => {
-    if (!newTitle) return;
+    if (!newTitle) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Başlıq boş qala bilməz"
+      }));
+      return;
+    };
     try {
       if (item == null) {
         const res = await api.post("/task/title/createTitle", { title: newTitle }, hdrs);
@@ -129,18 +143,35 @@ const TaskTypeAndTitleAdmin = ({ setResponseRequest, item, setItem }) => {
     setNewType(t?.typeName)
   }
 
+  const stopEditType = () => {
+    setItem(null);
+    setNewType("");
+  }
+
+  const stopEditTitle = () => {
+    setItem(null);
+    setNewTitle("");
+  }
+
+
   return (
     <div className="task-admin-wrapper p-4 w-full">
       <div className="task-admin-tabs mb-5">
         <button
           className={`task-admin-tab ${activeTab === "type" ? "active" : ""}`}
-          onClick={() => setActiveTab("type")}
+          onClick={() => {
+            setActiveTab("type");
+            setItem(null);
+          }}
         >
-          Tip
+          Tapşırıq Tipi
         </button>
         <button
           className={`task-admin-tab ${activeTab === "title" ? "active" : ""}`}
-          onClick={() => setActiveTab("title")}
+          onClick={() => {
+            setActiveTab("title");
+            setItem(null);
+          }}
         >
           Tapşırıq Başlığı
         </button>
@@ -156,8 +187,18 @@ const TaskTypeAndTitleAdmin = ({ setResponseRequest, item, setItem }) => {
               onChange={e => setNewType(e.target.value)}
               className="task-type-input"
             />
+            {
+              item && <button className="task-type-x-btn" onClick={stopEditType}>
+                <FiX className="close-update" />
+              </button>
+            }
             <button className="task-type-btn" onClick={createType}>
-              <FiPlus /> Əlavə et
+              {
+                item == null ?
+                  <>
+                    <FiPlus /> Əlavə et
+                  </> : "Yenilə"
+              }
             </button>
           </div>
 
@@ -191,8 +232,18 @@ const TaskTypeAndTitleAdmin = ({ setResponseRequest, item, setItem }) => {
               onChange={e => setNewTitle(e.target.value)}
               className="task-title-input"
             />
+            {
+              item && <button className="task-title-x-btn" onClick={stopEditTitle}>
+                <FiX className="close-update" />
+              </button>
+            }
             <button className="task-title-btn" onClick={createTitle}>
-              <FiPlus /> Əlavə et
+              {
+                item == null ?
+                  <>
+                    <FiPlus /> Əlavə et
+                  </> : "Yenilə"
+              }
             </button>
           </div>
 

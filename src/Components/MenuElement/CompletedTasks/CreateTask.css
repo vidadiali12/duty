@@ -1,0 +1,142 @@
+.create-task-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 20, 70, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999;
+}
+
+.create-task-box {
+    width: 520px;
+    background: var(--color-teal-20);
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    animation: scaleIn .25s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1
+    }
+}
+
+.create-task-header {
+    padding: 16px 20px;
+    background: var(--color-teal-3);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 14px 14px 0 0;
+}
+
+.close-icon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.create-task-body {
+    padding: 20px;
+    display: grid;
+    gap: 12px;
+}
+
+.create-task-body input,
+.create-task-body select,
+.create-task-body textarea {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--color-teal-7);
+    outline: none;
+}
+
+.create-task-body textarea {
+    min-height: 80px;
+    resize: none;
+}
+
+.create-task-footer {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 1px solid var(--color-teal-6);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background: var(--color-teal-6);
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+.title-switch-wrapper {
+    width: 100%;
+}
+
+.title-input-box,
+.title-select-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title-input,
+.title-select {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--color-teal-7);
+    background: #fff;
+    outline: none;
+    font-size: 14px;
+}
+
+.title-input:focus,
+.title-select:focus {
+    border-color: var(--color-teal-9);
+}
+
+.title-switch-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--color-teal-6);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.title-switch-btn.secondary {
+    background: transparent;
+    color: var(--color-teal-6);
+    border: 1px dashed var(--color-teal-6);
+}
+
+.title-switch-btn svg {
+    font-size: 16px;
+}
