@@ -18,6 +18,8 @@ import Footer from './Components/Footer/Footer'
 import CompletedTasks from './Components/MenuElement/CompletedTasks/CompletedTasks'
 import TaskTypeAndTitleAdmin from './Components/MenuElement/CompletedTasks/TaskTypeAndTitleAdmin'
 import Roles from './Components/MenuElement/Roles/Roles'
+import Order from './Components/MenuElement/Statistika/Order'
+import Statistics from './Components/MenuElement/Statistics/Statistics'
 
 function App() {
   const navigate = useNavigate();
@@ -64,30 +66,34 @@ function App() {
               <Route path="/" element={<Home
                 userInfo={userInfo}
                 setUserInfo={setUserInfo}
-                setResponseRequest={setResponseRequest} />} />
+                setResponseRequest={setResponseRequest} permissionIdsList={permissionIdsList} />} />
 
               <Route path='/departments' element={<Departments
-                setResponseRequest={setResponseRequest} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/units' element={<Units
-                setResponseRequest={setResponseRequest} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/account-types' element={<AccountTypes
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/ranks' element={<Ranks
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/accounts' element={<Accounts
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/shift-managers' element={<Duties
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/operation-history' element={<Loggins
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/users-request' element={<RequestUsers
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} connectNow={connectNow} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} connectNow={connectNow} permissionIdsList={permissionIdsList} />} />
               <Route path='/completed-tasks' element={<CompletedTasks
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/task-area' element={<TaskTypeAndTitleAdmin
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/permissions' element={<Roles
-                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} />} />
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
+              <Route path='/orders' element={<Order
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
+              <Route path='/statistics' element={<Statistics
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path="/login" element={<Navigate to="/" replace />} />
               <Route path="/create-admin-page" element={<Navigate to="/" replace />} />
               <Route path="*" element={<Navigate to="/" replace />} />

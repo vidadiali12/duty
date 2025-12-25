@@ -1,0 +1,119 @@
+.order-ope-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000000;
+}
+
+.order-ope-modal {
+    width: 500px;
+    max-width: 90%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-ope-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-icon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.order-ope-body {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-ope-body input[type=text] {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.order-ope-multi-select {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.order-ope-multi-select label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.order-ope-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.save-btn {
+    padding: 8px 15px;
+    background-color: #1a1446;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    padding: 8px 15px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Selected ordered list */
+.order-ope-selected-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+    border: 1px dashed #ccc;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.order-ope-selected-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f6fa;
+    padding: 6px 8px;
+    border-radius: 5px;
+}
+
+.order-ope-order-index {
+    font-weight: 600;
+    color: #241b5a;
+    min-width: 22px;
+}
+
+.order-ope-selected-name {
+    flex: 1;
+    font-size: 14px;
+}
+
+.order-ope-remove {
+    cursor: pointer;
+    color: #c0392b;
+    font-weight: bold;
+}

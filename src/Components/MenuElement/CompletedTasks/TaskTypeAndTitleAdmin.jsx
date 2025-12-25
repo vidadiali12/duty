@@ -3,7 +3,12 @@ import { FiEdit, FiTrash2, FiPlus, FiX } from "react-icons/fi";
 import "./TaskTypeAndTitleAdmin.css";
 import api from "../../../api";
 
-const TaskTypeAndTitleAdmin = ({ setResponseRequest, item, setItem }) => {
+const TaskTypeAndTitleAdmin = ({ setResponseRequest, item, setItem, userInfo }) => {
+
+  if (userInfo?.role?.name !== "Admin") {
+    return <p style={{ color: "red", marginTop: '20px', paddingLeft: '10px' }}>Bu səhifəyə giriş icazəniz yoxdur.</p>;
+  }
+
   const [activeTab, setActiveTab] = useState("type");
 
   const [taskTypes, setTaskTypes] = useState([]);

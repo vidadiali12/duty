@@ -5,7 +5,7 @@ import api from "../../../api";
 import Pagination from "../../Pagination/Pagination";
 import CreateTask from "./CreateTask";
 
-export default function CompletedTasks({ setResponseRequest, userInfo, setItem, item }) {
+export default function CompletedTasks({ setResponseRequest, userInfo, setItem, item, permissionIdsList }) {
     const [tasks, setTasks] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize] = useState(12);
@@ -174,13 +174,17 @@ export default function CompletedTasks({ setResponseRequest, userInfo, setItem, 
 
 
     const showCreateTask = () => {
-        setShowCreateTaskArea(true);
-        setItem(null)
+        if (userInfo && userInfo?.role?.name == "Admin") {
+            setShowCreateTaskArea(true);
+            setItem(null)
+        }
     }
 
     const editTask = (t) => {
-        setShowCreateTaskArea(true);
-        setItem(t)
+        if (userInfo && userInfo?.role?.name == "Admin") {
+            setShowCreateTaskArea(true);
+            setItem(t)
+        }
     }
 
     const deleteTask = (id) => {
@@ -310,7 +314,7 @@ export default function CompletedTasks({ setResponseRequest, userInfo, setItem, 
             </button>
 
             <div className="accounts-table-task w-full">
-                <div className="table-task-header">
+                <div className="table-task-header" style={{ gridTemplateColumns: userInfo && userInfo?.role?.name == "Admin" ? ".3fr 1.2fr 1.2fr .5fr .5fr .5fr 1fr .8fr .6fr" : ".3fr 1.2fr 1.2fr .5fr .5fr .5fr 1fr .8fr" }}>
                     <span>#</span>
                     <span>Növ</span>
                     <span>Başlıq</span>
@@ -319,11 +323,12 @@ export default function CompletedTasks({ setResponseRequest, userInfo, setItem, 
                     <span>Say</span>
                     <span>İcraçı</span>
                     <span>Tarix</span>
-                    <span style={{ textAlign: "center" }}>Əməliyyat</span>
+
+                    {userInfo && userInfo?.role?.name == "Admin" && <span style={{ textAlign: "center" }}>Əməliyyat</span>}
                 </div>
 
                 {tasks.map((t, index) => (
-                    <div className="table-task-row" key={t.id}>
+                    <div className="table-task-row" key={t.id} style={{ gridTemplateColumns: userInfo && userInfo?.role?.name == "Admin" ? ".3fr 1.2fr 1.2fr .5fr .5fr .5fr 1fr .8fr .6fr" : ".3fr 1.2fr 1.2fr .5fr .5fr .5fr 1fr .8fr" }}>
                         <span>{pageSize * (page - 1) + index + 1}</span>
                         <span>{t?.type?.typeName}</span>
                         <span>{t?.title?.title}</span>
@@ -332,10 +337,12 @@ export default function CompletedTasks({ setResponseRequest, userInfo, setItem, 
                         <span>{t?.count}</span>
                         <span>{t?.personnelUsername}</span>
                         <span>{t?.taskDate?.split("T")[0]} {t?.taskDate?.split("T")[1]?.slice(0, 8)}</span>
-                        <span className="ope-box">
-                            <FiEdit className="ope-icon" onClick={() => editTask(t)} />
-                            <FiTrash2 className="ope-icon" onClick={() => deleteTask(t.id)} />
-                        </span>
+                        {userInfo && userInfo?.role?.name == "Admin" && (
+                            <span className="ope-box">
+                                <FiEdit className="ope-icon" onClick={() => editTask(t)} />
+                                <FiTrash2 className="ope-icon" onClick={() => deleteTask(t.id)} />
+                            </span>
+                        )}
                     </div>
                 ))}
             </div>

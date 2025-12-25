@@ -11,6 +11,11 @@ import ChangePassword from './ChangePassword';
 import CreateAdminAccount from './CreateAdminAccount';
 
 export default function Duties({ setResponseRequest, userInfo, setItem, item }) {
+
+    if (userInfo?.role?.name !== "Admin") {
+        return <p style={{ color: "red", marginTop: '20px', paddingLeft: '10px' }}>Bu səhifəyə giriş icazəniz yoxdur.</p>;
+    }
+
     const [allAccounts, setAllAccounts] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(12);

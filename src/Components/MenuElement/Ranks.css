@@ -29,26 +29,30 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     border-radius: 10px;
-    gap: 8px;
+    gap: 12px;
 }
 
 .table-row-rank {
-    background: var(--color-teal-3);
+    background: var(--color-teal-20);
     padding: 14px 18px;
     border-radius: 8px;
     display: grid;
     grid-template-columns: 1fr 2fr 3fr 2fr;
     align-items: center;
     transition: .5s;
+    color: var(--color-teal-2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .table-row-rank:hover {
     background: var(--color-teal-4);
+    color: var(--color-teal-19);
 }
 
 .table-header-rank {
     background: var(--color-teal-5);
     font-weight: 600;
+    color: var(--color-teal-19);
 }
 
 .actions-ranks {
@@ -58,12 +62,34 @@
     font-size: 20px;
 }
 
-.edit-icon-rank {
-    color: var(--color-teal-10);
+.edit-icon-ranks {
+    color: var(--color-teal-5) !important;
     cursor: pointer;
+    font-size: 1.1rem;
+    scale: 1;
+    transition: .3s;
 }
 
-.delete-icon-rank {
-    color: var(--color-teal-15);
+.delete-icon-ranks {
+    color: var(--color-teal-8) !important;
     cursor: pointer;
+    font-size: 1rem;
+    scale: 1;
+    transition: .3s;
+}
+
+.table-row-rank:hover .edit-icon-ranks {
+    color: var(--color-teal-15) !important;
+}
+
+.table-row-rank:hover .delete-icon-ranks {
+    color: var(--color-teal-17) !important;
+}
+
+.edit-icon-ranks:hover {
+    scale: 1.1;
+}
+
+.delete-icon-ranks:hover {
+    scale: 1.1;
 }

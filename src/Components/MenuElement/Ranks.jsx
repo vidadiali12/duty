@@ -2,10 +2,17 @@ import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import api from "../../api";
 import "./Ranks.css"
+import RankEditAndCreate from "./RankEditAndCreate";
 
 const Ranks = ({ setResponseRequest, userInfo, setItem, item }) => {
+
+  if (userInfo?.role?.name !== "Admin") {
+    return <p style={{ color: "red", marginTop: '20px', paddingLeft: '10px' }}>Bu səhifəyə giriş icazəniz yoxdur.</p>;
+  }
+
   const [ranks, setRanks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showRankOpe, setShowRankOpe] = useState(false);
 
   const loadRanks = async () => {
     const token = localStorage.getItem('myUserDutyToken');
@@ -30,8 +37,20 @@ const Ranks = ({ setResponseRequest, userInfo, setItem, item }) => {
     }
   };
 
+  const deleteRank = async (id) => {
+    setResponseRequest(prev => ({
+      ...prev,
+      showResponse: true,
+      isQuestion: true,
+      title: "Rütbə silinsin?",
+      type: 'deleteRank',
+      api: `/rank/deleteRank/${id}`,
+    }));
+  }
+
   useEffect(() => {
     loadRanks();
+    setItem(null);
   }, []);
 
   if (loading) return <p style={{ color: "white" }}>Yüklənir...</p>;
@@ -40,7 +59,7 @@ const Ranks = ({ setResponseRequest, userInfo, setItem, item }) => {
     <div className="ranks-page">
       <div className="ranks-header">
         <h2>Rütbələr</h2>
-        <button className="add-btn">
+        <button className="add-btn" onClick={() => { setItem(null); setShowRankOpe(true); }}>
           <FaPlus /> Əlavə et
         </button>
       </div>
@@ -67,18 +86,28 @@ const Ranks = ({ setResponseRequest, userInfo, setItem, item }) => {
           <span style={{ textAlign: 'center' }}>Əməliyyatlar</span>
         </div>
 
-        {ranks.map((item) => (
-          <div key={item.id} className="table-row-rank">
-            <span>{item.id}</span>
-            <span>{item.name}</span>
-            <span>{item.description}</span>
+        {ranks.map((rank, index) => (
+          <div key={rank?.id} className="table-row-rank">
+            <span>{index + 1}</span>
+            <span>{rank?.name}</span>
+            <span>{rank?.description}</span>
             <span className="actions-ranks">
-              <FaEdit className="edit-icon-ranks" />
-              <FaTrash className="delete-icon-ranks" />
+              <FaEdit className="edit-icon-ranks" onClick={() => { setItem(rank); setShowRankOpe(true); }} />
+              <FaTrash className="delete-icon-ranks" onClick={() => deleteRank(rank?.id)} />
             </span>
           </div>
         ))}
       </div>
+      {
+        showRankOpe && (
+          <RankEditAndCreate
+            setShowRankOpe={setShowRankOpe}
+            setResponseRequest={setResponseRequest}
+            item={item}
+            setItem={setItem}
+          />
+        )
+      }
     </div>
   );
 };

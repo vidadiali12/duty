@@ -1,0 +1,104 @@
+.rank-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 20, 70, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999999;
+}
+
+.rank-box {
+    width: 420px;
+    background: var(--color-teal-20);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.rank-header {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-teal-4);
+    border-radius: 14px 14px 0 0;
+}
+
+.rank-header h2 {
+    color: var(--color-teal-15) !important;
+    font-size: 20px;
+}
+
+.rank-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.rank-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rank-body label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--color-teal-1);
+}
+
+.rank-body input,
+.rank-body textarea {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--color-teal-15);
+    background: white;
+}
+
+.rank-body input:focus,
+.rank-body textarea:focus {
+    outline: none;
+    border-color: var(--color-teal-8);
+}
+
+.rank-footer {
+    padding: 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--color-teal-18);
+}
+
+.rank-footer .cancel {
+    background: var(--color-teal-9);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--color-teal-19);
+    transition: .3s;
+}
+
+.rank-footer .submit {
+    background: var(--color-teal-8);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.rank-footer .cancel:hover {
+    background: var(--color-teal-6);
+}
+
+.rank-footer .submit:hover {
+    background: var(--color-teal-5);
+}

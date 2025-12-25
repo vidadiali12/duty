@@ -9,11 +9,10 @@ import { AiFillHome } from 'react-icons/ai';
 import { MdBusiness } from 'react-icons/md';
 import { FaUsers, FaHistory } from 'react-icons/fa';
 import { BsClockHistory } from 'react-icons/bs';
-import { FiCheckSquare, FiBarChart2, FiMenu, FiX } from 'react-icons/fi';
+import { FiCheckSquare, FiBarChart2, FiMenu, FiX, FiList } from 'react-icons/fi';
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import Profile from '../Modals/Profile';
 import AdminHeader from './AdminHeader';
-import { isPermission } from '../../Functions/IsPermissionFunc';
 
 const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConnectNow, permissionIdsList, setPermissionIdsList }) => {
     const [loading, setLoading] = useState(false);
@@ -43,13 +42,12 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
             const res = await api.get('/auth/getMyProfile', {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            
+
             const data = res?.data?.data || null;
             setUserInfo(data);
             localStorage.setItem("userInfo", JSON.stringify(data))
             setLoading(false);
             setPermissionIdsList(data?.role?.permissions.map(p => p.id));
-
             if (data?.shouldChangePassword == false) {
                 callIsConnect();
             }
@@ -163,7 +161,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                     </div>
 
                     {
-                        userInfo?.role?.name == "Admin" && (
+                       permissionIdsList && permissionIdsList?.includes(24) && (
                             <div className='ns-connect-box'>
                                 <div className='ns-connect-inform' onClick={connectNow ? disConnectNs : connectNs}>
                                     <span className='ns-connect-text' >
@@ -253,22 +251,25 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                                 <span className='menu-list-child-text'>Statistika</span>
                             </NavLink>
                         </li>
+                        <li className='menu-list-child'>
+                            <NavLink className="menu-list-child-link" to="/orders">
+                                <FiList className="menu-icon" />
+                                <span className='menu-list-child-text'>Siyahılar</span>
+                            </NavLink>
+                        </li>
                     </ul>
 
-                    {permissionIdsList && isPermission(
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26],
-                        permissionIdsList
-                    ) && (
-                            !showAdminMenu ?
-                                <FiMenu className="menu-icon admin-menu-button" onClick={() => {
-                                    setShowAdminMenu(!showAdminMenu);
-                                    setZIndexValue('99999999');
-                                }} />
-                                : <FiX className="menu-icon admin-menu-button" onClick={() => {
-                                    setShowAdminMenu(!showAdminMenu);
-                                    setZIndexValue('100000');
-                                }} />
-                        )}
+                    {userInfo && userInfo?.role?.name == "Admin" && (
+                        !showAdminMenu ?
+                            <FiMenu className="menu-icon admin-menu-button" onClick={() => {
+                                setShowAdminMenu(!showAdminMenu);
+                                setZIndexValue('99999999');
+                            }} />
+                            : <FiX className="menu-icon admin-menu-button" onClick={() => {
+                                setShowAdminMenu(!showAdminMenu);
+                                setZIndexValue('100000');
+                            }} />
+                    )}
 
                     {
                         showAdminMenu && (

@@ -4,7 +4,11 @@ import "./Roles.css";
 import api from "../../../api";
 import RoleUpdate from "./RoleUpdate";
 
-export default function Roles({ item, setItem, setResponseRequest }) {
+export default function Roles({ item, setItem, setResponseRequest, userInfo }) {
+
+    if (userInfo?.role?.name !== "Admin") {
+        return <p style={{ color: "red", marginTop: '20px', paddingLeft: '10px' }}>Bu səhifəyə giriş icazəniz yoxdur.</p>;
+    }
 
     const [roles, setRoles] = useState([]);
     const [permissions, setPermissions] = useState([]);

@@ -7,6 +7,7 @@ import "./Accounts.css"
 import CreateAndUpdateAcc from './CreateAndUpdateAcc';
 import Pagination from '../Pagination/Pagination';
 import ClientOpe from './ClientOpe';
+import ExportModal from './ExcelExport/ExportModal';
 
 export default function Accounts({ setResponseRequest, userInfo, setItem, item }) {
     const [allAccounts, setAllAccounts] = useState([]);
@@ -20,7 +21,8 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
     const [totalItem, setTotalItem] = useState(null);
     const [totalPages, setTotalPages] = useState(null)
     const [showClientOpe, setShowClientOpe] = useState(null);
-    const [isFromESD] = useState(null)
+    const [isFromESD] = useState(null);
+    const [showExportModal, setShowExportModal] = useState(false);
 
     const [filters, setFilters] = useState({
         text: "",
@@ -611,9 +613,15 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
             </div>
 
-            <button className="add-account-btn" onClick={createAcc}>
-                <FaPlus /> Yeni İstifadəçi
-            </button>
+            <div>
+                <button className="add-account-btn" onClick={createAcc}>
+                    <FaPlus /> Yeni İstifadəçi
+                </button>
+
+                <button className="export-account-btn" onClick={() => setShowExportModal(true)}>
+                    <FaPlus /> Excel olaraq xaric et
+                </button>
+            </div>
 
             <div className="accounts-table w-full">
                 <div className="table-header">
@@ -674,6 +682,15 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                         setItem={setItem}
                         item={item}
                         isFromESD={isFromESD}
+                    />
+                )
+            }
+
+            {
+                showExportModal && (
+                    <ExportModal
+                        setShowExportModal={setShowExportModal}
+                        setResponseRequest={setResponseRequest}
                     />
                 )
             }

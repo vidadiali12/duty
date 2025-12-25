@@ -140,7 +140,12 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
       });
 
     } catch (err) {
-      console.log(err);
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Xəta",
+        message: err?.response?.data?.errorDescription || err
+      }));
     }
   };
 

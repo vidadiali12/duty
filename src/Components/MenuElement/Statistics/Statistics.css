@@ -1,0 +1,165 @@
+/* Statistics.css */
+
+/* Wrapper */
+.statistics-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: #f5f6fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tabs */
+.statistics-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.statistics-tab {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.statistics-tab:hover {
+    background: #e0e0e0;
+}
+
+.active-tab {
+    background: #4b7bec;
+    color: #fff;
+    border-color: #4b7bec;
+}
+
+/* Filter Section */
+.statistics-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Generic filter container */
+.stat-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.stat-filter-placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Selects */
+.stat-filter select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    min-width: 150px;
+    cursor: pointer;
+}
+
+.stat-filter select:focus {
+    outline: none;
+    border-color: #4b7bec;
+}
+
+/* Date inputs */
+.stat-filter input[type="date"] {
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* Multi-checkbox container */
+.stat-multi-checkbox {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    border-radius: 6px;
+    background: #f9f9f9;
+}
+
+.stat-multi-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.stat-multi-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* Export Button */
+.statistics-export {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.statistics-export-btn {
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    background: #4b7bec;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.statistics-export-btn:hover {
+    background: #3867d6;
+}
+
+/* Specific filters styling for visual variety */
+.stat-filter-accounttype select,
+.stat-filter-accountcount select,
+.stat-filter-accountstatus-timeline select,
+.stat-filter-created-deleted select {
+    min-width: 180px;
+}
+
+.stat-filter-unit-dep .stat-multi-checkbox {
+    max-width: 300px;
+}
+
+.stat-filter-pests .stat-multi-checkbox {
+    max-width: 350px;
+}
+
+/* Scrollbar for multi-checkbox containers */
+.stat-multi-checkbox::-webkit-scrollbar {
+    width: 6px;
+}
+
+.stat-multi-checkbox::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+.stat-multi-checkbox::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 3px;
+}

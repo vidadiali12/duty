@@ -5,7 +5,10 @@ import './AccountTypes.css';
 import GetAccountTypes from './GetAccountTypes';
 
 const AccountTypes = ({ setResponseRequest, userInfo, setItem, item }) => {
-    if (userInfo?.role?.name !== "Admin") return;
+
+    if (userInfo?.role?.name !== "Admin") {
+        return <p style={{ color: "red", marginTop: '20px', paddingLeft: '10px' }}>Bu səhifəyə giriş icazəniz yoxdur.</p>;
+    }
 
     const [allTypes, setAllTypes] = useState([]);
     const [ope, setOpe] = useState(null)

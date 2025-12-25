@@ -86,8 +86,7 @@ const Profile = ({ userInfo, setUserInfo, setShowProfile, setResponseRequest }) 
         { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
       );
 
-      const responseData = response?.data?.data
-      console.log(responseData)
+      const responseData = response?.data?.data;
       localStorage.setItem("myUserDutyToken", responseData?.accessToken);
       localStorage.setItem("tokenExpiration", responseData?.tokenExpDate);
 
@@ -119,12 +118,10 @@ const Profile = ({ userInfo, setUserInfo, setShowProfile, setResponseRequest }) 
 
 
   const callUser = () => {
-    console.log(userInfo)
     setShouldChangePassword(userInfo?.shouldChangePassword);
   }
 
   useEffect(() => {
-    console.log(userInfo)
     callUser()
   }, [])
 
@@ -168,6 +165,7 @@ const Profile = ({ userInfo, setUserInfo, setShowProfile, setResponseRequest }) 
                 }
                 value={passwordData[field]}
                 onChange={handlePasswordChange}
+                autoComplete='off'
               />
               <span className="password-toggle-icon" onClick={() => toggleShowPassword(field)}>
                 {showPassword[field] ? <FaEye /> : <FaEyeSlash />}

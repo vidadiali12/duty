@@ -48,13 +48,17 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                 setResponseRequest(prev => ({
                     ...prev,
                     showResponse: true,
-                    title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                    title: "❌ Xəta baş verdi",
                     message: err?.response?.data?.errorDescription || err,
+                    isQuestion: false
                 }));
             }
         }
     };
 
+    if(responseRequest?.showResponse){
+        console.log("responseRequest", responseRequest);
+    }
     if (!responseRequest?.showResponse) return null;
 
     return (

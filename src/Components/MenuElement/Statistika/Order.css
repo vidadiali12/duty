@@ -1,0 +1,108 @@
+.order-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    font-family: sans-serif;
+}
+
+.order-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.order-tabs button {
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: var(--bg-3);
+    color: var(--text-1);
+    font-weight: 600;
+    transition: 0.2s;
+    width: min-content;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+.order-tabs .active-tab {
+    background: var(--accent);
+    color: #fff;
+}
+
+.order-department,
+.order-unit {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-department > button,
+.order-unit > button {
+    align-self: flex-start;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: 0.2s;
+    width: min-content;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.order-department > button:hover,
+.order-unit > button:hover {
+    background: var(--accent-light);
+}
+
+.order-dep-header,
+.order-unit-header {
+    display: grid;
+    grid-template-columns: 0.3fr 1.5fr 2.5fr 1fr;
+    padding: 10px 15px;
+    background: var(--bg-4);
+    color: var(--text-1);
+    font-weight: 600;
+    border-radius: 10px 10px 0 0;
+    font-size: 0.8rem;
+}
+
+.order-dep-row,
+.order-unit-row {
+    display: grid;
+    grid-template-columns: 0.3fr 1.5fr 2.5fr 1fr;
+    padding: 10px 15px;
+    align-items: center;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--bg-4);
+    font-size: 0.8rem;
+}
+
+.order-dep-row:last-child,
+.order-unit-row:last-child {
+    border-bottom: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.order-ope-box {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.ope-icon {
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+    color: var(--text-1);
+}
+
+.ope-icon:hover {
+    scale: 1.1;
+}
