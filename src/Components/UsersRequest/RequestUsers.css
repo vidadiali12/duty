@@ -72,6 +72,8 @@
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid #e1e1e1;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .req-user-header {
@@ -84,6 +86,9 @@
     color: #333;
     border-bottom: 1px solid #e1e1e1;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .request-header {

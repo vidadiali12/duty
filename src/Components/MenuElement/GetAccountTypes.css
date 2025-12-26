@@ -10,7 +10,7 @@
     backdrop-filter: blur(2px);
     padding: 28px;
     box-sizing: border-box;
-    z-index: 100000;
+    z-index: 100000000;
 }
 
 .gat-card {

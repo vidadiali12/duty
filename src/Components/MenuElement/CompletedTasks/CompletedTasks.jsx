@@ -67,7 +67,7 @@ export default function CompletedTasks({ setResponseRequest, userInfo, setItem, 
 
         const hdrsDep = {
             headers: { Authorization: `Bearer ${token}` },
-            params: { page, pageSize }
+            params: { page: 1, pageSize: 1000 }
         };
 
         try {
@@ -141,7 +141,7 @@ export default function CompletedTasks({ setResponseRequest, userInfo, setItem, 
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-                params: { page, pageSize }
+                params: { page: 1, pageSize: 1000 }
             }
 
             if (filters?.departmentId != "") {

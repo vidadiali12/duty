@@ -5,10 +5,17 @@
 
 .logs-table {
     width: 100%;
+    margin-top: 20px;
+    position: relative;
 }
 
 .logs-wrapper>.filters {
     padding: 10px 0;
+}
+
+.table-log-header {
+    position: sticky;
+    top: 0px;
 }
 
 .table-log-header,
@@ -94,6 +101,6 @@
     transition: 0.2s;
 }
 
-.filter-select:hover + .select-icon {
+.filter-select:hover+.select-icon {
     color: var(--accent);
 }

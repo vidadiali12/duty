@@ -148,7 +148,7 @@
 
 .acc-form input::placeholder,
 .acc-form textarea::placeholder {
-    color: var(--color-teal-5);
+    color: rgb(145, 142, 148);
 }
 
 .for-device {

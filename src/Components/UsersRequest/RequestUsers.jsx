@@ -4,7 +4,11 @@ import Pagination from "../Pagination/Pagination";
 import './RequestUsers.css'
 import CreateAndUpdateAcc from "../MenuElement/CreateAndUpdateAcc";
 
-const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow }) => {
+const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow, permissionIdsList }) => {
+
+    if (!(permissionIdsList && permissionIdsList?.includes(24))) {
+        return <p style={{ color: "red", marginTop: '20px', paddingLeft: '10px' }}>Bu səhifəyə giriş icazəniz yoxdur.</p>;
+    }
 
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
@@ -415,12 +419,12 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                                     <div className="req-user-table">
 
                                         <div className="req-user-header"
-                                            style={{ gridTemplateColumns: req?.forms[0]?.eventId == 4 ? '160px 130px 300px' : '120px 150px 150px 150px 130px 300px' }}>
+                                            style={{ gridTemplateColumns: req?.forms[0]?.eventId == 4 ? '30px 160px 130px 300px' : '30px 120px 150px 150px 150px 130px 300px' }}>
+                                            <span>#</span>
                                             {
                                                 req?.forms[0]?.eventId == 4 ?
                                                     <span className="col-name">İstifadəçi adı</span> :
                                                     <>
-
                                                         <span className="col-rank">Rütbə</span>
                                                         <span className="col-name">Ad</span>
                                                         <span className="col-surname">Soyad</span>
@@ -440,9 +444,10 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow 
                                             </span>
                                         </div>
 
-                                        {req?.forms?.map(form => (
+                                        {req?.forms?.map((form, countOfForm) => (
                                             <div className="req-user-row" key={form.formId}
-                                                style={{ gridTemplateColumns: form?.eventId == 4 ? '160px 130px 300px' : '120px 150px 150px 150px 130px 300px' }}>
+                                                style={{ gridTemplateColumns: form?.eventId == 4 ? '30px 160px 130px 300px' : '30px 120px 150px 150px 150px 130px 300px' }}>
+                                                <span>{countOfForm + 1}</span>
                                                 {
                                                     form?.eventId == 4 ?
                                                         <span className="col-name">{form.username}</span> :

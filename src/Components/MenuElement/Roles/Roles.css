@@ -38,6 +38,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-height: 750px;
+    overflow-y: auto;
 }
 
 .role-card {

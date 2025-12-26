@@ -56,9 +56,6 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
         }
     };
 
-    if(responseRequest?.showResponse){
-        console.log("responseRequest", responseRequest);
-    }
     if (!responseRequest?.showResponse) return null;
 
     return (
@@ -68,7 +65,11 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                 {
                     (responseRequest?.type === "deleteAccSoft" || responseRequest?.type == "deleteAccHard") ? ""
                         : <p>
-                            {responseRequest?.message || ""}
+                            {
+                                typeof responseRequest?.message === "string"
+                                    ? responseRequest.message
+                                    : responseRequest?.message?.message + ": RR" || "Xəta baş verdi: RR"
+                            }
                         </p>
                 }
                 <div className="modal-buttons">
@@ -87,7 +88,7 @@ const ResponseModal = ({ responseRequest, setResponseRequest }) => {
                         <button
                             className="confirm-button"
                             onClick={() => {
-                                setResponseRequest(prev => ({ ...prev, showResponse: false }));
+                                setResponseRequest(prev => ({ ...prev, showResponse: false, message: "", title: "", isQuestion: false, api: "", type: "", onConfirm: null }));
                                 if (responseRequest?.type === "changeMyPass" || responseRequest?.type === "createAdminAccDuty") {
                                     window.location.reload();
                                 }

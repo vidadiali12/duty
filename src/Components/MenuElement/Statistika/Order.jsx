@@ -13,7 +13,7 @@ const Order = ({ setResponseRequest, item, setItem }) => {
     const [departments, setDepartments] = useState([]);
     const [units, setUnits] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize] = useState(120);
+    const [pageSize] = useState(12);
     const [showOrderOpe, setShowOrderOpe] = useState(false);
     const [type, setType] = useState("department");
 
@@ -49,7 +49,6 @@ const Order = ({ setResponseRequest, item, setItem }) => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setDepOrders(res?.data?.data || []);
-            console.log(res?.data?.data)
         } catch (err) {
             console.error(err);
         }

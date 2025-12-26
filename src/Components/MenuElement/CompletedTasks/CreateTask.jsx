@@ -153,7 +153,7 @@ const CreateTask = ({ setResponseRequest, setShowCreateTaskArea, departmentList,
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-                params: { page, pageSize }
+                params: { page: 1, pageSize: 1000 }
             }
 
             if (form?.departmentId != "") {

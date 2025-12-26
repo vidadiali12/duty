@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api';
 import { FaPlus } from 'react-icons/fa';
-import { FiChevronDown, FiInfo } from "react-icons/fi";
+import { FiChevronDown, FiInfo, FiDownload } from "react-icons/fi";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import "./Accounts.css"
 import CreateAndUpdateAcc from './CreateAndUpdateAcc';
@@ -102,7 +102,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             headers: {
                 Authorization: `Bearer ${token}`
             },
-            params: { page, pageSize }
+            params: { page: 1, pageSize: 1000 }
         }
 
         if (!token) return;
@@ -191,7 +191,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-                params: { page, pageSize }
+                params: { page: 1, pageSize: 1000 }
             }
 
             if (filters?.departments.length !== 0) {
@@ -613,13 +613,13 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                 <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
             </div>
 
-            <div>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '5px' }}>
                 <button className="add-account-btn" onClick={createAcc}>
                     <FaPlus /> Yeni İstifadəçi
                 </button>
 
-                <button className="export-account-btn" onClick={() => setShowExportModal(true)}>
-                    <FaPlus /> Excel olaraq xaric et
+                <button className="add-account-btn export-account-btn" onClick={() => setShowExportModal(true)}>
+                  <FiDownload /> Excel kimi endir
                 </button>
             </div>
 
@@ -691,6 +691,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                     <ExportModal
                         setShowExportModal={setShowExportModal}
                         setResponseRequest={setResponseRequest}
+                        filters={filters}
                     />
                 )
             }

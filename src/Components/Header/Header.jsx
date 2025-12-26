@@ -161,7 +161,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                     </div>
 
                     {
-                       permissionIdsList && permissionIdsList?.includes(24) && (
+                        permissionIdsList && permissionIdsList?.includes(24) && (
                             <div className='ns-connect-box'>
                                 <div className='ns-connect-inform' onClick={connectNow ? disConnectNs : connectNs}>
                                     <span className='ns-connect-text' >
@@ -273,7 +273,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
 
                     {
                         showAdminMenu && (
-                            <AdminHeader />
+                            <AdminHeader setShowAdminMenu={setShowAdminMenu} />
                         )
                     }
                 </div>

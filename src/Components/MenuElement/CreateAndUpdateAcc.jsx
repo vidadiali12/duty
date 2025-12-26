@@ -257,7 +257,7 @@ const CreateAndUpdateAcc = ({
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-                params: { page, pageSize }
+                params: { page: 1, pageSize: 1000 }
             }
 
             if (id) {
