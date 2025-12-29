@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../../api';
 import './ExportModal.css';
 
-const ExportModal = ({ setShowExportModal, setResponseRequest, filters }) => {
+const ExportModal = ({ callFilter, setShowExportModal, setResponseRequest, filters }) => {
 
   const requestFields = {
     reqRank: false,
@@ -163,38 +163,47 @@ const ExportModal = ({ setShowExportModal, setResponseRequest, filters }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
+
   return (
     <div className="export-overlay">
-      <div className="export-box">
-        <h3>📥 Export sahələri seç</h3>
+      <div className='export-overlay-content'>
+        {
+          callFilter()
+        }
+        <div className="export-box">
+          <h3>📥 Export sahələri seç</h3>
 
-        <div className="checkbox-grid">
-          {Object.keys(format).map((key) => (
-            <label key={key} className="checkbox-item">
-              <input
-                type="checkbox"
-                checked={format[key]}
-                onChange={() => toggleField(key)}
-              />
-              <span>{requestFieldsInput[key]}</span>
-            </label>
-          ))}
-        </div>
+          <div className="checkbox-grid">
+            {Object.keys(format).map((key) => (
+              <label key={key} className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={format[key]}
+                  onChange={() => toggleField(key)}
+                />
+                <span>{requestFieldsInput[key]}</span>
+              </label>
+            ))}
+          </div>
 
-        <div className="export-actions">
-          <button
-            className="btn cancel"
-            onClick={() => setShowExportModal(false)}
-          >
-            Bağla
-          </button>
+          <div className="export-actions">
+            <button
+              className="btn cancel"
+              onClick={() => setShowExportModal(false)}
+            >
+              Bağla
+            </button>
 
-          <button
-            className="btn export"
-            onClick={exportToExcel}
-          >
-            Excel endir
-          </button>
+            <button
+              className="btn export"
+              onClick={exportToExcel}
+            >
+              Excel kimi endir
+            </button>
+          </div>
         </div>
       </div>
     </div>

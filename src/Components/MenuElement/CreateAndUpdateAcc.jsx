@@ -509,7 +509,7 @@ const CreateAndUpdateAcc = ({
                                             name="mark"
                                             placeholder="Cihazın Markası: "
                                             onChange={onDeviceChange} />
-                                        {errors.mark && <span className="error-text">{errors.mark}</span>}
+                                        {errors.mark && <span className="error-text">{errors?.mark}</span>}
                                     </div>
 
                                     <div className={`form-group ${errors.serialNumber ? "error" : ""}`}>
@@ -526,14 +526,14 @@ const CreateAndUpdateAcc = ({
                                         <label>Tutum</label>
                                         <div className="form-group-capacity">
                                             <input
-                                                value={form?.deviceData?.capacity.replace(/\D/g, "")}
+                                                value={form?.deviceData?.capacity?.replace(/\D/g, "")}
                                                 name="capacity"
                                                 placeholder="Cihazın Tutumu: "
                                                 onChange={onDeviceChange}
                                                 type="number" />
 
                                             <select name="" id=""
-                                                value={form?.deviceData?.capacity.slice(form?.deviceData?.capacity.length - 2, form?.deviceData?.capacity.length) || ""}
+                                                value={form?.deviceData?.capacity?.slice(form?.deviceData?.capacity?.length - 2, form?.deviceData?.capacity?.length) || ""}
                                                 onChange={chooseCapacityValue}>
                                                 <option value="">Seç</option>
                                                 <option value="KB">KB</option>

@@ -453,173 +453,178 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
         }
     }
 
-    return (
-        <div className="accounts-wrapper p-4 w-full">
-            <div className="filters flex flex-wrap gap-3 mb-5">
+    const callFilter = () => {
+        return <div className="filters flex flex-wrap gap-3 mb-5">
 
-                <div className="filter-box">
-                    <input
-                        className="filter-label"
-                        placeholder='axtar...'
-                        value={filters?.text}
-                        onChange={(e) => searchByText(e)} />
-                </div>
-
-                <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("rank")}>
-                        Rütbə
-                        <FiChevronDown />
-                    </span>
-                    <div className={`filter-box-child ${activeFilter === 'rank' ? 'show-filtered-element' : ''}`}>
-                        {rankList.map(r => (
-                            <label
-                                key={r.id}
-                            >
-                                <input type="checkbox"
-                                    checked={filters.ranks.includes(r.id)}
-                                    onChange={() => toggleFilter('ranks', r.id)} />
-                                <span>{r.description}</span>
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("dep")}>
-                        İdarə
-                        <FiChevronDown />
-                    </span>
-                    <div className={`filter-box-child ${activeFilter === 'dep' ? 'show-filtered-element' : ''}`}>
-                        {departmentList.map(d => (
-                            <label
-                                key={d.id}
-                            >
-                                <input type="checkbox"
-                                    checked={filters.departments.includes(d.id)}
-                                    onChange={() => toggleFilter('departments', d.id)} />
-                                <span>{d.tag}</span>
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("unit")}>
-                        Bölmə
-                        <FiChevronDown />
-                    </span>
-                    <div className={`filter-box-child ${activeFilter === 'unit' ? 'show-filtered-element' : ''}`}>
-                        {unitList.map(u => (
-                            <label key={u.id}>
-                                <input
-                                    type="checkbox"
-                                    checked={filters.units.includes(u.id)}
-                                    onChange={() => toggleFilter("units", u.id)}
-                                    className="unit-checkbox"
-                                />
-                                <span>{u.tag}</span>
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("type")}>
-                        Hesab növü
-                        <FiChevronDown />
-                    </span>
-                    <div className={`filter-box-child ${activeFilter === 'type' ? 'show-filtered-element' : ''}`}>
-                        {accTypeList.map(t => (
-                            <label key={t.id}>
-                                <input
-                                    type="checkbox"
-                                    checked={filters.accountTypes.includes(t.id)}
-                                    onChange={() => toggleFilter("accountTypes", t.id)}
-                                />
-                                <span>{t.name}</span>
-                            </label>
-                        ))}
-                    </div>
-                </div>
-                <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("status")}>
-                        Status
-                        <FiChevronDown />
-                    </span>
-                    <div className={`filter-box-child ${activeFilter === 'status' ? 'show-filtered-element' : ''}`}>
-                        {accStatusList.map(s => (
-                            <label key={s.id}>
-                                <input
-                                    type="checkbox"
-                                    checked={filters.accountStatus.includes(s.id)}
-                                    onChange={() => toggleFilter("accountStatus", s.id)}
-                                />
-                                <span>{s.status.toLowerCase() == "deleted" ? "Silinmiş" :
-                                    s.status.toLowerCase() == "active" ? "Aktiv" :
-                                        s.status.toLowerCase() == "deactive" ? "Deaktiv" :
-                                            s.status.toLowerCase() == "confidential" ? "Məxfi" : "Qeyri Məxfi"}</span>
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="filter-box">
-                    <input
-                        className="filter-label date-filter"
-                        value={filters.fromDate.split(".").reverse().join("-")}
-                        type="date"
-                        onChange={e =>
-                            setFilters(prev => ({ ...prev, fromDate: e.target.value.split("-").reverse().join(".") }))
-                        }
-                    />
-
-                </div>
-
-                <div className="filter-box">
-                    <input
-                        className="filter-label date-filter"
-                        value={filters.toDate.split(".").reverse().join("-")}
-                        type="date"
-                        onChange={e =>
-                            setFilters(prev => ({ ...prev, toDate: e.target.value.split("-").reverse().join(".") }))
-                        }
-                    />
-                </div>
-
-                <div className="filter-box sort-filter">
-                    <select
-                        className="filter-select"
-                        onChange={changeAsc}
-                        value={filters?.newToOld}
-                    >
-                        <option value={`${true}`}>Yenidən Köhnəyə</option>
-                        <option value={`${false}`}>Köhnədən Yeniyə</option>
-                    </select>
-                    <span className="select-icon">⇅</span>
-                </div>
-
-                <div className="filter-box sort-filter">
-                    <select
-                        className="filter-select"
-                        onChange={changeRegistered}
-                        value={filters?.registered}
-                    >
-                        <option value={`${null}`}>Hamısı</option>
-                        <option value={`${true}`}>Qeydiyyatdan keçmiş</option>
-                        <option value={`${false}`}>Qeydiyyatdan keçməmiş</option>
-                    </select>
-                </div>
-
-                <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
+            <div className="filter-box">
+                <input
+                    className="filter-label"
+                    placeholder='axtar...'
+                    value={filters?.text}
+                    onChange={(e) => searchByText(e)} />
             </div>
 
+            <div className="filter-box">
+                <span className="filter-label" onClick={() => showFilter("rank")}>
+                    Rütbə
+                    <FiChevronDown />
+                </span>
+                <div className={`filter-box-child ${activeFilter === 'rank' ? 'show-filtered-element' : ''}`}>
+                    {rankList.map(r => (
+                        <label
+                            key={r.id}
+                        >
+                            <input type="checkbox"
+                                checked={filters.ranks.includes(r.id)}
+                                onChange={() => toggleFilter('ranks', r.id)} />
+                            <span>{r.description}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div className="filter-box">
+                <span className="filter-label" onClick={() => showFilter("dep")}>
+                    İdarə
+                    <FiChevronDown />
+                </span>
+                <div className={`filter-box-child ${activeFilter === 'dep' ? 'show-filtered-element' : ''}`}>
+                    {departmentList.map(d => (
+                        <label
+                            key={d.id}
+                        >
+                            <input type="checkbox"
+                                checked={filters.departments.includes(d.id)}
+                                onChange={() => toggleFilter('departments', d.id)} />
+                            <span>{d.tag}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div className="filter-box">
+                <span className="filter-label" onClick={() => showFilter("unit")}>
+                    Bölmə
+                    <FiChevronDown />
+                </span>
+                <div className={`filter-box-child ${activeFilter === 'unit' ? 'show-filtered-element' : ''}`}>
+                    {unitList.map(u => (
+                        <label key={u.id}>
+                            <input
+                                type="checkbox"
+                                checked={filters.units.includes(u.id)}
+                                onChange={() => toggleFilter("units", u.id)}
+                                className="unit-checkbox"
+                            />
+                            <span>{u.tag}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div className="filter-box">
+                <span className="filter-label" onClick={() => showFilter("type")}>
+                    Hesab növü
+                    <FiChevronDown />
+                </span>
+                <div className={`filter-box-child ${activeFilter === 'type' ? 'show-filtered-element' : ''}`}>
+                    {accTypeList.map(t => (
+                        <label key={t.id}>
+                            <input
+                                type="checkbox"
+                                checked={filters.accountTypes.includes(t.id)}
+                                onChange={() => toggleFilter("accountTypes", t.id)}
+                            />
+                            <span>{t.name}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+            <div className="filter-box">
+                <span className="filter-label" onClick={() => showFilter("status")}>
+                    Status
+                    <FiChevronDown />
+                </span>
+                <div className={`filter-box-child ${activeFilter === 'status' ? 'show-filtered-element' : ''}`}>
+                    {accStatusList.map(s => (
+                        <label key={s.id}>
+                            <input
+                                type="checkbox"
+                                checked={filters.accountStatus.includes(s.id)}
+                                onChange={() => toggleFilter("accountStatus", s.id)}
+                            />
+                            <span>{s.status.toLowerCase() == "deleted" ? "Silinmiş" :
+                                s.status.toLowerCase() == "active" ? "Aktiv" :
+                                    s.status.toLowerCase() == "deactive" ? "Deaktiv" :
+                                        s.status.toLowerCase() == "confidential" ? "Məxfi" : "Qeyri Məxfi"}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div className="filter-box">
+                <input
+                    className="filter-label date-filter"
+                    value={filters.fromDate.split(".").reverse().join("-")}
+                    type="date"
+                    onChange={e =>
+                        setFilters(prev => ({ ...prev, fromDate: e.target.value.split("-").reverse().join(".") }))
+                    }
+                />
+
+            </div>
+
+            <div className="filter-box">
+                <input
+                    className="filter-label date-filter"
+                    value={filters.toDate.split(".").reverse().join("-")}
+                    type="date"
+                    onChange={e =>
+                        setFilters(prev => ({ ...prev, toDate: e.target.value.split("-").reverse().join(".") }))
+                    }
+                />
+            </div>
+
+            <div className="filter-box sort-filter">
+                <select
+                    className="filter-select"
+                    onChange={changeAsc}
+                    value={filters?.newToOld}
+                >
+                    <option value={`${true}`}>Yenidən Köhnəyə</option>
+                    <option value={`${false}`}>Köhnədən Yeniyə</option>
+                </select>
+                <span className="select-icon">⇅</span>
+            </div>
+
+            <div className="filter-box sort-filter">
+                <select
+                    className="filter-select"
+                    onChange={changeRegistered}
+                    value={filters?.registered}
+                >
+                    <option value={`${null}`}>Hamısı</option>
+                    <option value={`${true}`}>Qeydiyyatdan keçmiş</option>
+                    <option value={`${false}`}>Qeydiyyatdan keçməmiş</option>
+                </select>
+            </div>
+            <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
+        </div>
+    }
+
+    return (
+        <div className="accounts-wrapper p-4 w-full">
+
+            {
+                callFilter()
+            }
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '5px' }}>
                 <button className="add-account-btn" onClick={createAcc}>
                     <FaPlus /> Yeni İstifadəçi
                 </button>
 
                 <button className="add-account-btn export-account-btn" onClick={() => setShowExportModal(true)}>
-                  <FiDownload /> Excel kimi endir
+                    <FiDownload /> Excel kimi endir
                 </button>
             </div>
 
@@ -653,10 +658,10 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
                                     acc?.accountStatus?.status.toLowerCase() == "deactive" ? "Deaktiv" :
                                         acc?.accountStatus?.status.toLowerCase() == "confidential" ? "Məxfi" : "Qeyri Məxfi"}
                         </span>
-                        <span className='ope-box'>
-                            <FiInfo className='ope-icon' onClick={() => showOpe(acc)} />
-                            <AiOutlineEdit className='ope-icon' onClick={() => editUser(acc)} />
-                            <AiOutlineDelete className='ope-icon' onClick={
+                        <span className='ope-box-acc'>
+                            <FiInfo className='ope-icon-acc' onClick={() => showOpe(acc)} />
+                            <AiOutlineEdit className='ope-icon-acc' onClick={() => editUser(acc)} />
+                            <AiOutlineDelete className='ope-icon-acc' onClick={
                                 userInfo?.role?.name === "Admin" ? () => isDeleteUser(acc)
                                     :
                                     () => deleteBySingleUser(acc)
@@ -689,6 +694,7 @@ export default function Accounts({ setResponseRequest, userInfo, setItem, item }
             {
                 showExportModal && (
                     <ExportModal
+                        callFilter={callFilter}
                         setShowExportModal={setShowExportModal}
                         setResponseRequest={setResponseRequest}
                         filters={filters}

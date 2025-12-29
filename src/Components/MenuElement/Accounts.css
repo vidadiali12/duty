@@ -250,7 +250,7 @@ input[type="date"] {
     transform: translateY(-2px);
 }
 
-.ope-box .ope-icon:hover {
+.ope-box-acc .ope-icon-acc:hover {
     scale: 1.1;
 }
 
@@ -274,13 +274,13 @@ input[type="date"] {
 }
 
 
-.ope-box {
+.ope-box-acc {
     display: flex;
     justify-content: center;
     gap: 20px;
 }
 
-.ope-box .ope-icon {
+.ope-box-acc .ope-icon-acc {
     font-size: 30px;
     padding: 5px;
     box-shadow: 2px 2px 1px 1px var(--color-teal-20);
@@ -289,19 +289,19 @@ input[type="date"] {
     transition: .5s;
 }
 
-.ope-box .ope-icon:hover {
+.ope-box-acc .ope-icon-acc:hover {
     scale: 1.1;
 }
 
-.ope-box .ope-icon:nth-child(1) {
+.ope-box-acc .ope-icon-acc:nth-child(1) {
     color: rgb(20, 120, 187);
 }
 
-.ope-box .ope-icon:nth-child(2) {
+.ope-box-acc .ope-icon-acc:nth-child(2) {
     color: rgb(70, 34, 149);
 }
 
-.ope-box .ope-icon:nth-child(3) {
+.ope-box-acc .ope-icon-acc:nth-child(3) {
     color: red;
 }
 
@@ -312,7 +312,7 @@ input[type="date"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    z-index: 999999999;
 }
 
 .delete-user-box {

@@ -20,6 +20,7 @@ import TaskTypeAndTitleAdmin from './Components/MenuElement/CompletedTasks/TaskT
 import Roles from './Components/MenuElement/Roles/Roles'
 import Order from './Components/MenuElement/Statistika/Order'
 import Statistics from './Components/MenuElement/Statistics/Statistics'
+import ActionCountPage from './Components/MenuElement/HistoryPanel/ActionCountPage'
 
 function App() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function App() {
       const currentToken = localStorage.getItem("myUserDutyToken");
       if (token !== currentToken) {
         setToken(currentToken);
-        if (!currentToken) navigate("/login", { replace: true });
+        if (!currentToken) navigate("/login-page", { replace: true });
       }
     }, 100);
     return () => clearInterval(interval);
@@ -92,15 +93,17 @@ function App() {
                 setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/orders' element={<Order
                 setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
-              <Route path='/statistics' element={<Statistics
+              <Route path='/statistics-page' element={<Statistics
                 setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
-              <Route path="/login" element={<Navigate to="/" replace />} />
+              <Route path='/history-panel' element={<ActionCountPage
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
+              <Route path="/login-page" element={<Navigate to="/" replace />} />
               <Route path="/create-admin-page" element={<Navigate to="/" replace />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </>
           ) : (
             <>
-              <Route path="/login" element={<Login />} />
+              <Route path="/login-page" element={<Login />} />
               {
                 showCreate && (
                   <Route path="/create-admin-page" element={<CreateAdminAccount

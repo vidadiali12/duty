@@ -1,7 +1,9 @@
 .table-duties-row>.ope-box>.ope-icon:nth-child(1) {
     color: rgb(70, 34, 149);
+    font-size: 1.9rem;
 }
 
 .table-duties-row>.ope-box>.ope-icon:nth-child(2) {
     color: red;
+    font-size: 1.9rem;
 }

@@ -246,7 +246,7 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                             </NavLink>
                         </li>
                         <li className='menu-list-child'>
-                            <NavLink className="menu-list-child-link" to="/statistics">
+                            <NavLink className="menu-list-child-link" to="/statistics-page">
                                 <FiBarChart2 className="menu-icon" />
                                 <span className='menu-list-child-text'>Statistika</span>
                             </NavLink>
