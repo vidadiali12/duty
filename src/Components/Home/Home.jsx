@@ -64,219 +64,282 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
   const headers = { headers: { Authorization: `Bearer ${token}` } };
 
   const getStatuses = async () => {
-    const res = await api.get("/general/status/getAllStatus", headers);
-    setStatuses(res.data.data);
+    try {
+      const res = await api.get("/general/status/getAllStatus", headers);
+      setStatuses(res.data.data);
+    } catch (err) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
+    }
   };
 
   const getDepartmentOrders = async () => {
-    const res = await api.get("/statistics/order/department/getAllOrder", headers);
-    setDepartmentOrders(res.data.data);
+    try {
+      const res = await api.get("/statistics/order/department/getAllOrder", headers);
+      setDepartmentOrders(res.data.data);
+    } catch (err) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
+    }
   };
 
   const getUnitOrders = async () => {
-    const res = await api.get("/statistics/order/unit/getAllOrder", headers);
-    setUnitOrders(res.data.data);
+    try {
+      const res = await api.get("/statistics/order/unit/getAllOrder", headers);
+      setUnitOrders(res.data.data);
+    } catch (err) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
+    }
   };
 
   const accountTypeChart = async () => {
-    const res = await api.post(
-      "/statistics/common/accountTypeCount",
-      selectedStatusId ? { statusId: selectedStatusId } : {},
-      headers
-    );
+    try {
+      const res = await api.post(
+        "/statistics/common/accountTypeCount",
+        selectedStatusId ? { statusId: selectedStatusId } : {},
+        headers
+      );
 
-    const labels = res.data.data.map(x => x.accountType);
-    const values = res.data.data.map(x => x.count);
+      const labels = res.data.data.map(x => x.accountType);
+      const values = res.data.data.map(x => x.count);
 
-    if (typeChartRef.current) typeChartRef.current.destroy();
+      if (typeChartRef.current) typeChartRef.current.destroy();
 
-    typeChartRef.current = new Chart(typeCanvas.current, {
-      type: "pie",
-      data: {
-        labels,
-        datasets: [{
-          data: values,
-          backgroundColor: MODERN_50_COLORS.slice(0, labels.length)
-        }]
-      },
-      options: { responsive: true, maintainAspectRatio: false }
-    });
+      typeChartRef.current = new Chart(typeCanvas.current, {
+        type: "pie",
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: MODERN_50_COLORS.slice(0, labels.length)
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    } catch (err) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
+    }
   };
 
   const statusDoughnutChart = async () => {
-    const res = await api.post(
-      "/statistics/common/countByAccountStatus",
-      selectedStatusId ? { statusId: selectedStatusId } : {},
-      headers
-    );
+    try {
+      const res = await api.post(
+        "/statistics/common/countByAccountStatus",
+        selectedStatusId ? { statusId: selectedStatusId } : {},
+        headers
+      );
 
-    const labels = res.data.data.map(x => x.status);
-    const counts = res.data.data.map(x => x.count);
-    const register = res.data.data.map(x => x.registerCount);
-    const unRegister = res.data.data.map(x => x.unRegisterCount);
+      const labels = res.data.data.map(x => x.status);
+      const counts = res.data.data.map(x => x.count);
+      const register = res.data.data.map(x => x.registerCount);
+      const unRegister = res.data.data.map(x => x.unRegisterCount);
 
-    if (statusChartRef.current) statusChartRef.current.destroy();
+      if (statusChartRef.current) statusChartRef.current.destroy();
 
-    statusChartRef.current = new Chart(statusCanvas.current, {
-      type: "doughnut",
-      data: {
-        labels,
-        datasets: [
-          {
-            data: counts,
-            backgroundColor: MODERN_50_COLORS.slice(0, labels.length)
-          },
-          {
-            data: [...register, ...unRegister],
-            backgroundColor: ["#22C55E", "#EF4444"]
-          }
-        ]
-      },
-      options: { responsive: true, maintainAspectRatio: false, cutout: "45%" }
-    });
+      statusChartRef.current = new Chart(statusCanvas.current, {
+        type: "doughnut",
+        data: {
+          labels,
+          datasets: [
+            {
+              data: counts,
+              backgroundColor: MODERN_50_COLORS.slice(0, labels.length)
+            },
+            {
+              data: [...register, ...unRegister],
+              backgroundColor: ["#22C55E", "#EF4444"]
+            }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, cutout: "45%" }
+      });
+    } catch (err) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
+    }
   };
 
   const departmentChart = async () => {
-    const order = departmentOrders.find(x => x.id === selectedDepartmentOrder);
-    const reqBody = selectedDepartmentOrder ? {
-      departmentOrderIds: order?.departmentIds,
-      statusId: selectedStatusId
-    } : {};
-    const res = await api.post(
-      "/statistics/common/accountTypeCountByDepartment",
-      reqBody,
-      headers
-    );
+    try {
+      const order = departmentOrders.find(x => x.id === selectedDepartmentOrder);
+      const reqBody = selectedDepartmentOrder ? {
+        departmentOrderIds: order?.departmentIds,
+        statusId: selectedStatusId
+      } : {};
+      const res = await api.post(
+        "/statistics/common/accountTypeCountByDepartment",
+        reqBody,
+        headers
+      );
 
-    const labels = res.data.data.map(x => x.departmentTag);
-    const canvasMinWidth = Math.max(labels.length * 120, 900);
-    depCanvas.current.style.minWidth = canvasMinWidth + "px";
+      const labels = res.data.data.map(x => x.departmentTag);
+      const canvasMinWidth = Math.max(labels.length * 120, 900);
+      depCanvas.current.style.minWidth = canvasMinWidth + "px";
 
-    const keys = Object.keys(res.data.data[0]?.accountTypeWithCount || {});
+      const keys = Object.keys(res.data.data[0]?.accountTypeWithCount || {});
 
-    const datasets = keys.map((k, i) => ({
-      label: k,
-      data: res.data.data.map(x => x.accountTypeWithCount[k] || 0),
-      backgroundColor: MODERN_50_COLORS[i % MODERN_50_COLORS.length]
-    }));
+      const datasets = keys.map((k, i) => ({
+        label: k,
+        data: res.data.data.map(x => x.accountTypeWithCount[k] || 0),
+        backgroundColor: MODERN_50_COLORS[i % MODERN_50_COLORS.length]
+      }));
 
-    if (depChartRef.current) depChartRef.current.destroy();
+      if (depChartRef.current) depChartRef.current.destroy();
 
-    depChartRef.current = new Chart(depCanvas.current, {
-      type: "bar",
-      data: { labels, datasets },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: "x",
-        scales: {
-          x: {
-            stacked: true,
-            categoryPercentage: 0.6,
-            barPercentage: 0.9,
-            maxBarThickness: 60
+      depChartRef.current = new Chart(depCanvas.current, {
+        type: "bar",
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "x",
+          scales: {
+            x: {
+              stacked: true,
+              categoryPercentage: 0.6,
+              barPercentage: 0.9,
+              maxBarThickness: 60
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true
+            }
           },
-          y: {
-            stacked: true,
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          legend: {
-            position: "left",
-            align: "center",
-            labels: {
-              boxWidth: 14,
-              boxHeight: 14,
-              padding: 12,
-              font: {
-                size: 12,
-                weight: "500"
+          plugins: {
+            legend: {
+              position: "left",
+              align: "center",
+              labels: {
+                boxWidth: 14,
+                boxHeight: 14,
+                padding: 12,
+                font: {
+                  size: 12,
+                  weight: "500"
+                }
               }
             }
-          }
-        },
-        layout: {
-          padding: {
-            left: 10,
-            right: 10,
-            top: 10,
-            bottom: 10
+          },
+          layout: {
+            padding: {
+              left: 10,
+              right: 10,
+              top: 10,
+              bottom: 10
+            }
           }
         }
-      }
-    });
+      });
+    } catch (err) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
+    }
   };
 
   const unitChart = async () => {
-    const order = unitOrders.find(x => x.id === selectedUnitOrder);
-    const reqBody = selectedUnitOrder ? {
-      unitOrderIds: order?.unitIds,
-      statusId: selectedStatusId
-    } : {};
-    const res = await api.post(
-      "/statistics/common/accountTypeCountByUnit",
-      reqBody,
-      headers
-    );
+    try {
+      const order = unitOrders.find(x => x.id === selectedUnitOrder);
+      const reqBody = selectedUnitOrder ? {
+        unitOrderIds: order?.unitIds,
+        statusId: selectedStatusId
+      } : {};
+      const res = await api.post(
+        "/statistics/common/accountTypeCountByUnit",
+        reqBody,
+        headers
+      );
 
-    const labels = res.data.data.map(x => x.unitTag);
-    const canvasMinWidth = Math.max(labels.length * 120, 900);
-    unitCanvas.current.style.minWidth = canvasMinWidth + "px";
+      const labels = res.data.data.map(x => x.unitTag);
+      const canvasMinWidth = Math.max(labels.length * 120, 900);
+      unitCanvas.current.style.minWidth = canvasMinWidth + "px";
 
-    const keys = Object.keys(res.data.data[0]?.accountTypeWithCount || {});
+      const keys = Object.keys(res.data.data[0]?.accountTypeWithCount || {});
 
-    const datasets = keys.map((k, i) => ({
-      label: k,
-      data: res.data.data.map(x => x.accountTypeWithCount[k] || 0),
-      backgroundColor: UNIT_300_COLORS[i]
-    }));
+      const datasets = keys.map((k, i) => ({
+        label: k,
+        data: res.data.data.map(x => x.accountTypeWithCount[k] || 0),
+        backgroundColor: UNIT_300_COLORS[i]
+      }));
 
-    if (unitChartRef.current) unitChartRef.current.destroy();
+      if (unitChartRef.current) unitChartRef.current.destroy();
 
-    unitChartRef.current = new Chart(unitCanvas.current, {
-      type: "bar",
-      data: { labels, datasets },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: "x",
-        scales: {
-          x: {
-            stacked: true,
-            categoryPercentage: 0.6,
-            barPercentage: 0.9,
-            maxBarThickness: 60
+      unitChartRef.current = new Chart(unitCanvas.current, {
+        type: "bar",
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "x",
+          scales: {
+            x: {
+              stacked: true,
+              categoryPercentage: 0.6,
+              barPercentage: 0.9,
+              maxBarThickness: 60
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true
+            }
           },
-          y: {
-            stacked: true,
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          legend: {
-            position: "left",
-            align: "center",
-            labels: {
-              boxWidth: 14,
-              boxHeight: 14,
-              padding: 10,
-              font: {
-                size: 11
+          plugins: {
+            legend: {
+              position: "left",
+              align: "center",
+              labels: {
+                boxWidth: 14,
+                boxHeight: 14,
+                padding: 10,
+                font: {
+                  size: 11
+                }
               }
             }
-          }
-        },
-        layout: {
-          padding: {
-            left: 10,
-            right: 10,
-            top: 10,
-            bottom: 10
+          },
+          layout: {
+            padding: {
+              left: 10,
+              right: 10,
+              top: 10,
+              bottom: 10
+            }
           }
         }
-      }
-    });
+      });
+    } catch (err) {
+      setResponseRequest(prev => ({
+        ...prev,
+        showResponse: true,
+        title: "❌ Məlumatlar alınarkən xəta baş verdi",
+        message: err?.response?.data?.errorDescription || err,
+      }));
+    }
   };
 
   useEffect(() => {
@@ -308,17 +371,17 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
       <div className="filters-bar">
         <select onChange={e => setSelectedStatusId(+e.target.value)}>
           <option value="">Bütün Statuslar</option>
-          {statuses.map(s => <option key={s.id} value={s.id}>{s.status}</option>)}
+          {statuses?.map(s => <option key={s.id} value={s.id}>{s.status}</option>)}
         </select>
 
         <select onChange={e => setSelectedDepartmentOrder(+e.target.value)}>
           <option value="">Bütün İdarələr</option>
-          {departmentOrders.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+          {departmentOrders?.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
         </select>
 
         <select onChange={e => setSelectedUnitOrder(+e.target.value)}>
           <option value="">Bütün Bölmələr</option>
-          {unitOrders.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+          {unitOrders?.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
         </select>
       </div>
 

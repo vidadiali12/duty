@@ -25,7 +25,13 @@ const OrderOpe = ({
             });
             setAllDeps(res?.data?.data?.data || []);
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
         }
     };
 
@@ -38,7 +44,13 @@ const OrderOpe = ({
             });
             setAllUnits(res?.data?.data?.data || []);
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
         }
     };
 
@@ -50,10 +62,8 @@ const OrderOpe = ({
     const handleToggleId = (id) => {
         setSelectedIds(prev => {
             if (prev.includes(id)) {
-                // çıxar → sıra yenidən qurulur
                 return prev.filter(x => x !== id);
             }
-            // sona əlavə et (sıra buradan yaranır)
             return [...prev, id];
         });
     };
@@ -125,7 +135,7 @@ const OrderOpe = ({
             <div className="order-ope-modal">
                 <div className="order-ope-header">
                     <h3> {type === "department" ? "İdarə" : "Bölmə"} siyahı {item ? "yeniləmə" : "yaratma"}</h3>
-                    <FiX className="close-icon" onClick={() => {setShowOrderOpe(false); setItem(null);}} />
+                    <FiX className="close-icon" onClick={() => { setShowOrderOpe(false); setItem(null); }} />
                 </div>
 
                 <div className="order-ope-body">
@@ -182,7 +192,7 @@ const OrderOpe = ({
 
                 <div className="order-ope-footer">
                     <button className="save-btn" onClick={handleSave}>{item ? "Yenilə" : "Yarat"}</button>
-                    <button className="cancel-btn" onClick={() => {setShowOrderOpe(false); setItem(null);}}>Ləğv Et</button>
+                    <button className="cancel-btn" onClick={() => { setShowOrderOpe(false); setItem(null); }}>Ləğv Et</button>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import Chart from "chart.js/auto";
 import api from "../../../api";
 import "./ActionCountPage.css";
 
-export default function ActionCountPage() {
+export default function ActionCountPage({ setResponseRequest }) {
     const [actions] = useState([
         { id: 1, action: "Yaradıldı", icon: <FaEdit /> },
         { id: 2, action: "Dəyişdirildi", icon: <FaEdit /> },
@@ -18,6 +18,7 @@ export default function ActionCountPage() {
     ]);
 
     const [byAccountType, setByAccountType] = useState(false);
+    const [byHours, setByHours] = useState(false);
     const [personnelList, setPersonnelList] = useState([]);
     const [filters, setFilters] = useState({
         actionIds: [],
@@ -31,14 +32,27 @@ export default function ActionCountPage() {
     const chartCanvasRef = useRef(null);
     const chartRef = useRef(null);
 
+    const chartCanvasRefByHours = useRef(null);
+    const chartRefByHours = useRef(null);
+
     const loadPersonnel = async () => {
-        const token = localStorage.getItem("myUserDutyToken");
-        const res = await api.post(
-            "/admin/personnel/getAllPersonnel?page=1&pageSize=50",
-            {},
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setPersonnelList(res?.data?.data || []);
+        try {
+            const token = localStorage.getItem("myUserDutyToken");
+            const res = await api.post(
+                "/admin/personnel/getAllPersonnel?page=1&pageSize=50",
+                {},
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setPersonnelList(res?.data?.data || []);
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Növbətçi məlumatları alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
+        }
     };
 
     useEffect(() => {
@@ -67,28 +81,68 @@ export default function ActionCountPage() {
     };
 
     const getActionCounts = async () => {
-        const token = localStorage.getItem("myUserDutyToken");
-        const res = await api.post(
-            "/statistics/history/getActionCount",
-            {
-                actionIds: filters.actionIds,
-                personnelIds: filters.personnelIds,
-                fromDate: filters.fromDate,
-                toDate: filters.toDate
-            },
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setActionCounts(res?.data?.data || []);
+        try {
+            const token = localStorage.getItem("myUserDutyToken");
+            const res = await api.post(
+                "/statistics/history/getActionCount",
+                {
+                    actionIds: filters.actionIds,
+                    personnelIds: filters.personnelIds,
+                    fromDate: filters.fromDate,
+                    toDate: filters.toDate
+                },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setActionCounts(res?.data?.data || []);
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Əməliyyat sayları alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
+        }
     };
 
     const getAllByAccountType = async () => {
-        const token = localStorage.getItem("myUserDutyToken");
-        const res = await api.post(
-            "/statistics/history/actionCountByAccountType",
-            filters,
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setByAccountType(res?.data?.data || false);
+        try {
+            const token = localStorage.getItem("myUserDutyToken");
+            const res = await api.post(
+                "/statistics/history/actionCountByAccountType",
+                filters,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setByAccountType(res?.data?.data || false);
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Hesab növü üzrə əməliyyat sayları alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
+        }
+    };
+
+    const getAllByHours = async () => {
+        try {
+            const token = localStorage.getItem("myUserDutyToken");
+            const res = await api.post(
+                "/statistics/history/personnelDailyActivity",
+                {},
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setByHours(res?.data?.data || false);
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Saat üzrə əməliyyat sayları alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
+        }
     };
 
     useEffect(() => {
@@ -97,35 +151,91 @@ export default function ActionCountPage() {
     }, [filters]);
 
     useEffect(() => {
-        console.log(byAccountType)
-        if (!byAccountType || !byAccountType.actionCount || !chartCanvasRef.current) return;
+        getAllByHours();
+    }, []);
 
-        const labels = Object.keys(byAccountType.actionCount);
-        const values = Object.values(byAccountType.actionCount);
+
+    useEffect(() => {
+        if (!byHours || !byHours.length || !chartCanvasRefByHours.current) return;
+
+        const labels = byHours.map(item => item.date);
+        const actionKeys = Object.keys(byHours[0].activityCount);
+
+        const datasets = actionKeys.map((action, i) => ({
+            label: action,
+            data: byHours.map(item => item.activityCount[action]),
+            fill: true,
+            backgroundColor: `rgba(${50 + i * 40}, 95, 240, 0.3)`,
+            borderColor: `rgba(${50 + i * 40}, 95, 240, 0.8)`,
+            tension: 0.4
+        }));
 
         requestAnimationFrame(() => {
-            if (chartRef.current) {
-                chartRef.current.destroy();
-            }
+            if (chartRefByHours.current) chartRefByHours.current.destroy();
 
-            chartRef.current = new Chart(chartCanvasRef.current, {
-                type: "bar",
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            label: byAccountType.accountTypeName,
-                            data: values,
-                            borderRadius: 8,
-                            backgroundColor: "#6f5ff0"
-                        }
-                    ]
-                },
+            chartRefByHours.current = new Chart(chartCanvasRefByHours.current, {
+                type: 'line',
+                data: { labels, datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true } },
+                        tooltip: { enabled: true }
+                    },
                     scales: {
+                        x: {
+                            display: true,
+                            title: { display: true, text: 'Tarix' }
+                        },
                         y: {
+                            display: true,
+                            beginAtZero: true,
+                            title: { display: true, text: 'Əməliyyat sayı' },
+                            ticks: { precision: 0 }
+                        }
+                    }
+                }
+            });
+
+            chartRefByHours.current.resize();
+        });
+
+        return () => chartRefByHours.current?.destroy();
+    }, [byHours]);
+
+
+    useEffect(() => {
+        if (!byAccountType || !byAccountType.length || !chartCanvasRef.current) return;
+
+        const actionKeys = Object.keys(byAccountType[0].actionCount); // action-lar legend
+        const labels = byAccountType.map(account => account.accountTypeName); // künclər
+
+        const datasets = actionKeys.map((action, i) => ({
+            label: action,
+            data: byAccountType.map(account => account.actionCount[action]),
+            borderWidth: 2,
+            borderColor: `hsl(${(i * 360) / actionKeys.length}, 70%, 50%)`,
+            backgroundColor: `hsla(${(i * 360) / actionKeys.length}, 70%, 50%, 0.3)`,
+            fill: true,
+            pointBackgroundColor: `hsl(${(i * 360) / actionKeys.length}, 70%, 50%)`
+        }));
+
+        requestAnimationFrame(() => {
+            if (chartRef.current) chartRef.current.destroy();
+
+            chartRef.current = new Chart(chartCanvasRef.current, {
+                type: "radar",
+                data: { labels, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: "top" },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        r: {
                             beginAtZero: true,
                             ticks: { precision: 0 }
                         }
@@ -238,6 +348,20 @@ export default function ActionCountPage() {
                     }}
                 >
                     <canvas ref={chartCanvasRef} />
+                </div>
+            )}
+            {byHours && (
+                <div
+                    className="by-account-type-wrapper"
+                    style={{
+                        height: "350px",
+                        background: "#fff",
+                        borderRadius: "14px",
+                        padding: "20px",
+                        marginTop: "30px"
+                    }}
+                >
+                    <canvas ref={chartCanvasRefByHours} />
                 </div>
             )}
         </div>

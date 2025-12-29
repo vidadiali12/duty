@@ -25,13 +25,21 @@ export default function Roles({ item, setItem, setResponseRequest, userInfo }) {
     });
 
     const loadRoles = async () => {
-        const res = await api.get("/admin/role/getAllRole", headers());
-        setRoles(res?.data?.data || []);
+        try {
+            const res = await api.get("/admin/role/getAllRole", headers());
+            setRoles(res?.data?.data || []);
+        } catch (err) {
+            setResponseRequest({ showResponse: true, title: "❌ Rollar yüklənmədi", message: err?.response?.data?.errorDescription || err });
+        }
     };
 
     const loadPermissions = async () => {
-        const res = await api.get("/admin/role/getPermissions", headers());
-        setPermissions(res?.data?.data || []);
+        try {
+            const res = await api.get("/admin/role/getPermissions", headers());
+            setPermissions(res?.data?.data || []);
+        } catch (err) {
+            setResponseRequest({ showResponse: true, title: "❌ İcazələr yüklənmədi", message: err?.response?.data?.errorDescription || err });
+        }
     };
 
     const togglePermission = (id) => {
@@ -56,7 +64,7 @@ export default function Roles({ item, setItem, setResponseRequest, userInfo }) {
             setShowCreate(false);
             loadRoles();
         } catch (err) {
-            setResponseRequest({ showResponse: true, title: "❌ Xəta", message: err });
+            setResponseRequest({ showResponse: true, title: "❌ Xəta", message: err?.response?.data?.errorDescription || err });
         }
     };
 

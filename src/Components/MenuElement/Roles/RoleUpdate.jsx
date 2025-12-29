@@ -15,16 +15,24 @@ export default function RoleUpdate({ item, setItem, setResponseRequest, setIsEdi
     });
 
     const loadPermissions = async () => {
-        const res = await api.get("/admin/role/getPermissions", headers());
-        setPermissions(res?.data?.data || []);
+        try {
+            const res = await api.get("/admin/role/getPermissions", headers());
+            setPermissions(res?.data?.data || []);
+        } catch (err) {
+            setResponseRequest({ showResponse: true, title: "❌ İcazələr yüklənmədi", message: err?.response?.data?.errorDescription || err });
+        }
     };
 
     const loadRoleDetails = async () => {
-        const res = await api.get(`/admin/role/getRoleDetails/${item?.id}`, headers());
-        setForm({
-            roleName: res.data.data.name,
-            permissionIds: res.data.data.permissions.map(p => p.id)
-        });
+        try {
+            const res = await api.get(`/admin/role/getRoleDetails/${item?.id}`, headers());
+            setForm({
+                roleName: res.data.data.name,
+                permissionIds: res.data.data.permissions.map(p => p.id)
+            });
+        } catch (err) {
+            setResponseRequest({ showResponse: true, title: "❌ Rol detalları yüklənmədi", message: err?.response?.data?.errorDescription || err });
+        }
     };
 
     const updateRole = async () => {
@@ -83,7 +91,7 @@ export default function RoleUpdate({ item, setItem, setResponseRequest, setIsEdi
                     <button onClick={() => {
                         setItem(null);
                         setIsEdit(false);
-                        }}>Geri</button>
+                    }}>Geri</button>
                     <button onClick={updateRole}>Yadda saxla</button>
                 </div>
             </div>

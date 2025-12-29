@@ -27,7 +27,13 @@ const Order = ({ setResponseRequest, item, setItem }) => {
             });
             setDepartments(res?.data?.data?.data || []);
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
         }
     };
 
@@ -39,7 +45,13 @@ const Order = ({ setResponseRequest, item, setItem }) => {
             });
             setUnits(res?.data?.data?.data || []);
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
         }
     };
 
@@ -50,7 +62,13 @@ const Order = ({ setResponseRequest, item, setItem }) => {
             });
             setDepOrders(res?.data?.data || []);
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
         }
     };
 
@@ -61,7 +79,13 @@ const Order = ({ setResponseRequest, item, setItem }) => {
             });
             setUnitOrders(res?.data?.data || []);
         } catch (err) {
-            console.error(err);
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
         }
     };
 
