@@ -6,12 +6,12 @@ export default function ByAccountTypeChart({ data }) {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        console.log(data)
-        if (!data || !data.actionCount) return;
+    if (!data || !data.actionCount || !canvasRef.current) return;
 
-        const labels = Object.keys(data.actionCount);
-        const values = Object.values(data.actionCount);
+    const labels = Object.keys(data.actionCount);
+    const values = Object.values(data.actionCount);
 
+    requestAnimationFrame(() => {
         if (chartRef.current) {
             chartRef.current.destroy();
         }
@@ -25,31 +25,27 @@ export default function ByAccountTypeChart({ data }) {
                         label: data.accountTypeName,
                         data: values,
                         borderRadius: 8,
-                        backgroundColor: "rgba(111,95,240,0.7)"
+                        backgroundColor: "#6f5ff0"
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true
-                    }
-                },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
+                        ticks: { precision: 0 }
                     }
                 }
             }
         });
+        chartRef.current.resize();
+    });
 
-        return () => chartRef.current?.destroy();
-    }, [data]);
+    return () => chartRef.current?.destroy();
+}, [data]);
+
 
     return (
         <div style={{ height: "350px", background: "#fff", borderRadius: "14px", padding: "20px" }}>

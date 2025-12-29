@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FaEdit, FaTrashAlt, FaLock, FaUnlock } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
+import Chart from "chart.js/auto";
 import api from "../../../api";
 import "./ActionCountPage.css";
-import ByAccountTypeChart from "./Charts/ByAccountTypeChart";
 
 export default function ActionCountPage() {
     const [actions] = useState([
@@ -14,11 +14,10 @@ export default function ActionCountPage() {
         { id: 5, action: "Deactiv", icon: <FaLock /> },
         { id: 6, action: "Məxfi", icon: <FaLock /> },
         { id: 7, action: "Qeyri Məxfi", icon: <FaUnlock /> },
-        { id: 8, action: "Silinmiş", icon: <FaTrashAlt /> },
+        { id: 8, action: "Silinmiş", icon: <FaTrashAlt /> }
     ]);
 
     const [byAccountType, setByAccountType] = useState(false);
-
     const [personnelList, setPersonnelList] = useState([]);
     const [filters, setFilters] = useState({
         actionIds: [],
@@ -29,16 +28,17 @@ export default function ActionCountPage() {
     const [actionCounts, setActionCounts] = useState([]);
     const [activeFilter, setActiveFilter] = useState(null);
 
+    const chartCanvasRef = useRef(null);
+    const chartRef = useRef(null);
+
     const loadPersonnel = async () => {
         const token = localStorage.getItem("myUserDutyToken");
-        try {
-            const res = await api.post("/admin/personnel/getAllPersonnel?page=1&pageSize=50", {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setPersonnelList(res?.data?.data || []);
-        } catch (err) {
-            console.error(err);
-        }
+        const res = await api.post(
+            "/admin/personnel/getAllPersonnel?page=1&pageSize=50",
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setPersonnelList(res?.data?.data || []);
     };
 
     useEffect(() => {
@@ -54,52 +54,90 @@ export default function ActionCountPage() {
         }));
     };
 
-    const handleDateChange = (e) => {
+    const handleDateChange = e => {
         const { name, value } = e.target;
-        setFilters(prev => ({ ...prev, [name]: value.split("-").reverse().join(".") }));
+        setFilters(prev => ({
+            ...prev,
+            [name]: value.split("-").reverse().join(".")
+        }));
     };
 
-    const toggleActiveFilter = (filterName) => {
-        setActiveFilter(prev => prev === filterName ? null : filterName);
+    const toggleActiveFilter = filterName => {
+        setActiveFilter(prev => (prev === filterName ? null : filterName));
     };
 
     const getActionCounts = async () => {
         const token = localStorage.getItem("myUserDutyToken");
-        try {
-            const res = await api.post(
-                "/statistics/history/getActionCount",
-                {
-                    actionIds: filters.actionIds,
-                    personnelIds: filters.personnelIds,
-                    fromDate: filters.fromDate,
-                    toDate: filters.toDate
-                },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setActionCounts(res?.data?.data || []);
-        } catch (err) {
-            console.error(err);
-        }
+        const res = await api.post(
+            "/statistics/history/getActionCount",
+            {
+                actionIds: filters.actionIds,
+                personnelIds: filters.personnelIds,
+                fromDate: filters.fromDate,
+                toDate: filters.toDate
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setActionCounts(res?.data?.data || []);
     };
 
     const getAllByAccountType = async () => {
         const token = localStorage.getItem("myUserDutyToken");
-        try {
-            const res = await api.post(
-                "/statistics/history/actionCountByAccountType",
-                filters,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setByAccountType(res?.data?.data || false);
-        } catch (err) {
-            console.error(err);
-        }
+        const res = await api.post(
+            "/statistics/history/actionCountByAccountType",
+            filters,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setByAccountType(res?.data?.data || false);
     };
 
     useEffect(() => {
         getActionCounts();
         getAllByAccountType();
     }, [filters]);
+
+    useEffect(() => {
+        console.log(byAccountType)
+        if (!byAccountType || !byAccountType.actionCount || !chartCanvasRef.current) return;
+
+        const labels = Object.keys(byAccountType.actionCount);
+        const values = Object.values(byAccountType.actionCount);
+
+        requestAnimationFrame(() => {
+            if (chartRef.current) {
+                chartRef.current.destroy();
+            }
+
+            chartRef.current = new Chart(chartCanvasRef.current, {
+                type: "bar",
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: byAccountType.accountTypeName,
+                            data: values,
+                            borderRadius: 8,
+                            backgroundColor: "#6f5ff0"
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    }
+                }
+            });
+
+            chartRef.current.resize();
+        });
+
+        return () => chartRef.current?.destroy();
+    }, [byAccountType]);
 
     const clearFilters = () => {
         setFilters({
@@ -189,15 +227,19 @@ export default function ActionCountPage() {
             </div>
 
             {byAccountType && (
-                <div style={{ marginTop: "40px" }}>
-                    <h3 style={{ color: "#1a1446", marginBottom: "15px" }}>
-                        Account Type üzrə Statistikalar
-                    </h3>
-
-                    <ByAccountTypeChart data={byAccountType} />
+                <div
+                    className="by-account-type-wrapper"
+                    style={{
+                        height: "350px",
+                        background: "#fff",
+                        borderRadius: "14px",
+                        padding: "20px",
+                        marginTop: "30px"
+                    }}
+                >
+                    <canvas ref={chartCanvasRef} />
                 </div>
             )}
-
         </div>
     );
 }

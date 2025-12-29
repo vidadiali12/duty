@@ -41,8 +41,6 @@ const UNIT_300_COLORS = [
   "#C1F0E8", "#FFE0C1", "#FF5C7C", "#81F4D0", "#FFECB3",
 ];
 
-console.log(UNIT_300_COLORS)
-
 export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
   const [statuses, setStatuses] = useState([]);
   const [selectedStatusId, setSelectedStatusId] = useState(null);
@@ -140,12 +138,13 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
 
   const departmentChart = async () => {
     const order = departmentOrders.find(x => x.id === selectedDepartmentOrder);
+    const reqBody = selectedDepartmentOrder ? {
+      departmentOrderIds: order?.departmentIds,
+      statusId: selectedStatusId
+    } : {};
     const res = await api.post(
       "/statistics/common/accountTypeCountByDepartment",
-      {
-        departmentOrderIds: order?.departmentIds,
-        statusId: selectedStatusId
-      },
+      reqBody,
       headers
     );
 
@@ -174,8 +173,8 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
           x: {
             stacked: true,
             categoryPercentage: 0.6,
-            barPercentage: 0.9,      
-            maxBarThickness: 60 
+            barPercentage: 0.9,
+            maxBarThickness: 60
           },
           y: {
             stacked: true,
@@ -211,12 +210,13 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
 
   const unitChart = async () => {
     const order = unitOrders.find(x => x.id === selectedUnitOrder);
+    const reqBody = selectedUnitOrder ? {
+      unitOrderIds: order?.unitIds,
+      statusId: selectedStatusId
+    } : {};
     const res = await api.post(
       "/statistics/common/accountTypeCountByUnit",
-      {
-        unitOrderIds: order?.unitIds,
-        statusId: selectedStatusId
-      },
+      reqBody,
       headers
     );
 
@@ -245,8 +245,8 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
           x: {
             stacked: true,
             categoryPercentage: 0.6,
-            barPercentage: 0.9,      
-            maxBarThickness: 60 
+            barPercentage: 0.9,
+            maxBarThickness: 60
           },
           y: {
             stacked: true,
