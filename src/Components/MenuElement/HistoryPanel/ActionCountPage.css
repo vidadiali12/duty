@@ -44,7 +44,7 @@
     border-radius: 6px;
     color: var(--text-1);
     border: 1px solid var(--bg-4);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
     transition: 0.2s;
 }
 
@@ -59,16 +59,33 @@
     position: absolute;
     top: 45px;
     left: 0;
-    background: rgba(240,240,255,0.8);
+    background: rgba(240, 240, 255, 0.8);
     backdrop-filter: blur(8px);
     padding: 12px;
     border-radius: 14px;
     border: 1px solid var(--bg-4);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     z-index: 100;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     animation: openFilter 0.18s ease;
+}
+
+.filter-panel-box-child-date {
+    display: none;
+    position: absolute;
+    top: 45px;
+    left: 0;
+    background: rgba(240, 240, 255, 0.8);
+    backdrop-filter: blur(8px);
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid var(--bg-4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    z-index: 100;
+    animation: openFilter 0.18s ease;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .show-filtered-panel-element {
@@ -132,13 +149,13 @@
     background: var(--bg-2);
     padding: 15px;
     border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .action-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
 .action-icon {
@@ -163,6 +180,7 @@
         opacity: 0;
         transform: translateY(-6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
