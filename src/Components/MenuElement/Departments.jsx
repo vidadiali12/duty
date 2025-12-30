@@ -5,6 +5,7 @@ import './Departments.css';
 import { NavLink } from 'react-router-dom';
 import UpdateAndAdd from './UpdateAndAdd';
 import Pagination from '../Pagination/Pagination';
+import Loading from '../Modals/Loading';
 
 const Departments = ({ setResponseRequest, setItem, item }) => {
     const [allDeps, setAllDeps] = useState([]);
@@ -15,10 +16,12 @@ const Departments = ({ setResponseRequest, setItem, item }) => {
     const [endPoint, setEndPoint] = useState("");
     const [totalItem, setTotalItem] = useState(null);
     const [totalPages, setTotalPages] = useState(null);
+    const [loading, setLoading] = useState(false)
 
     const callDepartments = async () => {
         const token = localStorage.getItem("myUserDutyToken");
         try {
+            setLoading(false)
             const resDeps = await api.get("/department/getDepartments", {
                 params: { page, pageSize },
                 headers: { Authorization: `Bearer ${token}` }
@@ -26,13 +29,15 @@ const Departments = ({ setResponseRequest, setItem, item }) => {
             setTotalItem(resDeps?.data?.data?.totalItem || null);
             setTotalPages(resDeps?.data?.data?.totalPages || null);
             setAllDeps(resDeps?.data?.data?.data || []);
+            setLoading(false)
         } catch (err) {
-               setResponseRequest(prev => ({
+            setResponseRequest(prev => ({
                 ...prev,
                 showResponse: true,
                 title: "❌ Məlumatlar alınarkən xəta baş verdi",
                 message: err?.response?.data?.errorDescription || err,
             }));
+            setLoading(true)
         }
     };
 
@@ -103,6 +108,9 @@ const Departments = ({ setResponseRequest, setItem, item }) => {
                     </div>
                 ))}
             </div>
+            {
+                loading && <Loading loadingMessage={"Məlumatlar yüklənir..."} />
+            }
 
             {
                 section && (

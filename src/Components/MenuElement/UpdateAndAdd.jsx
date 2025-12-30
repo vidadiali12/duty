@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../api';
 import './UpdateAndAdd.css';
+import Loading from '../Modals/Loading';
 
 const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, setTypeOfOpe, section, setSection, item, setItem }) => {
 
   const [departments, setDepartments] = useState([]);
+  const [loading, setLoading] = useState(false)
   const [requestData, setRequestData] = useState(
     section == "departments"
       ? typeOfOpe == "create" ? { tag: '', description: '' } : { tag: item?.tag, description: item?.description }
@@ -19,6 +21,7 @@ const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, se
     const hdrs = { headers: { Authorization: `Bearer ${token}` } };
 
     try {
+      setLoading(true)
       if (section == "departments") {
         if (typeOfOpe == "create") {
           await api.post(endPoint, requestData, hdrs);
@@ -37,7 +40,7 @@ const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, se
       setTypeOfOpe("");
       setSection(null);
       setItem({})
-
+      setLoading(false)
       window.location.reload();
 
     } catch (err) {
@@ -47,6 +50,7 @@ const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, se
         title: "❌ Məlumatlar alınarkən xəta baş verdi",
         message: err?.response?.data?.errorDescription || err,
       }));
+      setLoading(false)
     }
   };
 
@@ -140,6 +144,9 @@ const UpdateAndAdd = ({ setResponseRequest, endPoint, setEndPoint, typeOfOpe, se
 
         </div>
       </div>
+      {
+        loading && <Loading loadingMessage={"Məlumatlar yüklənir..."} />
+      }
     </div>
   );
 };

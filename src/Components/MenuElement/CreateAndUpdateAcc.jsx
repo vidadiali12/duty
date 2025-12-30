@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../api";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import "./CreateAndUpdateAcc.css";
+import Loading from "../Modals/Loading";
 
 const CreateAndUpdateAcc = ({
     setApiOpe,
@@ -70,6 +71,7 @@ const CreateAndUpdateAcc = ({
     const [pageSize, setPageSize] = useState(15);
     const [errors, setErrors] = useState({});
     const [valueOfCapacity, setValueOfCapacity] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const validateForm = () => {
         let newErrors = {};
@@ -195,6 +197,7 @@ const CreateAndUpdateAcc = ({
         };
 
         try {
+            setLoading(true)
             if (typeOpe === "createAcc") {
                 await api.post(apiOpe, req, hdrs);
             } else {
@@ -205,6 +208,7 @@ const CreateAndUpdateAcc = ({
             setTypeOpe("");
             setItem(null);
             window.location.reload();
+            setLoading(false)
         } catch (err) {
             setResponseRequest(prev => ({
                 ...prev,
@@ -212,6 +216,7 @@ const CreateAndUpdateAcc = ({
                 title: "❌ Məlumatlar alınarkən xəta baş verdi",
                 message: err?.response?.data?.errorDescription || err,
             }));
+            setLoading(false)
         }
     };
 
@@ -590,6 +595,10 @@ const CreateAndUpdateAcc = ({
                 </div>
 
             </div>
+
+            {
+                loading && <Loading loadingMessage={"Məlumatlar yüklənir..."}/>
+            }
         </div>
     );
 };

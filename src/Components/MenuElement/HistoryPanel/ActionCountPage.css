@@ -190,6 +190,7 @@
     height: 450px !important;
     margin: 0px !important;
     border-radius: 0px 0px 10px 10px !important;
+    overflow-x: auto;
 }
 
 .row-box {

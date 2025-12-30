@@ -15,8 +15,10 @@ const Units = ({ setResponseRequest, setItem, item }) => {
     const [endPoint, setEndPoint] = useState("");
     const [totalItem, setTotalItem] = useState(null);
     const [totalPages, setTotalPages] = useState(null);
+    const [loading, setLoading] = useState(false)
 
     const callUnits = async () => {
+        setLoading(true)
         const token = localStorage.getItem("myUserDutyToken");
         try {
             const resUnits = await api.get("/department/unit/getAllUnit", {
@@ -26,6 +28,7 @@ const Units = ({ setResponseRequest, setItem, item }) => {
             setTotalItem(resUnits?.data?.data?.totalItem || null);
             setTotalPages(resUnits?.data?.data?.totalPages || null)
             setAllUnits(resUnits?.data?.data?.data || []);
+            setLoading(false)
         } catch (err) {
             setResponseRequest(prev => ({
                 ...prev,
@@ -33,6 +36,7 @@ const Units = ({ setResponseRequest, setItem, item }) => {
                 title: "❌ Məlumatlar alınarkən xəta baş verdi",
                 message: err?.response?.data?.errorDescription || err,
             }));
+            setLoading(false)
         }
     };
 
@@ -104,6 +108,10 @@ const Units = ({ setResponseRequest, setItem, item }) => {
                     </div>
                 ))}
             </div>
+            {
+                loading && <Loading loadingMessage={"Məlumatlar yüklənir..."} />
+            }
+
             {
                 section && (
                     <UpdateAndAdd

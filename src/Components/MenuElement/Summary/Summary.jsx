@@ -29,7 +29,7 @@ export default function Summary({ setResponseRequest }) {
     const [totalItem, setTotalItem] = useState(null);
     const [totalPages, setTotalPages] = useState(null)
     const [page, setPage] = useState(1);
-    const [pageSize] = useState(4)
+    const [pageSize] = useState(5)
 
     const [activeFilter, setActiveFilter] = useState(null);
 
@@ -147,6 +147,53 @@ export default function Summary({ setResponseRequest }) {
             unitOrderIds: []
         })
     }
+
+
+
+    const callUnitByDep = async () => {
+        try {
+            const token = localStorage.getItem('myUserDutyToken');
+            const hdrs = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const hdrsDep = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                params: { page: 1, pageSize: 1000 }
+            }
+
+            if (filters?.departmentIds.length !== 0) {
+                let u, uList = [];
+                const callUnits = async (id) => {
+                    u = await api.get(`/department/unit/getUnitsByDepartment/${id}`, hdrs);
+                    uList = [...uList, ...(u?.data?.data || [])];
+                    setUnits(uList);
+                }
+                filters?.departmentIds.forEach((id) => {
+                    callUnits(id)
+                })
+            }
+            else {
+                const uu = await api.get('/department/unit/getAllUnit', hdrsDep);
+                setUnits(uu?.data?.data?.data || []);
+            }
+        }
+        catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+            }));
+        }
+    }
+
+    useEffect(() => {
+        callUnitByDep()
+    }, [filters?.departmentIds])
 
     const renderFilters = () => (
         <div className="summary-filters">
@@ -276,11 +323,36 @@ export default function Summary({ setResponseRequest }) {
     );
 
     useEffect(() => {
-        if (depUnitSummary != []) {
-            setTotalItem(depUnitSummary.length)
-            setTotalPages(Math.ceil(depUnitSummary.length / pageSize))
+        if (depUnitSummary.length === 0) return;
+
+        const grouped = depUnitSummary.reduce((acc, item) => {
+            const depName = item.departmentName;
+
+            if (!acc[depName]) {
+                acc[depName] = [];
+            }
+
+            acc[depName].push(item);
+            return acc;
+        }, {});
+
+        const departmentCount = Object.keys(grouped).length;
+
+        setTotalItem(departmentCount);
+        setTotalPages(Math.ceil(departmentCount / pageSize));
+
+    }, [depUnitSummary, page, filters]);
+
+    const groupedByDepartment = depUnitSummary.reduce((acc, item) => {
+        const depName = item.departmentName;
+
+        if (!acc[depName]) {
+            acc[depName] = [];
         }
-    }, [depUnitSummary, page, filters])
+
+        acc[depName].push(item);
+        return acc;
+    }, {});
 
     return (
         <div className="summary-wrapper">
@@ -322,31 +394,45 @@ export default function Summary({ setResponseRequest }) {
             <div className="summary-card">
                 <h3>İdarə / Bölmə üzrə hesab növləri</h3>
 
-                {depUnitSummary.slice((page - 1) * pageSize, page * pageSize).map((d, i) => (
-                    <div key={i} className="summary-dep-row">
-                        <div className="summary-dep-title">
-                            {d.departmentName} / {d.unitName}
-                        </div>
+                {Object.entries(groupedByDepartment)
+                    .slice((page - 1) * pageSize, page * pageSize)
+                    .map(([depName, units]) => (
+                        <div key={depName} className="summary-dep-block">
 
-                        <div className="summary-badges">
-                            {Object.entries(d.typeAndCount || {}).map(([k, v]) => (
-                                <span key={k} className="summary-badge">
-                                    {k}: <b>{v}</b>
-                                </span>
+                            <div className="summary-dep-title">
+                                {depName}
+                            </div>
+
+                            {units.map((d) => (
+                                <div key={d.unitName} className="summary-dep-row">
+
+                                    <div className="summary-unit-title">
+                                        {d.unitName}
+                                    </div>
+
+                                    <div className="summary-badges">
+                                        {Object.entries(d.typeAndCount || {}).map(([k, v]) => (
+                                            <span key={k} className="summary-badge">
+                                                {k}: <b>{v}</b>
+                                            </span>
+                                        ))}
+
+                                        {d.registeredCount !== undefined && (
+                                            <span className="summary-badge">
+                                                Qeydiyyat: <b>{d.registeredCount} / {d.unregisteredCount}</b>
+                                            </span>
+                                        )}
+
+                                        {d.unConfidentialCount !== undefined && (
+                                            <span className="summary-badge">
+                                                Qeyri Məxfi: <b>{d.unConfidentialCount}</b>
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                             ))}
-                            {d.registeredCount !== undefined && (
-                                <span className="summary-badge">
-                                    Qeydiyyat: <b>{d.registeredCount} / {d.unregisteredCount}</b>
-                                </span>
-                            )}
-                            {d.unConfidentialCount !== undefined && (
-                                <span className="summary-badge">
-                                    Qeyri Məxfi: <b>{d.unConfidentialCount}</b>
-                                </span>
-                            )}
                         </div>
-                    </div>
-                ))}
+                    ))}
             </div>
             {
                 totalItem && totalPages && totalItem > pageSize && (

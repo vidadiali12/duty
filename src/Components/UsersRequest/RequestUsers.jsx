@@ -3,6 +3,7 @@ import api from "../../api";
 import Pagination from "../Pagination/Pagination";
 import './RequestUsers.css'
 import CreateAndUpdateAcc from "../MenuElement/CreateAndUpdateAcc";
+import Loading from "../Modals/Loading";
 
 const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow, permissionIdsList }) => {
 
@@ -25,7 +26,8 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
     const [createAndUpdate, setCreateAndUpdate] = useState(null);
     const [typeOpe, setTypeOpe] = useState("");
     const [apiOpe, setApiOpe] = useState("");
-    const [isFromESD] = useState("fromESD")
+    const [isFromESD] = useState("fromESD");
+    const [loading, setLoading] = useState(false)
 
     const loadFilterData = async (detailsData, formElement, toAll) => {
         const token = localStorage.getItem('myUserDutyToken');
@@ -60,7 +62,6 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
 
 
             if (formElement?.eventId == 2) {
-                console.log(detailsData)
                 setCreateAndUpdate(true);
                 setApiOpe("/admin/client/createClient");
                 setTypeOpe("createAcc");
@@ -106,7 +107,12 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
                             await api.put(`/admin/client/updateClient/${resDetailsData?.id}`, req, hdrs);
                             window.location.reload()
                         } catch (err) {
-                            console.log(err)
+                            setResponseRequest(prev => ({
+                                ...prev,
+                                showResponse: true,
+                                title: "❌ Məlumatlar alınarkən xəta baş verdi",
+                                message: err?.response?.data?.errorDescription || err,
+                            }));
                         }
                     }
                     else {
@@ -215,6 +221,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
 
     const allRequest = async () => {
         try {
+            setLoading(true)
             const token = localStorage.getItem("myUserDutyToken");
             if (!token) throw new Error("❌ Token tapılmadı");
 
@@ -237,8 +244,8 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
 
             setTotalItem(res?.data?.totalItem || null);
             setTotalPages(res?.data?.totalPages || null);
-            console.log(res?.data?.data)
             setAllUsersRequest(res?.data?.data || []);
+            setLoading(false)
         } catch (err) {
             setResponseRequest(prev => ({
                 ...prev,
@@ -246,6 +253,7 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
                 title: "❌ Məlumatlar alınarkən xəta baş verdi",
                 message: err?.response?.data?.errorDescription || err,
             }));
+            setLoading(false)
         }
     }
 
@@ -347,7 +355,6 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
 
 
     const approvedAll = (req) => {
-        console.log(req);
         req?.forms.forEach((form) => {
             callClientDetails(form, "approvedAll")
         })
@@ -501,6 +508,10 @@ const RequestUsers = ({ setResponseRequest, userInfo, setItem, item, connectNow,
                         <div className="no-data">Məlumat tapılmadı...</div>
                     )}
             </div>
+
+            {
+                loading && <Loading loadingMessage={"Məlumatlar yüklənir..."} />
+            }
 
             {
                 totalItem && totalPages && totalItem > pageSize && (
