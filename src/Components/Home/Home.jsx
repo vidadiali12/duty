@@ -3,6 +3,7 @@ import Chart from "chart.js/auto";
 import api from "../../api";
 import "./Home.css";
 import Profile from "../Modals/Profile";
+import Loading from "../Modals/Loading";
 
 const MODERN_50_COLORS = [
   "#FF6B6B", "#4ECDC4", "#FFD93D", "#6C5CE7", "#FF9F43",
@@ -49,6 +50,7 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
   const [unitOrders, setUnitOrders] = useState([]);
   const [selectedUnitOrder, setSelectedUnitOrder] = useState(null);
   const [showProfile, setShowProfile] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const typeChartRef = useRef(null);
   const statusChartRef = useRef(null);
@@ -60,13 +62,14 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
   const depCanvas = useRef(null);
   const unitCanvas = useRef(null);
 
-  const token = localStorage.getItem("myUserDutyToken");
-  const headers = { headers: { Authorization: `Bearer ${token}` } };
-
   const getStatuses = async () => {
     try {
+      setLoading(true);
+      const token = localStorage.getItem("myUserDutyToken");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
       const res = await api.get("/general/status/getAllStatus", headers);
-      setStatuses(res.data.data);
+      setStatuses(res?.data?.data);
+      setLoading(false);
     } catch (err) {
       setResponseRequest(prev => ({
         ...prev,
@@ -74,13 +77,16 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
         title: "❌ Məlumatlar alınarkən xəta baş verdi",
         message: err?.response?.data?.errorDescription || err,
       }));
+      setLoading(false);
     }
   };
 
   const getDepartmentOrders = async () => {
     try {
+      const token = localStorage.getItem("myUserDutyToken");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
       const res = await api.get("/statistics/order/department/getAllOrder", headers);
-      setDepartmentOrders(res.data.data);
+      setDepartmentOrders(res?.data?.data);
     } catch (err) {
       setResponseRequest(prev => ({
         ...prev,
@@ -93,8 +99,10 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
 
   const getUnitOrders = async () => {
     try {
+      const token = localStorage.getItem("myUserDutyToken");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
       const res = await api.get("/statistics/order/unit/getAllOrder", headers);
-      setUnitOrders(res.data.data);
+      setUnitOrders(res?.data?.data);
     } catch (err) {
       setResponseRequest(prev => ({
         ...prev,
@@ -107,14 +115,16 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
 
   const accountTypeChart = async () => {
     try {
+      const token = localStorage.getItem("myUserDutyToken");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
       const res = await api.post(
         "/statistics/common/accountTypeCount",
         selectedStatusId ? { statusId: selectedStatusId } : {},
         headers
       );
 
-      const labels = res.data.data.map(x => x.accountType);
-      const values = res.data.data.map(x => x.count);
+      const labels = res?.data?.data?.map(x => x?.accountType);
+      const values = res?.data?.data?.map(x => x?.count);
 
       if (typeChartRef.current) typeChartRef.current.destroy();
 
@@ -124,7 +134,7 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
           labels,
           datasets: [{
             data: values,
-            backgroundColor: MODERN_50_COLORS.slice(0, labels.length)
+            backgroundColor: MODERN_50_COLORS.slice(0, labels?.length)
           }]
         },
         options: { responsive: true, maintainAspectRatio: false }
@@ -141,16 +151,20 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
 
   const statusDoughnutChart = async () => {
     try {
+      const token = localStorage.getItem("myUserDutyToken");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
       const res = await api.post(
         "/statistics/common/countByAccountStatus",
         selectedStatusId ? { statusId: selectedStatusId } : {},
         headers
       );
 
-      const labels = res.data.data.map(x => x.status);
-      const counts = res.data.data.map(x => x.count);
-      const register = res.data.data.map(x => x.registerCount);
-      const unRegister = res.data.data.map(x => x.unRegisterCount);
+      const data = res?.data?.data;
+      const labels = data?.map(x => x?.status);
+      const counts = data?.map(x => x?.count);
+
+      const totalRegister = data?.reduce((sum, x) => sum + (x?.registerCount || 0), 0);
+      const totalUnRegister = data?.reduce((sum, x) => sum + (x?.unRegisterCount || 0), 0);
 
       if (statusChartRef.current) statusChartRef.current.destroy();
 
@@ -160,17 +174,60 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
           labels,
           datasets: [
             {
+              label: "Statuslar",
               data: counts,
-              backgroundColor: MODERN_50_COLORS.slice(0, labels.length)
+              backgroundColor: MODERN_50_COLORS.slice(0, labels?.length),
             },
             {
-              data: [...register, ...unRegister],
-              backgroundColor: ["#22C55E", "#EF4444"]
+              label: "Qeydiyyat vəziyyəti",
+              data: [totalRegister, totalUnRegister],
+              backgroundColor: ["#22C55E", "#EF4444"],
             }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false, cutout: "45%" }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "45%",
+          plugins: {
+            tooltip: {
+              callbacks: {
+                title: function (contexts) {
+                  const ctx = contexts[0];
+                  if (ctx?.datasetIndex === 1) {
+                    return "Qeydiyyat vəziyyəti";
+                  }
+                  return ctx?.label;
+                },
+                label: function (context) {
+                  if (context?.datasetIndex === 0) {
+                    return `${context?.label}: ${context?.parsed}`;
+                  }
+                  if (context?.datasetIndex === 1) {
+                    const customLabels = ["Qeydiyyatdan keçmiş", "Qeydiyyatdan keçməmiş"];
+                    return `${customLabels[context?.dataIndex]}: ${context?.parsed}`;
+                  }
+                }
+              }
+            },
+            legend: {
+              labels: {
+                generateLabels(chart) {
+                  const original =
+                    Chart.overrides?.doughnut?.plugins?.legend?.labels?.generateLabels(chart);
+                  return original?.map(item => {
+                    if (item?.datasetIndex === 1) {
+                      item.text = item?.index === 0 ? "Qeydiyyat vəziyyəti" : "Qeydiyyat vəziyyəti";
+                    }
+                    return item;
+                  });
+                }
+              }
+            }
+          }
+        }
       });
+
     } catch (err) {
       setResponseRequest(prev => ({
         ...prev,
@@ -183,7 +240,9 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
 
   const departmentChart = async () => {
     try {
-      const order = departmentOrders.find(x => x.id === selectedDepartmentOrder);
+      const token = localStorage.getItem("myUserDutyToken");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
+      const order = departmentOrders?.find(x => x?.id === selectedDepartmentOrder);
       const reqBody = selectedDepartmentOrder ? {
         departmentOrderIds: order?.departmentIds,
         statusId: selectedStatusId
@@ -194,21 +253,21 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
         headers
       );
 
-      const labels = res.data.data.map(x => x.departmentTag);
-      const canvasMinWidth = Math.max(labels.length * 120, 900);
+      const labels = res?.data?.data?.map(x => x?.departmentTag);
+      const canvasMinWidth = Math?.max(labels?.length * 120, 900);
       depCanvas.current.style.minWidth = canvasMinWidth + "px";
 
-      const keys = Object.keys(res.data.data[0]?.accountTypeWithCount || {});
+      const keys = Object.keys(res?.data?.data?.[0]?.accountTypeWithCount || {});
 
-      const datasets = keys.map((k, i) => ({
+      const datasets = keys?.map((k, i) => ({
         label: k,
-        data: res.data.data.map(x => x.accountTypeWithCount[k] || 0),
+        data: res?.data?.data?.map(x => x?.accountTypeWithCount?.[k] || 0),
         backgroundColor: MODERN_50_COLORS[i % MODERN_50_COLORS.length]
       }));
 
-      if (depChartRef.current) depChartRef.current.destroy();
+      if (depChartRef?.current) depChartRef?.current.destroy();
 
-      depChartRef.current = new Chart(depCanvas.current, {
+      depChartRef.current = new Chart(depCanvas?.current, {
         type: "bar",
         data: { labels, datasets },
         options: {
@@ -264,7 +323,9 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
 
   const unitChart = async () => {
     try {
-      const order = unitOrders.find(x => x.id === selectedUnitOrder);
+      const token = localStorage.getItem("myUserDutyToken");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
+      const order = unitOrders?.find(x => x?.id === selectedUnitOrder);
       const reqBody = selectedUnitOrder ? {
         unitOrderIds: order?.unitIds,
         statusId: selectedStatusId
@@ -275,21 +336,21 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
         headers
       );
 
-      const labels = res.data.data.map(x => x.unitTag);
-      const canvasMinWidth = Math.max(labels.length * 120, 900);
+      const labels = res?.data?.data?.map(x => x?.unitTag);
+      const canvasMinWidth = Math.max(labels?.length * 120, 900);
       unitCanvas.current.style.minWidth = canvasMinWidth + "px";
 
-      const keys = Object.keys(res.data.data[0]?.accountTypeWithCount || {});
+      const keys = Object.keys(res?.data?.data?.[0]?.accountTypeWithCount || {});
 
-      const datasets = keys.map((k, i) => ({
+      const datasets = keys?.map((k, i) => ({
         label: k,
-        data: res.data.data.map(x => x.accountTypeWithCount[k] || 0),
+        data: res?.data?.data?.map(x => x?.accountTypeWithCount?.[k] || 0),
         backgroundColor: UNIT_300_COLORS[i]
       }));
 
       if (unitChartRef.current) unitChartRef.current.destroy();
 
-      unitChartRef.current = new Chart(unitCanvas.current, {
+      unitChartRef.current = new Chart(unitCanvas?.current, {
         type: "bar",
         data: { labels, datasets },
         options: {
@@ -371,19 +432,28 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
       <div className="filters-bar">
         <select onChange={e => setSelectedStatusId(+e.target.value)}>
           <option value="">Bütün Statuslar</option>
-          {statuses?.map(s => <option key={s.id} value={s.id}>{s.status}</option>)}
+          {statuses?.map(s => {
+            if (s?.status !== "Confidential" && s?.status !== "Unconfidential") {
+              return <option key={s?.id} value={s?.id}>{
+                s?.status === "Active" ? "Aktiv" : s?.status === "Deactive" ? "Deaktiv" :
+                  s?.status === "Deleted" ? "Silinmiş" : ""
+              }</option>
+            }
+          })}
         </select>
 
         <select onChange={e => setSelectedDepartmentOrder(+e.target.value)}>
           <option value="">Bütün İdarələr</option>
-          {departmentOrders?.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+          {departmentOrders?.map(d => <option key={d?.id} value={d?.id}>{d?.name}</option>)}
         </select>
 
         <select onChange={e => setSelectedUnitOrder(+e.target.value)}>
           <option value="">Bütün Bölmələr</option>
-          {unitOrders?.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+          {unitOrders?.map(u => <option key={u?.id} value={u?.id}>{u?.name}</option>)}
         </select>
       </div>
+
+      {loading && <Loading loadingMessage={"Məlumatlar analiz olunur..."} />}
 
       <div className="top-charts">
         <div className="chart-box-main chart-box-circle">
@@ -399,7 +469,6 @@ export default function Home({ userInfo, setUserInfo, setResponseRequest }) {
           </div>
         </div>
       </div>
-
 
       <div className="chart-box-main">
         <h1>İdarələr</h1>

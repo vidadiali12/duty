@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiInfo } from "react-icons/fi";
 import "./Loggins.css";
 import api from "../../api";
 import Pagination from "../Pagination/Pagination";
-import { FiInfo } from "react-icons/fi";
 import LogDetails from "./LogDetails";
-
+import Loading from "../Modals/Loading";
 
 export default function Loggins({ setResponseRequest, userInfo, setItem, item }) {
-
     const [logs, setLogs] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize] = useState(12);
     const [totalItem, setTotalItem] = useState(null);
     const [totalPages, setTotalPages] = useState(null);
     const [rankList, setRankList] = useState([]);
-    const [showLogDetails, setShowLogDetails] = useState(null)
-
+    const [showLogDetails, setShowLogDetails] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [actions] = useState([
         { id: 1, action: "Yaradıldı" },
         { id: 2, action: "Dəyişdirildi" },
@@ -27,11 +25,8 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
         { id: 7, action: "Qeyri Məxfi" },
         { id: 8, action: "Silinmiş" }
     ]);
-
     const [accTypeList, setAccTypeList] = useState([]);
-
     const [activeFilter, setActiveFilter] = useState(null);
-
     const [filters, setFilters] = useState({
         clientSearchText: "",
         issuerSearchText: "",
@@ -43,16 +38,14 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
     });
 
     const loadFilterData = async () => {
+        setLoading(true);
         const token = localStorage.getItem('myUserDutyToken');
         const hdr = { headers: { Authorization: `Bearer ${token}` } };
-
         try {
             const ranks = await api.get('/rank/getAllRank', hdr);
             const types = await api.get('/admin/accountType/getAllAccountType', hdr);
-
             setRankList(ranks?.data?.data || []);
             setAccTypeList(types?.data?.data || []);
-
         } catch (err) {
             setResponseRequest(prev => ({
                 ...prev,
@@ -60,22 +53,20 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                 title: "❌ Məlumatlar alınarkən xəta baş verdi",
                 message: err?.response?.data?.errorDescription || err,
             }));
+        } finally {
+            setLoading(false);
         }
     };
 
     const getLogs = async () => {
+        setLoading(true);
         const token = localStorage.getItem('myUserDutyToken');
-
         try {
             const res = await api.post(
                 "/admin/history/getLogs",
                 filters,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                    params: { page, pageSize }
-                }
+                { headers: { Authorization: `Bearer ${token}` }, params: { page, pageSize } }
             );
-
             setTotalItem(res?.data?.totalItem || null);
             setTotalPages(res?.data?.totalPages || null);
             setLogs(res?.data?.data || []);
@@ -86,21 +77,21 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                 title: "❌ Məlumatlar alınarkən xəta baş verdi",
                 message: err?.response?.data?.errorDescription || err,
             }));
+        } finally {
+            setLoading(false);
         }
     };
 
     const toggleFilter = (type, id) => {
         setFilters(prev => ({
             ...prev,
-            [type]: prev[type].includes(id)
-                ? prev[type].filter(x => x !== id)
+            [type]: prev[type]?.includes(id)
+                ? prev[type]?.filter(x => x !== id)
                 : [...prev[type], id]
         }));
     };
 
-    const showFilter = (type) => {
-        setActiveFilter(prev => prev === type ? null : type);
-    }
+    const showFilter = (type) => setActiveFilter(prev => prev === type ? null : type);
 
     useEffect(() => {
         setItem(null);
@@ -109,19 +100,12 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
     }, []);
 
     const showDetails = async (log) => {
+        setLoading(true);
         const token = localStorage.getItem('myUserDutyToken');
-
         try {
-            const res = await api.get(
-                `/admin/history/getLogDetails/${log?.id}`,
-                filters,
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-            );
-
+            const res = await api.get(`/admin/history/getLogDetails/${log?.id}`, { headers: { Authorization: `Bearer ${token}` } });
             setItem(res?.data?.data);
-            setShowLogDetails(true)
+            setShowLogDetails(true);
         } catch (err) {
             setResponseRequest(prev => ({
                 ...prev,
@@ -129,8 +113,10 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                 title: "❌ Məlumatlar alınarkən xəta baş verdi",
                 message: err?.response?.data?.errorDescription || err,
             }));
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     const clearFilter = () => {
         setFilters({
@@ -141,42 +127,19 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
             accountTypeIds: [],
             actionIds: [],
             newToOld: true
-        })
-
-        const inputs = document.querySelectorAll('input[type="checkbox"]');
-        inputs.forEach(input => {
-            input.checked = false;
         });
-
+        document.querySelectorAll('input[type="checkbox"]').forEach(input => input.checked = false);
         setActiveFilter(null);
-    }
+    };
 
-    const changeAsc = (e) => {
-        if (e?.target?.value == `${true}`) {
-            setFilters(prev => ({
-                ...prev, newToOld: true
-            }))
-        }
-        else if (e?.target?.value == `${false}`) {
-            setFilters(prev => ({
-                ...prev, newToOld: false
-            }))
-        }
-    }
+    const changeAsc = (e) => setFilters(prev => ({ ...prev, newToOld: e?.target?.value === "true" }));
 
-    useEffect(() => {
-        getLogs();
-    }, [filters, page]);
-
-    useEffect(() => {
-        setPage(1)
-    }, [filters]);
+    useEffect(() => { getLogs(); }, [filters, page]);
+    useEffect(() => { setPage(1); }, [filters]);
 
     return (
         <div className="logs-wrapper p-4">
-
             <div className="filters">
-
                 <div className="filter-box">
                     <input
                         placeholder="İstifadəçi axtar..."
@@ -185,7 +148,6 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                         onChange={(e) => setFilters({ ...filters, clientSearchText: e.target.value })}
                     />
                 </div>
-
                 <div className="filter-box">
                     <input
                         placeholder="Təsdiq edən axtar..."
@@ -194,99 +156,61 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                         onChange={(e) => setFilters({ ...filters, issuerSearchText: e.target.value })}
                     />
                 </div>
-
                 <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("actionIds")}>
-                        Əməliyyat <FiChevronDown />
-                    </span>
+                    <span className="filter-label" onClick={() => showFilter("actionIds")}>Əməliyyat <FiChevronDown /></span>
                     <div className={`filter-box-child ${activeFilter === 'actionIds' ? 'show-filtered-element' : ''}`}>
                         {actions.map(a => (
                             <label key={a.id}>
-                                <input
-                                    type="checkbox"
-                                    checked={filters.actionIds.includes(a.id)}
-                                    onChange={() => toggleFilter("actionIds", a.id)}
-                                />
+                                <input type="checkbox" checked={filters.actionIds.includes(a.id)} onChange={() => toggleFilter("actionIds", a.id)} />
                                 <span>{a.action}</span>
                             </label>
                         ))}
                     </div>
                 </div>
-
-
                 <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("accountTypeIds")}>
-                        Hesab Növü <FiChevronDown />
-                    </span>
+                    <span className="filter-label" onClick={() => showFilter("accountTypeIds")}>Hesab Növü <FiChevronDown /></span>
                     <div className={`filter-box-child ${activeFilter === 'accountTypeIds' ? 'show-filtered-element' : ''}`}>
                         {accTypeList.map(t => (
                             <label key={t.id}>
-                                <input
-                                    type="checkbox"
-                                    checked={filters.accountTypeIds.includes(t.id)}
-                                    onChange={() => toggleFilter("accountTypeIds", t.id)}
-                                />
+                                <input type="checkbox" checked={filters.accountTypeIds.includes(t.id)} onChange={() => toggleFilter("accountTypeIds", t.id)} />
                                 <span>{t.name}</span>
                             </label>
                         ))}
                     </div>
                 </div>
-
                 <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("clientRankIds")}>
-                        İstifadəçi Rütbəsi <FiChevronDown />
-                    </span>
+                    <span className="filter-label" onClick={() => showFilter("clientRankIds")}>İstifadəçi Rütbəsi <FiChevronDown /></span>
                     <div className={`filter-box-child ${activeFilter === 'clientRankIds' ? 'show-filtered-element' : ''}`}>
                         {rankList.map(t => (
                             <label key={t.id}>
-                                <input
-                                    type="checkbox"
-                                    checked={filters.clientRankIds.includes(t.id)}
-                                    onChange={() => toggleFilter("clientRankIds", t.id)}
-                                />
+                                <input type="checkbox" checked={filters.clientRankIds.includes(t.id)} onChange={() => toggleFilter("clientRankIds", t.id)} />
                                 <span>{t.name}</span>
                             </label>
                         ))}
                     </div>
                 </div>
-
-
                 <div className="filter-box">
-                    <span className="filter-label" onClick={() => showFilter("issuerRankIds")}>
-                        Növbətçi Rütbəsi <FiChevronDown />
-                    </span>
+                    <span className="filter-label" onClick={() => showFilter("issuerRankIds")}>Növbətçi Rütbəsi <FiChevronDown /></span>
                     <div className={`filter-box-child ${activeFilter === 'issuerRankIds' ? 'show-filtered-element' : ''}`}>
                         {rankList.map(t => (
                             <label key={t.id}>
-                                <input
-                                    type="checkbox"
-                                    checked={filters.issuerRankIds.includes(t.id)}
-                                    onChange={() => toggleFilter("issuerRankIds", t.id)}
-                                />
+                                <input type="checkbox" checked={filters.issuerRankIds.includes(t.id)} onChange={() => toggleFilter("issuerRankIds", t.id)} />
                                 <span>{t.name}</span>
                             </label>
                         ))}
                     </div>
                 </div>
-
                 <div className="filter-box sort-filter">
-                    <select
-                        className="filter-select"
-                        onChange={changeAsc}
-                        value={filters?.newToOld}
-                    >
+                    <select className="filter-select" onChange={changeAsc} value={filters?.newToOld}>
                         <option value={`${true}`}>Yenidən Köhnəyə</option>
                         <option value={`${false}`}>Köhnədən Yeniyə</option>
                     </select>
                     <span className="select-icon">⇅</span>
                 </div>
-
                 <button onClick={clearFilter} className="clear-filters">Filteri sıfırla</button>
             </div>
 
-
             <div className="logs-table">
-
                 <div className="table-header table-log-header">
                     <span>#</span>
                     <span>Əməliyyat</span>
@@ -299,7 +223,6 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                     <span>Tarix</span>
                     <span className="log-more-icon-box">Ətraflı</span>
                 </div>
-
                 {logs.map((log, index) => (
                     <div className="table-row table-log-row" key={log.id}>
                         <span>{pageSize * (page - 1) + index + 1}</span>
@@ -316,20 +239,17 @@ export default function Loggins({ setResponseRequest, userInfo, setItem, item })
                         </span>
                     </div>
                 ))}
-
             </div>
 
-            {
-                showLogDetails && (
-                    <LogDetails setResponseRequest={setResponseRequest} setItem={setItem} item={item} setShowLogDetails={setShowLogDetails} />
-                )
-            }
+            {showLogDetails && (
+                <LogDetails setResponseRequest={setResponseRequest} setItem={setItem} item={item} setShowLogDetails={setShowLogDetails} />
+            )}
 
-            {
-                totalItem && totalPages && (totalItem > pageSize) && (
-                    <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
-                )
-            }
+            {totalItem && totalPages && totalItem > pageSize && (
+                <Pagination page={page} setPage={setPage} pageSize={pageSize} totalItem={totalItem} totalPages={totalPages} />
+            )}
+
+            {loading && <Loading loadingMessage="Məlumatlar yüklənir..." />}
         </div>
     );
 }

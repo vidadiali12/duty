@@ -11,6 +11,7 @@ import { FaUsers, FaHistory } from 'react-icons/fa';
 import { BsClockHistory } from 'react-icons/bs';
 import { FiCheckSquare, FiBarChart2, FiMenu, FiX, FiList } from 'react-icons/fi';
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
+import { MdSummarize } from "react-icons/md";
 import Profile from '../Modals/Profile';
 import AdminHeader from './AdminHeader';
 
@@ -213,6 +214,12 @@ const Header = ({ userInfo, setUserInfo, setResponseRequest, connectNow, setConn
                             <NavLink className="menu-list-child-link" to="/">
                                 <AiFillHome className="menu-icon" />
                                 <span className='menu-list-child-text'>Əsas Səhifə</span>
+                            </NavLink>
+                        </li>
+                        <li className='menu-list-child'>
+                            <NavLink className="menu-list-child-link" to="/summary">
+                                <MdSummarize className="menu-icon" />
+                                <span className='menu-list-child-text'>Xülasə</span>
                             </NavLink>
                         </li>
                         <li className='menu-list-child'>

@@ -118,7 +118,7 @@ const Statistics = ({ setResponseRequest }) => {
             setResponseRequest(prev => ({
                 ...prev,
                 showResponse: true,
-                title: "✅ Excel faylı uğurla endirildi!"
+                title: "✅ Excel faylı uğurla hazırlandı!"
             }));
 
             document.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);

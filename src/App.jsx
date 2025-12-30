@@ -21,6 +21,7 @@ import Roles from './Components/MenuElement/Roles/Roles'
 import Order from './Components/MenuElement/Statistika/Order'
 import Statistics from './Components/MenuElement/Statistics/Statistics'
 import ActionCountPage from './Components/MenuElement/HistoryPanel/ActionCountPage'
+import Summary from './Components/MenuElement/Summary/Summary'
 
 function App() {
   const navigate = useNavigate();
@@ -96,6 +97,8 @@ function App() {
               <Route path='/statistics-page' element={<Statistics
                 setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path='/history-panel' element={<ActionCountPage
+                setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
+              <Route path='/summary' element={<Summary
                 setResponseRequest={setResponseRequest} userInfo={userInfo} setItem={setItem} item={item} permissionIdsList={permissionIdsList} />} />
               <Route path="/login-page" element={<Navigate to="/" replace />} />
               <Route path="/create-admin-page" element={<Navigate to="/" replace />} />

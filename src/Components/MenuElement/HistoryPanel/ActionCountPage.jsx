@@ -19,6 +19,8 @@ export default function ActionCountPage({ setResponseRequest }) {
 
     const [byAccountType, setByAccountType] = useState(false);
     const [byHours, setByHours] = useState(false);
+    const [byPersonnel, setByPersonnel] = useState(false);
+    const [byDepartment, setByDepartment] = useState(false);
     const [personnelList, setPersonnelList] = useState([]);
     const [filters, setFilters] = useState({
         actionIds: [],
@@ -34,6 +36,13 @@ export default function ActionCountPage({ setResponseRequest }) {
 
     const chartCanvasRefByHours = useRef(null);
     const chartRefByHours = useRef(null);
+
+
+    const chartCanvasRefByPersonnel = useRef(null);
+    const chartRefByPersonnel = useRef(null);
+
+    const chartCanvasRefByDepartment = useRef(null);
+    const chartRefByDepartment = useRef(null);
 
     const loadPersonnel = async () => {
         try {
@@ -145,9 +154,51 @@ export default function ActionCountPage({ setResponseRequest }) {
         }
     };
 
+    const getAllByPersonnel = async () => {
+        try {
+            const token = localStorage.getItem("myUserDutyToken");
+            const res = await api.post(
+                "/statistics/history/getActionCountByPersonnel",
+                filters,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setByPersonnel(res?.data?.data || false);
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ Saat üzrə əməliyyat sayları alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
+        }
+    };
+
+    const getAllByDepartment = async () => {
+        try {
+            const token = localStorage.getItem("myUserDutyToken");
+            const res = await api.post(
+                "/statistics/history/actionCountByDepartment",
+                filters,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setByDepartment(res?.data?.data || false);
+        } catch (err) {
+            setResponseRequest(prev => ({
+                ...prev,
+                showResponse: true,
+                title: "❌ İdarə üzrə əməliyyat sayları alınarkən xəta baş verdi",
+                message: err?.response?.data?.errorDescription || err,
+                isQuestion: false
+            }));
+        }
+    };
+
     useEffect(() => {
         getActionCounts();
         getAllByAccountType();
+        getAllByPersonnel();
+        getAllByDepartment();
     }, [filters]);
 
     useEffect(() => {
@@ -208,8 +259,8 @@ export default function ActionCountPage({ setResponseRequest }) {
     useEffect(() => {
         if (!byAccountType || !byAccountType.length || !chartCanvasRef.current) return;
 
-        const actionKeys = Object.keys(byAccountType[0].actionCount); // action-lar legend
-        const labels = byAccountType.map(account => account.accountTypeName); // künclər
+        const actionKeys = Object.keys(byAccountType[0].actionCount);
+        const labels = byAccountType.map(account => account.accountTypeName);
 
         const datasets = actionKeys.map((action, i) => ({
             label: action,
@@ -248,6 +299,95 @@ export default function ActionCountPage({ setResponseRequest }) {
 
         return () => chartRef.current?.destroy();
     }, [byAccountType]);
+
+    useEffect(() => {
+        if (!byPersonnel || !byPersonnel.length || !chartCanvasRefByPersonnel.current) return;
+        const labels = byPersonnel.map(p => p.fullname);
+        const actionKeys = Object.keys(byPersonnel[0].actionCounts);
+
+        const datasets = actionKeys.map((action, i) => ({
+            label: action,
+            data: byPersonnel.map(p => p.actionCounts[action] || 0),
+            backgroundColor: `hsla(${(i * 360) / actionKeys.length}, 70%, 50%, 0.5)`,
+            borderColor: `hsl(${(i * 360) / actionKeys.length}, 70%, 50%)`,
+            borderWidth: 1
+        }));
+
+        requestAnimationFrame(() => {
+            if (chartRefByPersonnel.current) chartRefByPersonnel.current.destroy();
+
+            chartRefByPersonnel.current = new Chart(chartCanvasRefByPersonnel.current, {
+                type: "bar",
+                data: { labels, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: "top" },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        },
+                        x: {
+                            ticks: { color: "#241b5a", font: { weight: "bold" } }
+                        }
+                    }
+                }
+            });
+
+            chartRefByPersonnel.current.resize();
+        });
+
+        return () => chartRefByPersonnel.current?.destroy();
+    }, [byPersonnel]);
+
+    useEffect(() => {
+        if (!byDepartment || !byDepartment.length || !chartCanvasRefByDepartment.current) return;
+        const labels = byDepartment.map(p => p.departmentTag);
+        const actionKeys = Object.keys(byDepartment[0].actionCount);
+
+        const datasets = actionKeys.map((action, i) => ({
+            label: action,
+            data: byDepartment.map(p => p.actionCount[action] || 0),
+            backgroundColor: `hsla(${(i * 360) / actionKeys.length}, 70%, 50%, 0.5)`,
+            borderColor: `hsl(${(i * 360) / actionKeys.length}, 70%, 50%)`,
+            borderWidth: 1
+        }));
+
+        requestAnimationFrame(() => {
+            if (chartRefByDepartment.current) chartRefByDepartment.current.destroy();
+
+            chartRefByDepartment.current = new Chart(chartCanvasRefByDepartment.current, {
+                type: "bar",
+                data: { labels, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: "top" },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        },
+                        x: {
+                            ticks: { color: "#241b5a", font: { weight: "bold" } }
+                        }
+                    }
+                }
+            });
+
+            chartRefByDepartment.current.resize();
+        });
+
+        return () => chartRefByDepartment.current?.destroy();
+    }, [byDepartment]);
+
 
     const clearFilters = () => {
         setFilters({
@@ -336,34 +476,79 @@ export default function ActionCountPage({ setResponseRequest }) {
                 ))}
             </div>
 
-            {byAccountType && (
-                <div
-                    className="by-account-type-wrapper"
-                    style={{
-                        height: "350px",
-                        background: "#fff",
-                        borderRadius: "14px",
-                        padding: "20px",
-                        marginTop: "30px"
-                    }}
-                >
-                    <canvas ref={chartCanvasRef} />
+            <div className="row-box">
+                <div className="wrap-box-child">
+                    <h1 className="wrap-box-head">Hesab Növünə görə</h1>
+                    {byAccountType && (
+                        <div
+                            className="by-account-type-wrapper wrap-box"
+                            style={{
+                                height: "350px",
+                                background: "#fff",
+                                borderRadius: "14px",
+                                padding: "20px",
+                                marginTop: "30px"
+                            }}
+                        >
+                            <canvas ref={chartCanvasRef} />
+                        </div>
+                    )}
                 </div>
-            )}
-            {byHours && (
-                <div
-                    className="by-account-type-wrapper"
-                    style={{
-                        height: "350px",
-                        background: "#fff",
-                        borderRadius: "14px",
-                        padding: "20px",
-                        marginTop: "30px"
-                    }}
-                >
-                    <canvas ref={chartCanvasRefByHours} />
+
+                <div className="wrap-box-child">
+                    <h1 className="wrap-box-head">Növbətçilərə görə</h1>
+                    {byPersonnel && (
+                        <div
+                            className="by-account-type-wrapper wrap-box"
+                            style={{
+                                height: "350px",
+                                background: "#fff",
+                                borderRadius: "14px",
+                                padding: "20px",
+                                marginTop: "30px"
+                            }}
+                        >
+                            <canvas ref={chartCanvasRefByPersonnel} />
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
+
+            <div className="wrap-box-child">
+                <h1 className="wrap-box-head">Son 24 saata əsasən</h1>
+                {byHours && (
+                    <div
+                        className="by-account-type-wrapper"
+                        style={{
+                            height: "350px",
+                            background: "#fff",
+                            borderRadius: "14px",
+                            padding: "20px",
+                            marginTop: "30px"
+                        }}
+                    >
+                        <canvas ref={chartCanvasRefByHours} />
+                    </div>
+                )}
+            </div>
+
+            <div className="wrap-box-child">
+                <h1 className="wrap-box-head">İdarələrə görə</h1>
+                {byDepartment && (
+                    <div
+                        className="by-account-type-wrapper"
+                        style={{
+                            height: "350px",
+                            background: "#fff",
+                            borderRadius: "14px",
+                            padding: "20px",
+                            marginTop: "30px"
+                        }}
+                    >
+                        <canvas ref={chartCanvasRefByDepartment} />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

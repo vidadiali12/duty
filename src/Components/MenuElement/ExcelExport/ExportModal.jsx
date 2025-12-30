@@ -130,7 +130,7 @@ const ExportModal = ({ callFilter, setShowExportModal, setResponseRequest, filte
       setResponseRequest(prev => ({
         ...prev,
         showResponse: true,
-        title: "✅ Excel uğurla endirildi",
+        title: "✅ Excel faylı uğurla hazırlandı!",
         message: "Fayl cihazınıza uğurla yükləndi!"
       }));
 

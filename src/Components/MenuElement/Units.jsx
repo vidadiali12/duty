@@ -44,10 +44,10 @@ const Units = ({ setResponseRequest, setItem, item }) => {
         setResponseRequest(prev => ({
             ...prev,
             isQuestion: true,
-            title: "Bu idarəni silməyə əminsiz?",
+            title: "Bu Bölməni silməyə əminsiz?",
             type: "deleteDep",
             showResponse: true,
-            api: `/department/deleteDepartment/${id}`
+            api: `/department/unit/deleteUnit/${id}`
         }))
     }
 
@@ -98,7 +98,7 @@ const Units = ({ setResponseRequest, setItem, item }) => {
                         <span className="cell action" onClick={() => editUnit(unit)}>
                             <FiEdit className="action-icon update" />
                         </span>
-                        <span className="cell action" onClick={() => deleteUnit(dep?.id)}>
+                        <span className="cell action" onClick={() => deleteUnit(unit?.id)}>
                             <FiTrash2 className="action-icon delete" />
                         </span>
                     </div>
